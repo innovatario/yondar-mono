@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { IdentityProvider } from './providers/IdentityProvider.tsx'
 import { Home } from './components/Home'
-import { Account } from './components/Account'
+import { Login } from './components/Login'
 import './App.css'
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
         <IdentityProvider>
           <Routes>
             <Route path="/" element={<Home/>}/>
-            <Route path="/account" element={<Account/>}/>
+            <Route path="/login" element={<Login/>}/>
           </Routes>
         </IdentityProvider>
     </div>

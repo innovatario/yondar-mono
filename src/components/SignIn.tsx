@@ -1,6 +1,24 @@
+import { useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { IdentityContextType } from "../types/IdentityType"
+import { IdentityContext } from "../providers/IdentityProvider"
+import { getPublicKey } from "../libraries/NIP-07"
+
 export const SignIn = () => {
+  const { setIdentity } = useContext<IdentityContextType>(IdentityContext)
+  const navigate = useNavigate()
+
   const signIn = async () => {
-    console.log('signing in')
+    // trigger sign in with extension
+    const success = await getPublicKey()
+    if (success) {
+      // store pubkey in identity provider
+      setIdentity({pubkey: success})
+      // redirect to account page
+      navigate('/login')
+    } else {
+      // trigger "key not set up yet" dialog
+    }
   }
   return (
     <button onClick={signIn}>Sign in with Extension</button>

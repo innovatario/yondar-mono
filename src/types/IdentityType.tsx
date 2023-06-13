@@ -1,5 +1,6 @@
 export type IdentityType = {
   pubkey: string
+  last_updated?: number // record the last time the profile was updated from relays. This also serves as a marker that the account has been loaded. Updated in Login component.
   name?: string
   username?: string
   display_name?: string
@@ -10,7 +11,7 @@ export type IdentityType = {
   picture?: string
   banner?: string
   lud16?: string
-  [key: string]: string | undefined
+  // [key: string]: string | undefined
 } | null
 
 export type IdentityContextType = {
@@ -21,5 +22,6 @@ export type IdentityContextType = {
 
 export const defaultIdentityContext: IdentityContextType = {
   identity: null,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setIdentity: () => {}
 }
