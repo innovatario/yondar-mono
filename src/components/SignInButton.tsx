@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { IdentityContextType } from "../types/IdentityType"
 import { IdentityContext } from "../providers/IdentityProvider"
 import { getPublicKey } from "../libraries/NIP-07"
+import { STALE_PROFILE } from "../libraries/Nostr"
 
-export const SignIn = () => {
-  const { setIdentity } = useContext<IdentityContextType>(IdentityContext)
+export const SignInButton = () => {
+  const { identity, setIdentity, isIdentityFresh } = useContext<IdentityContextType>(IdentityContext)
   const navigate = useNavigate()
 
   const signIn = async () => {
@@ -20,7 +21,13 @@ export const SignIn = () => {
       // trigger "key not set up yet" dialog
     }
   }
-  return (
-    <button onClick={signIn}>Sign in with Extension</button>
-  )
+  if (isIdentityFresh()) {
+    return (
+      <button onClick={() => navigate('/login')}>Go to Dashboard</button>
+    )
+  } else {
+    return (
+      <button onClick={signIn}>Sign in with Extension</button>
+    )
+  }
 }

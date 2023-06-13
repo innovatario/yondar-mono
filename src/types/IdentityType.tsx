@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-empty-function */
 export type IdentityType = {
   pubkey: string
   last_updated?: number // record the last time the profile was updated from relays. This also serves as a marker that the account has been loaded. Updated in Login component.
@@ -16,12 +18,12 @@ export type IdentityType = {
 
 export type IdentityContextType = {
   identity: IdentityType,
-  // eslint-disable-next-line @typescript-eslint/ban-types
   setIdentity: Function,
+  isIdentityFresh: Function,
 }
 
 export const defaultIdentityContext: IdentityContextType = {
   identity: null,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setIdentity: () => {}
+  setIdentity: () => {},
+  isIdentityFresh: () => {},
 }

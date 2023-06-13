@@ -32,8 +32,6 @@ type EventsByKind = {
   [key: number]: Event[]
 }
 
-export const STALE_PROFILE = 1000 * 60 * 60 * 24 * 7
-
 export const getAll = async (pubkey: string[] | undefined, kinds: number[], relays: string[] = defaultRelays) => {
   const filter: Filter<number> = {kinds: [...kinds], authors: pubkey}
   const sub: Sub = pool.sub(relays,[filter])

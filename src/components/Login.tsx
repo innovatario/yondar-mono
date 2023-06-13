@@ -7,7 +7,7 @@ import { Spinner } from './Spinner'
 
 export const Login = () => {
   const [loading, setLoading] = useState(false)
-  const {identity, setIdentity} = useContext<IdentityContextType>(IdentityContext)
+  const {identity, setIdentity, isIdentityFresh} = useContext<IdentityContextType>(IdentityContext)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export const Login = () => {
     // redirect to homepage if no identity
     if (!identity) {
       navigate('/')
-    } else if (+new Date() - identity.last_updated < STALE_PROFILE ) {
+    } else if (isIdentityFresh()) {
       // profile is still fresh. redirect to dashboard
       navigate('/dashboard')
     } else {

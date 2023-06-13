@@ -1,9 +1,9 @@
-import { SignIn } from './SignIn'
+import { SignInButton } from './SignInButton'
 export const Home = () => {
   return (
     <div>
       <h1>Yondar.me</h1>
-      <SignIn/>
+      <SignInButton/>
     </div>
   )
 }
