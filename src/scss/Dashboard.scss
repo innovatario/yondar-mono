@@ -1,9 +1,11 @@
 #dashboard {
   text-align: left;
 }
+$profile-size: 3rem;
 .profile-picture {
-  width: 5rem;
-  border-radius: 5rem;
+  min-width: $profile-size;
+  max-height: $profile-size;
+  border-radius: $profile-size;
 }
 .messagebox {
   display: flex;

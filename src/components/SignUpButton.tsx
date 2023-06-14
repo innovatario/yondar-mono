@@ -9,11 +9,12 @@ export const SignUpButton = () => {
   const { identity, setIdentity } = useContext<IdentityContextType>(IdentityContext)
   const navigate = useNavigate()
 
-  const newIdentity = () => {
+  const newIdentity = async () => {
     const sk = generatePrivateKey() // `sk` is a hex string
     const pk = getPublicKey(sk) // `pk` is a hex string
+    const proceed = await encryptAndStorePrivateKey(sk)
+    if (proceed === false) return
     setIdentity({pubkey: pk})
-    encryptAndStorePrivateKey(sk)
     navigate('/login')
   }
 

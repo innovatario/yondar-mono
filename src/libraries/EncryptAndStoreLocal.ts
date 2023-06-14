@@ -4,7 +4,8 @@ export const localStorageKey = 'storens'
 
 function setPassword() {
   const newpass = prompt('Secure your new identity with a password:')
-  if (!newpass || newpass === '') {
+  if (newpass === null) return false
+  if (newpass === '') {
     const sure = confirm('Your identity be stored unencrypted. This is less safe. OK? Cancel to enter a password.')
     if (!sure) {
       return setPassword()
@@ -21,12 +22,18 @@ function recallPassword(){
   return prompt('Enter your password to unlock your identity for export. \n\nLeave blank if you did not encrypt your identity with a password.')
 }
 
-export async function encryptAndStorePrivateKey(privateKeyHex: string) {
+export async function encryptAndStorePrivateKey(privateKeyHex: string): Promise<boolean>{
     const encoder = new TextEncoder()
     const privateKeyBytes = encoder.encode(privateKeyHex)
 
+    const proceed = setPassword()
+
+    if (proceed === false) {
+      return false
+    }
+
+    const password = encoder.encode(defaultPassword + proceed)
     // Derive a key from a password
-    const password = encoder.encode(defaultPassword + setPassword())
     const keyMaterial = await crypto.subtle.importKey(
         'raw', password, { name: 'PBKDF2' }, false, ['deriveKey']
     )
@@ -53,6 +60,8 @@ export async function encryptAndStorePrivateKey(privateKeyHex: string) {
     localStorage.setItem(localStorageKey, JSON.stringify(Array.from(new Uint8Array(encrypted))))
     localStorage.setItem(localStorageKey+'v', JSON.stringify(Array.from(iv)))
     localStorage.setItem(localStorageKey+'s', JSON.stringify(Array.from(salt)))
+
+    return true
 }
 
 // Function to decrypt the private key from localStorage

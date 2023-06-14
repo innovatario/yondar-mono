@@ -69,6 +69,9 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+button.danger {
+  color: red;
+}
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -91,6 +94,14 @@ button:focus-visible {
   .full {
     flex-basis: 100%;
   }
+  &.aligncenter {
+    align-items: center;
+  }
+}
+
+
+.crush {
+  margin: 0;
 }
 
 

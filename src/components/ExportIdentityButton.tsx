@@ -53,7 +53,7 @@ export const ExportIdentityButton = () => {
     return (
       <>
         <button onClick={exportIdentity}>Export Identity</button>
-        <div className="secret export messagebox">
+        <div className="secret export messagebox full">
           <span>Wrong password. Please try again.</span>
           <button className="close" onClick={closeButton}>&times;</button>
         </div>
@@ -61,7 +61,7 @@ export const ExportIdentityButton = () => {
     )
   } else if (showExport) {
     return (
-      <div className="secret export messagebox">
+      <div className="secret export messagebox full">
         {showExport}
         <button className="close" onClick={closeButton}>&times;</button>
       </div>

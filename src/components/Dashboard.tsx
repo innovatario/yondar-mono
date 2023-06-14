@@ -5,18 +5,28 @@ import { IdentityContextType } from "../types/IdentityType"
 import defaultDisplayImage from '../assets/default-display-image.png'
 import { ExportIdentityButton } from "./ExportIdentityButton"
 import '../scss/Dashboard.scss'
+import { WipeIdentityButton } from "./WipeIdentityButton"
 
 export const Dashboard = () => {
   const {identity} = useContext<IdentityContextType>(IdentityContext)
 
-  const displayImage = identity.picture && identity.picture !== 'unknown' ? identity.picture : defaultDisplayImage
+  const displayImage = identity?.picture && identity.picture !== 'unknown' ? identity.picture : defaultDisplayImage
+
+  const displayName = identity?.display_name && identity?.display_name !== 'unknown' ? identity.display_name : identity?.displayName && identity?.displayName !== 'unknown' ? identity.displayName : 'unknown'
 
   return (
     <div id="dashboard">
-      <h1>Dashboard</h1>
-      <img className="profile-picture" src={displayImage} alt={`${identity.display_name}'s profile picture`}/>
-      <p>Coming soon...</p>
-      <HomeButton/><ExportIdentityButton/>
+      <div className="flexcol">
+        <h1>Dashboard</h1>
+      </div>
+      <div className="flexcol aligncenter">
+        <img className="profile-picture" src={displayImage} alt={`${displayName}'s profile picture`}/>&nbsp;
+        <h1 className="crush">{displayName}</h1>
+      </div>
+      <br/>
+      <div className="flexcol">
+        <HomeButton/><ExportIdentityButton/><WipeIdentityButton/>
+      </div>
     </div>
   )
 }
