@@ -96,13 +96,19 @@ button:focus-visible {
 
 $close-width: 3rem;
 .close {
-  position: absolute;
-  top: calc($close-width / -2);
-  right: calc($close-width / -2);
-  font-size: 1.5rem;
+  align-items: center;
+  border-width: 2px;
+  border-radius: $close-width;
   cursor: pointer;
-  width: $close-width;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.5rem;
   height: $close-width;
+  line-height: 2.5rem;
   margin: 0;
   padding: 0;
+  position: absolute;
+  right: calc($close-width / -2);
+  top: calc($close-width / -2);
+  width: $close-width;
 }
