@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
 import { IdentityContext } from "../providers/IdentityProvider"
 import { IdentityContextType } from "../types/IdentityType"
-import { STALE_PROFILE, defaultProfile, getMyProfile } from "../libraries/Nostr"
+import { defaultProfile, getMyProfile } from "../libraries/Nostr"
 import { Spinner } from './Spinner'
 
 export const Login = () => {
@@ -18,6 +18,9 @@ export const Login = () => {
         // no profile found. use default as template but add pubkey
         const newProfile = {...defaultProfile, pubkey: identity.pubkey, last_updated: +new Date()}
         setIdentity(newProfile)
+      } else {
+        const profile = {...loadedProfile, pubkey: identity.pubkey, last_updated: +new Date()}
+        setIdentity(profile)
       }
     }
     // redirect to homepage if no identity

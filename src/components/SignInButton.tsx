@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { IdentityContextType } from "../types/IdentityType"
 import { IdentityContext } from "../providers/IdentityProvider"
 import { getPublicKey } from "../libraries/NIP-07"
-import { STALE_PROFILE } from "../libraries/Nostr"
 
 export const SignInButton = () => {
-  const { identity, setIdentity, isIdentityFresh } = useContext<IdentityContextType>(IdentityContext)
+  const { setIdentity, isIdentityFresh } = useContext<IdentityContextType>(IdentityContext)
   const navigate = useNavigate()
 
   const signIn = async () => {

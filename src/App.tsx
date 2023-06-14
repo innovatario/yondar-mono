@@ -3,7 +3,7 @@ import { IdentityProvider } from './providers/IdentityProvider.tsx'
 import { Home } from './components/Home'
 import { Login } from './components/Login'
 import { Dashboard } from './components/Dashboard.tsx'
-import './App.css'
+import './scss/App.scss'
 
 function App() {
 

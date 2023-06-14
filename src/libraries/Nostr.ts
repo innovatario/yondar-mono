@@ -13,7 +13,6 @@ export const defaultRelays = [
   'wss://puravida.nostr.land/',
   'wss://nos.lol/',
   'wss://relay.snort.social/',
-  'wss://nostrica.nostrnotes.com/',
   'wss://relay.devstr.org/',
 ]
 

@@ -1,3 +1,6 @@
+* {
+  box-sizing: border-box;
+}
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -26,9 +29,20 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  place-items: top;
   min-width: 320px;
   min-height: 100vh;
+}
+
+#root {
+  overflow-x: hidden;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+#app {
+  padding: 2rem;
+  text-align: center;
 }
 
 h1 {
@@ -46,6 +60,7 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  margin: 0 0.5rem;
 }
 button:hover {
   border-color: #646cff;
@@ -66,4 +81,28 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.flexcol {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  position: relative;
+  .full {
+    flex-basis: 100%;
+  }
+}
+
+
+$close-width: 3rem;
+.close {
+  position: absolute;
+  top: calc($close-width / -2);
+  right: calc($close-width / -2);
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: $close-width;
+  height: $close-width;
+  margin: 0;
+  padding: 0;
 }
