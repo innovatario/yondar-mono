@@ -23,7 +23,7 @@ export const Login = () => {
         setIdentity(profile)
       }
     }
-    // redirect to homepage if no identity
+    // redirect to homepage if login page is accessed with no identity
     if (!identity) {
       navigate('/')
     } else if (isIdentityFresh()) {
@@ -35,11 +35,6 @@ export const Login = () => {
       loadProfile()
     }
   }, [identity])
-
-  useEffect(() => {
-    // retrieve nostr account data from relays
-
-  }, [])
 
   return (
     <div id="login">

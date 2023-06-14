@@ -1,12 +1,7 @@
 #dashboard {
   text-align: left;
 }
-$profile-size: 3rem;
-.profile-picture {
-  min-width: $profile-size;
-  max-height: $profile-size;
-  border-radius: $profile-size;
-}
+
 .messagebox {
   display: flex;
   flex-direction: column;
@@ -28,5 +23,28 @@ $profile-size: 3rem;
     display: block;
     padding: 0.6em 1.2em;
     flex-grow: 1;
+  }
+}
+
+.profile {
+  border-radius: 1rem;
+  padding: 1rem;
+  min-height: 30vh;
+  $profile-size: max(10vw, 4rem);
+
+  .profile-picture {
+    min-width: $profile-size;
+    max-height: $profile-size;
+    border-radius: $profile-size;
+    margin-right: 1rem;
+  }
+  .display-name {
+
+  }
+  .about {
+    background-color: #000c;
+    border-radius: 1rem;
+    padding: 1rem;
+    white-space: break-spaces;
   }
 }
