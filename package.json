@@ -11,9 +11,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "mapbox-gl": "^2.15.0",
     "nostr-tools": "^1.12.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-map-gl": "^7.0.25",
     "react-router-dom": "^6.12.1",
     "sass": "^1.63.3"
   },

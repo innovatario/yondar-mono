@@ -5,6 +5,7 @@ import { IdentityContextType } from "../types/IdentityType"
 import { ExportIdentityButton } from "./ExportIdentityButton"
 import '../scss/Dashboard.scss'
 import { WipeIdentityButton } from "./WipeIdentityButton"
+import { YondarMap } from "./YondarMap"
 import defaultDisplayImage from '../assets/default-display-image.png'
 import defaultBanner from '../assets/default-banner.png'
 
@@ -28,7 +29,7 @@ export const Dashboard = () => {
   return (
     <div id="dashboard">
       <div className="flexcol">
-        <h1>Dashboard</h1>
+        <h1>Your Dashboard</h1>
       </div>
       <div className="profile flexcol align-center" style={backgroundStyle}>
         <img className="profile-picture" src={displayImage} alt={`${displayName}'s profile picture`}/>&nbsp;
@@ -38,6 +39,9 @@ export const Dashboard = () => {
       <br/>
       <div className="flexcol">
         <HomeButton/><ExportIdentityButton/><WipeIdentityButton/>
+      </div>
+      <div className="flexcol">
+        <YondarMap/>
       </div>
     </div>
   )
