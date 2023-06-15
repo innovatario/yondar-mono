@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Me } from './Me'
 import { MapClickHint } from './MapClickHint'
-import Map, { MapLayerMouseEvent, ViewState } from 'react-map-gl'
+import Map, { ViewState } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import { useGeolocationData } from '../providers/GeolocationProvider'
+import { useGeolocationData } from '../hooks/useGeolocationData'
 import { FollowTarget } from '../types/Follow'
 
 export const YondarMap = () => {
@@ -40,7 +40,7 @@ export const YondarMap = () => {
       zoom={zoom}
       style={{ maxWidth: '100%', height: '50vh', borderRadius: '1rem', marginTop: '1rem' }}
       onMove={e => setViewState(e.viewState)}
-      onClick={e => handleClick()}
+      onClick={() => handleClick()}
       mapStyle='mapbox://styles/innovatar/ckg6zpegq44ym19pen438iclf'
     >
       { !triggerGeo ? <MapClickHint longitude={longitude} latitude={latitude} /> : null }

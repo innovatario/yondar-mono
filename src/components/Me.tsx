@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useEffect }  from 'react'
 import { useGeolocation, validGeolocation } from '../hooks/useGeolocation'
-import { useGeolocationData } from '../providers/GeolocationProvider'
+import { useGeolocationData } from '../hooks/useGeolocationData'
 import { Marker, useMap } from 'react-map-gl'
 import { FollowTarget } from '../types/Follow'
 import '../scss/Me.scss'
@@ -17,7 +17,7 @@ export const Me: React.FC<MeProps> = ({ setFollow }) => {
   const {current: map} = useMap()
 
   const handleFollow = () => {
-    if (map) {
+    if (map && position) {
       map.flyTo({
         center: [position?.coords.longitude, position?.coords.latitude],
         zoom: 16,

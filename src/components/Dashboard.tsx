@@ -39,6 +39,7 @@ export const Dashboard = () => {
       <div className="flexcol">
         <YondarMap/>
       </div>
+      <hr/>
       <div className="flexcol">
         <HomeButton/><ExportIdentityButton/><WipeIdentityButton/>
       </div>
