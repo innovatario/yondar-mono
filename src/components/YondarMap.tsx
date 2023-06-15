@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Me } from './Me'
 import { MapClickHint } from './MapClickHint'
+import { Invite } from './InviteButton'
 import Map, { ViewState } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { useGeolocationData } from '../hooks/useGeolocationData'
@@ -45,6 +46,8 @@ export const YondarMap = () => {
     >
       { !triggerGeo ? <MapClickHint longitude={longitude} latitude={latitude} /> : null }
       { triggerGeo ? <Me setFollow={setFollow}/> : null }
+
+      <Invite/>
     </Map>
     </>
   )
