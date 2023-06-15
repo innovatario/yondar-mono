@@ -4,17 +4,20 @@ import { Home } from './components/Home'
 import { Login } from './components/Login'
 import { Dashboard } from './components/Dashboard.tsx'
 import './scss/App.scss'
+import { GeolocationProvider } from './providers/GeolocationProvider.tsx'
 
 function App() {
 
   return (
     <div id="app">
         <IdentityProvider>
-          <Routes>
-            <Route path="/" element={<Home/>}/>
-            <Route path="/login" element={<Login/>}/>
-            <Route path="/dashboard" element={<Dashboard/>}/>
-          </Routes>
+          <GeolocationProvider>
+            <Routes>
+              <Route path="/" element={<Home/>}/>
+              <Route path="/login" element={<Login/>}/>
+              <Route path="/dashboard" element={<Dashboard/>}/>
+            </Routes>
+          </GeolocationProvider>
         </IdentityProvider>
     </div>
   )

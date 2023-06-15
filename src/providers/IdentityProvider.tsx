@@ -2,7 +2,7 @@ import { createContext } from 'react'
 import { IdentityType, IdentityContextType, defaultIdentityContext } from '../types/IdentityType.tsx'
 import usePersistedState from '../hooks/usePersistedState'
 
-export const STALE_PROFILE = 1000 * 60 * 60 * 24 * 7
+const STALE_PROFILE = 1000 * 60 * 60 * 24 * 7
 
 type IdentityProviderProps = {
   children: React.ReactNode
