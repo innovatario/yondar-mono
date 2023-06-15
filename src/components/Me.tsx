@@ -16,6 +16,18 @@ export const Me: React.FC<MeProps> = ({ setFollow }) => {
 
   const {current: map} = useMap()
 
+  const handleFollow = () => {
+    if (map) {
+      map.flyTo({
+        center: [position?.coords.longitude, position?.coords.latitude],
+        zoom: 16,
+        duration: 1000,
+      })
+      map.once('moveend', () => setFollow("USER"))
+    }
+  }
+
+  // this will fire on each navigator watch position update
   useEffect(() => {
     if (validGeolocation(position)) {
       setPosition(position)
@@ -25,7 +37,7 @@ export const Me: React.FC<MeProps> = ({ setFollow }) => {
   if (validGeolocation(position)) {
     return (
       <Marker longitude={position?.coords.longitude} latitude={position?.coords.latitude} anchor={'center'}>
-        <div id="me" onClick={() => setFollow("USER")}>😀</div>
+        <div id="me" onClick={handleFollow}>😀</div>
       </Marker>
     )
   } else {

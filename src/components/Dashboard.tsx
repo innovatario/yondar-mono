@@ -29,19 +29,18 @@ export const Dashboard = () => {
   return (
     <div id="dashboard">
       <div className="flexcol">
-        <h1>Your Dashboard</h1>
+        <h1>Yondar Dashboard</h1>
       </div>
       <div className="profile flexcol align-center" style={backgroundStyle}>
         <img className="profile-picture" src={displayImage} alt={`${displayName}'s profile picture`}/>&nbsp;
         <h1 className="display-name crush">{displayName}</h1>
         <p className="about full">{about}</p>
       </div>
-      <br/>
-      <div className="flexcol">
-        <HomeButton/><ExportIdentityButton/><WipeIdentityButton/>
-      </div>
       <div className="flexcol">
         <YondarMap/>
+      </div>
+      <div className="flexcol">
+        <HomeButton/><ExportIdentityButton/><WipeIdentityButton/>
       </div>
     </div>
   )
