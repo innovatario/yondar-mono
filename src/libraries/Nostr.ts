@@ -1,4 +1,4 @@
-import { SimplePool, Filter, Sub, Event, Kind } from "nostr-tools"
+import { SimplePool, Filter, Sub, Event } from "nostr-tools"
 import { IdentityType } from "../types/IdentityType"
 
 export const defaultRelays = [
@@ -10,10 +10,8 @@ export const defaultRelays = [
   'wss://relay.orangepill.dev/',
   'wss://nostr.bitcoiner.social/',
   'wss://nostr.plebchain.org/',
-  'wss://puravida.nostr.land/',
   'wss://nos.lol/',
   'wss://relay.snort.social/',
-  'wss://relay.devstr.org/',
 ]
 
 export const defaultProfile: IdentityType = {
@@ -74,7 +72,7 @@ export const getMostRecent = async (pubkey: string, kinds: number[], relays: str
     return mostRecent
   } catch (e) {
     console.warn('Failed to get most recent events.',kinds, pubkey)
-    return [];
+    return []
   }
 }
 
@@ -88,10 +86,10 @@ export const getMyRelays = async (pubkey: string) => {
   }
 }
 
-export const getMyProfile = async (pubkey: string): Promise<NostrIdentity> => {
+export const getMyProfile = async (pubkey: string): Promise<IdentityType> => {
   const myProfile = await getMostRecent(pubkey,[0])
   try {
-    const parsedProfile = JSON.parse(myProfile.content) as NostrIdentity
+    const parsedProfile = JSON.parse(myProfile.content) as IdentityType
     return Object.assign({}, parsedProfile, {pubkey})
   } catch (e) {
     console.warn('Failed to parse profile from user metadata.')
