@@ -1,4 +1,5 @@
 import { Marker } from 'react-map-gl'
+import { WavyText } from './WavyText'
 import '../scss/MapClickHint.scss'
 
 type MapClickHintProps = {
@@ -10,7 +11,7 @@ export const MapClickHint: React.FC<MapClickHintProps> = ({longitude, latitude})
   return (
     <Marker longitude={longitude} latitude={latitude} anchor={'center'}>
       <div id="map-hint">
-        Click to allow GPS
+        <WavyText text="Click to allow GPS"/>
       </div>
     </Marker>
   )

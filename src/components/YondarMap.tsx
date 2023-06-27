@@ -6,7 +6,11 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import { useGeolocationData } from '../hooks/useGeolocationData'
 import { FollowTarget } from '../types/Follow'
 
-export const YondarMap = () => {
+type YondarMapProps = {
+  children?: React.ReactNode
+}
+
+export const YondarMap = ({ children }: YondarMapProps) => {
   const [longitude, setLongitude] = useState<number>(-80)
   const [latitude, setLatitude] = useState<number>(0)
   const [zoom, setZoom] = useState<number>(1)
@@ -38,13 +42,14 @@ export const YondarMap = () => {
       longitude={mapLongitude}
       latitude={mapLatitude}
       zoom={zoom}
-      style={{ maxWidth: '100%', height: '50vh', borderRadius: '1rem', marginTop: '1rem' }}
+      style={{ maxWidth: '100%', height: '100vh' }}
       onMove={e => setViewState(e.viewState)}
       onClick={() => handleClick()}
       mapStyle='mapbox://styles/innovatar/ckg6zpegq44ym19pen438iclf'
     >
       { !triggerGeo ? <MapClickHint longitude={longitude} latitude={latitude} /> : null }
       { triggerGeo ? <Me setFollow={setFollow}/> : null }
+      { children }
     </Map>
     </>
   )

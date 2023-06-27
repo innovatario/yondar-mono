@@ -22,7 +22,7 @@ export const SignInButton = () => {
   }
   if (isIdentityFresh()) {
     return (
-      <button onClick={() => navigate('/login')}>Go to Dashboard</button>
+      <button onClick={() => navigate('/login')}>Go Yondar!</button>
     )
   } else {
     return (

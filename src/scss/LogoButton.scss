@@ -1,0 +1,14 @@
+// @use '../globals';
+
+.component-logobutton {
+  cursor: pointer;
+  position: absolute;
+  top: .25rem;
+  left: 0;
+  z-index: 1;
+  transition: all 50ms ease-in-out;
+
+  &:active {
+      transform: translateY(5px);
+  }
+}
