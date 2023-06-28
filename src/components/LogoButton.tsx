@@ -55,9 +55,10 @@ export const LogoButton = ({ color = '#00aeef', children }: LogoButtonProps) => 
           </g>
         </svg>
       </div>
-      <div className='menu'>
-        { toggle ? children : null }
+      { toggle ? (<div className='component-logobutton-menu'>
+        { children }
       </div>
+      ) : null }
     </div>
   )
 }

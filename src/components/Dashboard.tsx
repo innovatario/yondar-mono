@@ -41,9 +41,7 @@ export const Dashboard = () => {
       <div className="flexcol">
         <YondarMap>
           <LogoButton>
-            <div className="flexcol">
               <HomeButton/><ExportIdentityButton/><WipeIdentityButton/>
-            </div>
           </LogoButton>
           { showProfile ? $profile : null }
         </YondarMap>

@@ -8,7 +8,7 @@
   z-index: 1;
   transition: all 50ms ease-in-out;
 
-  &:active {
+  & .button:active {
       transform: translateY(5px);
   }
 }
