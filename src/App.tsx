@@ -4,6 +4,7 @@ import { Home } from './components/Home'
 import { Login } from './components/Login'
 import { Dashboard } from './components/Dashboard.tsx'
 import './scss/App.scss'
+import { Publish } from './components/Publish.tsx'
 import { GeolocationProvider } from './providers/GeolocationProvider.tsx'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
               <Route path="/" element={<Home/>}/>
               <Route path="/login" element={<Login/>}/>
               <Route path="/dashboard" element={<Dashboard/>}/>
+              <Route path="/publish" element={<Publish/>}/>
             </Routes>
           </GeolocationProvider>
         </IdentityProvider>

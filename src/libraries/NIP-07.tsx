@@ -1,3 +1,4 @@
+import { EventTemplate, Event } from 'nostr-tools';
 import { NostrWindow } from '../types/NostrWindow'
 
 // This declaration allows us to access window.nostr without TS errors.
@@ -21,6 +22,21 @@ export const getPublicKey = async (): Promise<string|null> => {
     return pubkey
   } catch (e) {
     console.log('getPublicKey() failed:',e)
+    return null
+  }
+}
+
+/**
+ * Try/catch wrapper for window.nostr.signEvent
+ * nostr.signEvent can error if the user rejects the signature request or if no key has been set up yet.
+ */
+export const signEvent = async (event: EventTemplate): Promise<Event|null> => {
+  let signed: Event 
+  try {
+    signed = await window.nostr.signEvent(event)
+    return signed
+  } catch (e) {
+    console.log('signEvent() failed:',e)
     return null
   }
 }

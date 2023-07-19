@@ -2,16 +2,8 @@ import { SimplePool, Filter, Sub, Event } from "nostr-tools"
 import { IdentityType } from "../types/IdentityType"
 
 export const defaultRelays = [
-  'wss://relay.damus.io/',
-  'wss://eden.nostr.land/',
-  'wss://nostr-pub.wellorder.net/',
-  'wss://nostr-verified.wellorder.net/',
-  'wss://bitcoinmaximalists.online/',
-  'wss://relay.orangepill.dev/',
-  'wss://nostr.bitcoiner.social/',
-  'wss://nostr.plebchain.org/',
-  'wss://nos.lol/',
-  'wss://relay.snort.social/',
+  'wss://yondar.nostr1.com',
+  'wss://relay.primal.net'
 ]
 
 export const defaultProfile: IdentityType = {
