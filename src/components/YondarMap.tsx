@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Me } from './Me'
+import { MapPlaces } from './MapPlaces'
 import { MapClickHint } from './MapClickHint'
 import Map, { ViewState } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -49,6 +50,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
     >
       { !triggerGeo ? <MapClickHint longitude={longitude} latitude={latitude} /> : null }
       { triggerGeo ? <Me setFollow={setFollow}/> : null }
+      <MapPlaces/>
       { children }
     </Map>
     </>

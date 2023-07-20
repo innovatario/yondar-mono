@@ -9,17 +9,12 @@ import {
   nip19,
 } from 'nostr-tools'
 import { signEvent } from "../libraries/NIP-07"
+import { BeaconCollection } from "../types/Beacon"
 import '../scss/Publish.scss'
-
-type ID = string
-
-type Beacons = {
-  [key: ID]: Event
-}
 
 export const Publish = () => {
   const {identity} = useContext<IdentityContextType>(IdentityContext)
-  const [beacons, setBeacons] = useState<Beacons>({})
+  const [beacons, setBeacons] = useState<BeaconCollection>({})
   const [copied, setCopied] = useState<boolean>()
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 

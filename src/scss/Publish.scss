@@ -39,6 +39,10 @@ textarea {
   animation: fadeOut 2s ease-in-out forwards;
 }
 
+.beacon {
+  font-size: 2rem;
+}
+
 @keyframes fadeOut {
   0% {
     opacity: 1;
