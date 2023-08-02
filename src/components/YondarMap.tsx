@@ -32,8 +32,11 @@ export const YondarMap = ({ children }: YondarMapProps) => {
 
   function handleClick(event: mapboxgl.MapLayerMouseEvent) {
     if (!triggerGeo) setTriggerGeo(true)
-    console.log(event)
-    setCursorPosition(event.lngLat)
+    console.log(event.originalEvent?.target?.tagName)
+    if (event.originalEvent?.target?.tagName === "CANVAS") {
+      // we touched the map. Place the cursor.
+      setCursorPosition(event.lngLat)
+    }
   }
 
   const mapLongitude = position && follow === "USER" ? position?.coords.longitude : longitude
