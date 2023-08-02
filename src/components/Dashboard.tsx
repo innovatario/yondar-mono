@@ -15,10 +15,6 @@ export const Dashboard = () => {
   const {identity} = useContext<IdentityContextType>(IdentityContext)
   const [showProfile, setShowProfile] = useState(false)
 
-  const composeNewPlace = () => {
-
-  }
-
   const displayImage = identity?.picture && identity.picture !== 'unknown' ? identity.picture : defaultDisplayImage
 
   const background = identity?.banner && identity.banner !== 'unknown' ? identity.banner : defaultBanner
@@ -46,7 +42,9 @@ export const Dashboard = () => {
       <div className="flexcol">
         <YondarMap>
           <LogoButton>
-              <HomeButton/><ExportIdentityButton/><WipeIdentityButton/>
+              <HomeButton/><NewPlaceButton/>
+              <br/>
+              <ExportIdentityButton/><WipeIdentityButton/>
 
           </LogoButton>
           { showProfile ? $profile : null }

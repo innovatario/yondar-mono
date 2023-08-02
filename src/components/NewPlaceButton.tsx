@@ -1,7 +1,11 @@
-export const NewPlaceButton = ({ composeNewPlace }) => {
+import { useNavigate } from 'react-router-dom'
+
+export const NewPlaceButton = () => {
+  const navigate = useNavigate()
+  const goPublish = () => {
+    navigate('/publish')
+  }
   return (
-    <button className="circle-float-button" onClick={composeNewPlace}>
-      ➕
-    </button>
+    <button onClick={goPublish}>Create a Place</button>
   )
-};
+}

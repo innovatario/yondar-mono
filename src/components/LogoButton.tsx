@@ -11,11 +11,12 @@ export const LogoButton = ({ color = '#00aeef', children }: LogoButtonProps) => 
 
   const doToggle = () => setToggle(!toggle)
 
+  const outerClasses = 'component-logobutton ' + (toggle ? 'active' : 'inactive') 
   const classes = 'button ' + (toggle ? 'active' : 'inactive')
 
   return (
-    <div className='component-logobutton'>
-      <div className={classes} onClick={doToggle}>
+    <div className={outerClasses} onClick={doToggle}>
+      <div className={classes}>
         <svg xmlns='http://www.w3.org/2000/svg' width='65' height='65'>
           <filter id='a' width='65' height='65' x='0' y='0' filterUnits='userSpaceOnUse'>
             <feOffset dy='3' />

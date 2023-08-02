@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Me } from './Me'
 import { MapPlaces } from './MapPlaces'
-import { MapClickHint } from './MapClickHint'
+import { Cursor } from './Cursor'
 import Map, { ViewState } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { useGeolocationData } from '../hooks/useGeolocationData'
@@ -14,6 +14,7 @@ type YondarMapProps = {
 export const YondarMap = ({ children }: YondarMapProps) => {
   const [longitude, setLongitude] = useState<number>(-80)
   const [latitude, setLatitude] = useState<number>(0)
+  const [cursorPosition, setCursorPosition] = useState<{lng: number, lat: number}>({lng: longitude, lat: latitude})
   const [zoom, setZoom] = useState<number>(1)
   const [triggerGeo, setTriggerGeo] = useState<boolean>(false)
   const [follow, setFollow] = useState<FollowTarget>(null)
@@ -29,8 +30,10 @@ export const YondarMap = ({ children }: YondarMapProps) => {
     if (!triggerGeo) setTriggerGeo(true)
   }
 
-  function handleClick() {
+  function handleClick(event: mapboxgl.MapLayerMouseEvent) {
     if (!triggerGeo) setTriggerGeo(true)
+    console.log(event)
+    setCursorPosition(event.lngLat)
   }
 
   const mapLongitude = position && follow === "USER" ? position?.coords.longitude : longitude
@@ -45,12 +48,13 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       zoom={zoom}
       style={{ maxWidth: '100%', height: '100vh' }}
       onMove={e => setViewState(e.viewState)}
-      onClick={() => handleClick()}
+      onClick={handleClick}
       mapStyle='mapbox://styles/innovatar/ckg6zpegq44ym19pen438iclf'
     >
       {/* { !triggerGeo ? <MapClickHint longitude={longitude} latitude={latitude} /> : null } */}
       { triggerGeo ? <Me setFollow={setFollow}/> : null }
       <MapPlaces/>
+      <Cursor lnglat={cursorPosition}/>
       { children }
     </Map>
     </>
