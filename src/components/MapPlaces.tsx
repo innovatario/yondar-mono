@@ -30,7 +30,7 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
 
   return Object.values(beacons).map( (beacon) => {
     return (
-      <Marker key={beacon.id} longitude={beacon.content.geometry.coordinates[0]} latitude={beacon.content.geometry.coordinates[1]} offset={[-10,-20]}>
+      <Marker key={beacon.id} longitude={beacon.content.geometry.coordinates[0]} latitude={beacon.content.geometry.coordinates[1]} offset={[-10,-20]} anchor={'center'}>
         <Beacon beaconData={beacon}/>
       </Marker>
     )

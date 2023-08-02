@@ -41,7 +41,7 @@ export const Me: React.FC<MeProps> = ({ setFollow }) => {
 
   if (validGeolocation(position)) {
     return (
-      <Marker longitude={position?.coords.longitude} latitude={position?.coords.latitude} anchor={'center'}>
+      <Marker longitude={position?.coords.longitude} latitude={position?.coords.latitude} anchor={'center'} offset={[-15.5,-15.5]}>
         <div id="me" className="component-useremoji" onClick={handleFollow}>
           <div className='color-ring' style={userStyle}>
             <span role='img'>{emoji}</span>
