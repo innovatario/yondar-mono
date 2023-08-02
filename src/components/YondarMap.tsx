@@ -14,7 +14,7 @@ type YondarMapProps = {
 export const YondarMap = ({ children }: YondarMapProps) => {
   const [longitude, setLongitude] = useState<number>(-80)
   const [latitude, setLatitude] = useState<number>(0)
-  const [cursorPosition, setCursorPosition] = useState<{lng: number, lat: number}>({lng: longitude, lat: latitude})
+  const [cursorPosition, setCursorPosition] = useState<{lng: number, lat: number} | null>(null)
   const [zoom, setZoom] = useState<number>(1)
   const [triggerGeo, setTriggerGeo] = useState<boolean>(false)
   const [follow, setFollow] = useState<FollowTarget>(null)
@@ -32,7 +32,6 @@ export const YondarMap = ({ children }: YondarMapProps) => {
 
   function handleClick(event: mapboxgl.MapLayerMouseEvent) {
     if (!triggerGeo) setTriggerGeo(true)
-    console.log(event.originalEvent?.target?.tagName)
     if (event.originalEvent?.target?.tagName === "CANVAS") {
       // we touched the map. Place the cursor.
       setCursorPosition(event.lngLat)

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Marker, useMap } from 'react-map-gl'
 import '../scss/Cursor.scss'
 
@@ -11,6 +11,8 @@ type CursorProps = {
 
 export const Cursor: React.FC<CursorProps> = ({ lnglat }) => {
 
+  const [showCursorMenu, setShowCursorMenu] = useState(false)
+
   const {current: map} = useMap()
 
   const size = 30
@@ -21,6 +23,7 @@ export const Cursor: React.FC<CursorProps> = ({ lnglat }) => {
         center: [lnglat.lng, lnglat.lat],
         duration: 500,
       })
+      map.once('moveend', () => setShowCursorMenu(true))
     }
   }
 
