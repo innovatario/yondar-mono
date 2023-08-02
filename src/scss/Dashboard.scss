@@ -88,3 +88,17 @@
     // display: none;
   }
 }
+
+.float-button-menu {
+  display: flex;
+  flex-direction: column-reverse;
+  position: absolute;
+  right: 0rem;
+  bottom: 2rem;
+}
+.circle-float-button {
+  display: block;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 2rem;
+}

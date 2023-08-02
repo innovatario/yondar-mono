@@ -6,9 +6,15 @@
   top: .25rem;
   left: 0;
   z-index: 1;
-  transition: all 50ms ease-in-out;
+
+  & .button {
+    position: relative;
+    top: 0rem;
+    transition: none;
+  }
 
   & .button:active {
-      transform: translateY(5px);
+    top: 0.5rem;
+    transition: all 150ms ease-out;
   }
 }

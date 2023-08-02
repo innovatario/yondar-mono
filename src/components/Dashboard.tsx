@@ -7,12 +7,17 @@ import '../scss/Dashboard.scss'
 import { WipeIdentityButton } from "./WipeIdentityButton"
 import { YondarMap } from "./YondarMap"
 import { LogoButton } from "./LogoButton"
+import { NewPlaceButton } from "./NewPlaceButton"
 import defaultDisplayImage from '../assets/default-display-image.png'
 import defaultBanner from '../assets/default-banner.png'
 
 export const Dashboard = () => {
   const {identity} = useContext<IdentityContextType>(IdentityContext)
   const [showProfile, setShowProfile] = useState(false)
+
+  const composeNewPlace = () => {
+
+  }
 
   const displayImage = identity?.picture && identity.picture !== 'unknown' ? identity.picture : defaultDisplayImage
 
@@ -42,9 +47,13 @@ export const Dashboard = () => {
         <YondarMap>
           <LogoButton>
               <HomeButton/><ExportIdentityButton/><WipeIdentityButton/>
+
           </LogoButton>
           { showProfile ? $profile : null }
         </YondarMap>
+        {/* <div className="float-button-menu">
+          <NewPlaceButton onClick={composeNewPlace}/>
+        </div> */}
       </div>
     </div>
   )
