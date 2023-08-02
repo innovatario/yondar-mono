@@ -48,7 +48,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       onClick={() => handleClick()}
       mapStyle='mapbox://styles/innovatar/ckg6zpegq44ym19pen438iclf'
     >
-      { !triggerGeo ? <MapClickHint longitude={longitude} latitude={latitude} /> : null }
+      {/* { !triggerGeo ? <MapClickHint longitude={longitude} latitude={latitude} /> : null } */}
       { triggerGeo ? <Me setFollow={setFollow}/> : null }
       <MapPlaces/>
       { children }

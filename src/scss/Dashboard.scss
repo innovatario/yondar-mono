@@ -50,3 +50,41 @@
 
 // .mapboxgl-map {
 // }
+.mapboxgl-ctrl.mapboxgl-ctrl-attrib.mapboxgl-compact {
+  background-color: transparent;
+  padding: 0.25rem;
+  button.mapboxgl-ctrl-attrib-button:not(:disabled):hover {
+    background-color: hsla(0,0%,100%,.5);
+  }
+}
+.mapboxgl-ctrl.mapboxgl-ctrl-attrib.mapboxgl-compact-show {
+  background-color: hsla(0,0%,100%,.5);
+  padding: 0.25rem;
+  font-size: 10px;
+  .mapboxgl-ctrl-attrib-button {
+    // position: static;
+    // float: right;
+    top: -2rem;
+  }
+}
+
+.mapboxgl-ctrl-attrib-button {
+  padding: 0;
+  margin: 0;
+  width: initial;
+  height: initial;
+}
+
+.mapboxgl-ctrl {
+  button:focus, button:focus-visible {
+    // background-color: hsla(0,0%,100%,.5);
+    outline: transparent;
+    box-shadow: none;
+  }
+}
+
+.mapboxgl-ctrl.mapboxgl-compact-show {
+  button.mapboxgl-ctrl-attrib-button {
+    // display: none;
+  }
+}
