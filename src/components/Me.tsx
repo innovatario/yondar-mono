@@ -16,6 +16,11 @@ export const Me: React.FC<MeProps> = ({ setFollow }) => {
 
   const {current: map} = useMap()
 
+  const emoji = "😀"
+  const userStyle = {
+    backgroundColor: '#00AEEF'
+  }
+
   const handleFollow = () => {
     if (map && position) {
       map.flyTo({
@@ -37,7 +42,11 @@ export const Me: React.FC<MeProps> = ({ setFollow }) => {
   if (validGeolocation(position)) {
     return (
       <Marker longitude={position?.coords.longitude} latitude={position?.coords.latitude} anchor={'center'}>
-        <div id="me" onClick={handleFollow}>😀</div>
+        <div id="me" className="component-useremoji" onClick={handleFollow}>
+          <div className='color-ring' style={userStyle}>
+            <span role='img'>{emoji}</span>
+          </div>
+        </div>
       </Marker>
     )
   } else {
