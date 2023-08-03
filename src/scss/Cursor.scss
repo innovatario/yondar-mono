@@ -48,3 +48,42 @@ $duration: 5s;
    transform:rotate(-360deg) scale(1);
  }
 }
+
+#cursor {
+  position: relative;
+}
+
+.cursor-menu {
+  font-family: "sofia-pro-soft", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
+  font-size: 1.5rem;
+  left: 0;
+  position:absolute;
+  line-height: 2rem;;
+  text-align: center;
+  transform: translateX(calc(-10vw + 26px));
+  width: 20vw;
+  // create a fade in and swoop up effect animation on load
+  animation: fade-in 500ms ease-out forwards, swoop-up 500ms ease-out forwards;
+
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+      text-shadow: 0px 0px 10px #000,0px 0px 10px #000;
+    }
+    100% {
+      opacity: 1;
+      text-shadow: 0px 40px 10px #000,0px 40px 10px #000;
+    }
+  }
+
+  @keyframes swoop-up {
+    0% {
+      transform: translateX(calc(-10vw + 26px)) translateY(0);
+    }
+    100% {
+      transform: translateX(calc(-10vw + 26px)) translateY(-8vh);
+    }
+  }
+
+}
