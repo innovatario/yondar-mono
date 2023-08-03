@@ -12,23 +12,23 @@ type CursorProps = {
 
 export const Cursor: React.FC<CursorProps> = ({ lnglat }) => {
 
-  const [showCursorMenu, setShowCursorMenu] = useState(false)
+  const [showAddPlaceModal, setShowAddPlaceModal] = useState(false)
 
   const {current: map} = useMap()
 
   const size = 30
 
   useEffect(() => {
-    setShowCursorMenu(false)
+    setShowAddPlaceModal(false)
   }, [lnglat])
 
-  const handleFollow = () => {
+  const handleClickCursor = () => {
     if (map && lnglat) {
       map.flyTo({
         center: [lnglat.lng, lnglat.lat],
         duration: 500,
       })
-      map.once('moveend', () => setShowCursorMenu(true))
+      map.once('moveend', () => setShowAddPlaceModal(true))
     }
   }
 
@@ -36,8 +36,8 @@ export const Cursor: React.FC<CursorProps> = ({ lnglat }) => {
   if (lnglat) {
     return (
       <Marker longitude={lnglat.lng} latitude={lnglat.lat} anchor={'center'} offset={[0,0]}>
-        <div id="cursor" className="component-cursor" onClick={handleFollow}>
-          { showCursorMenu ? <div className="cursor-menu"><WavyText text="Add a Place"/><br/><WavyText text='📍'/></div> : null }
+        <div id="cursor" className="component-cursor" onClick={handleClickCursor}>
+          <AddPlace drop={showAddPlaceModal}/>
           <svg className="spinner" width={`${size}px`} height={`${size}px`} viewBox={`0 0 ${size+1} ${size+1}`} xmlns="http://www.w3.org/2000/svg">
             <circle className="path" fill="none" strokeWidth="4" strokeLinecap="round" cx={`${(size+1)/2}`} cy={`${(size+1)/2}`} r="15"></circle>
           </svg>
@@ -47,4 +47,17 @@ export const Cursor: React.FC<CursorProps> = ({ lnglat }) => {
   } else {
     return null
   }
+}
+
+const AddPlace = ({drop}) => {
+  const floatStyle = {
+
+  }
+  const classes = "cursor-menu " + (drop ? "no-shadow" : "")
+  return (
+    <div className={classes}>
+      { drop ? null : <div className="add-a-place"><WavyText text="Add a Place"/></div> }
+      { drop ? <div className="dropped-pin">📍</div> : <WavyText text='📍'/> }
+    </div>
+  )
 }
