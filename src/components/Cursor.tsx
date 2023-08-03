@@ -50,9 +50,6 @@ export const Cursor: React.FC<CursorProps> = ({ lnglat }) => {
 }
 
 const AddPlace = ({drop}) => {
-  const floatStyle = {
-
-  }
   const classes = "cursor-menu " + (drop ? "no-shadow" : "")
   return (
     <div className={classes}>

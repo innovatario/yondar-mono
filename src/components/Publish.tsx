@@ -114,7 +114,7 @@ const examplePlace = `
   "tags": [
     [ "d", "North Dakota Heritage Center & State Museum" ],
     [ "g", "cb266epj" ],
-    [ "alt", "This event represents a place. View it on yondar.me/${exampleNaddr}" ]
+    [ "alt", "This event represents a place. View it on go.yondar.me/${exampleNaddr}" ]
   ],
   "content": {
     "type": "Feature",
