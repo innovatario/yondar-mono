@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { Me } from './Me'
 import { MapPlaces } from './MapPlaces'
 import { Cursor } from './Cursor'
@@ -6,6 +6,8 @@ import Map, { ViewState } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { useGeolocationData } from '../hooks/useGeolocationData'
 import { FollowTarget } from '../types/Follow'
+import { ModalContextType } from "../types/ModalType"
+import { ModalContext } from "../providers/ModalProvider"
 
 type YondarMapProps = {
   children?: React.ReactNode
@@ -19,6 +21,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
   const [triggerGeo, setTriggerGeo] = useState<boolean>(false)
   const [follow, setFollow] = useState<FollowTarget>(null)
   const {position} = useGeolocationData()
+  const {modal} = useContext<ModalContextType>(ModalContext)
 
   function setViewState(viewState: ViewState) {
     // unlock map, we moved the map by interaction
@@ -34,7 +37,13 @@ export const YondarMap = ({ children }: YondarMapProps) => {
     if (!triggerGeo) setTriggerGeo(true)
     if (event.originalEvent?.target?.tagName === "CANVAS") {
       // we touched the map. Place the cursor.
-      setCursorPosition(event.lngLat)
+      if (modal?.placeForm) {
+        // if the place form is open, don't move the cursor
+        // close the place form
+        modal.setPlaceForm(false)
+      } else { 
+        setCursorPosition(event.lngLat)
+      }
     }
   }
 
