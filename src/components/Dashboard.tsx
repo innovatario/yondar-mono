@@ -3,16 +3,20 @@ import { HomeButton } from "./HomeButton"
 import { IdentityContext } from "../providers/IdentityProvider"
 import { IdentityContextType } from "../types/IdentityType"
 import { ExportIdentityButton } from "./ExportIdentityButton"
-import '../scss/Dashboard.scss'
 import { WipeIdentityButton } from "./WipeIdentityButton"
 import { YondarMap } from "./YondarMap"
 import { LogoButton } from "./LogoButton"
 import { NewPlaceButton } from "./NewPlaceButton"
 import defaultDisplayImage from '../assets/default-display-image.png'
 import defaultBanner from '../assets/default-banner.png'
+import { ModalContextType } from "../types/ModalType"
+import { ModalContext } from "../providers/ModalProvider"
+import { PlaceForm } from "./PlaceForm"
+import '../scss/Dashboard.scss'
 
 export const Dashboard = () => {
   const {identity} = useContext<IdentityContextType>(IdentityContext)
+  const {modal} = useContext<ModalContextType>(ModalContext)
   const [showProfile, setShowProfile] = useState(false)
 
   const displayImage = identity?.picture && identity.picture !== 'unknown' ? identity.picture : defaultDisplayImage
@@ -39,20 +43,16 @@ export const Dashboard = () => {
 
   return (
     <div id="dashboard">
-      <div className="flexcol">
-        <YondarMap>
-          <LogoButton>
-              <HomeButton/><NewPlaceButton/>
-              <br/>
-              <ExportIdentityButton/><WipeIdentityButton/>
+      <YondarMap>
+        <LogoButton>
+            <HomeButton/><NewPlaceButton/>
+            <br/>
+            <ExportIdentityButton/><WipeIdentityButton/>
 
-          </LogoButton>
-          { showProfile ? $profile : null }
-        </YondarMap>
-        {/* <div className="float-button-menu">
-          <NewPlaceButton onClick={composeNewPlace}/>
-        </div> */}
-      </div>
+        </LogoButton>
+        { showProfile ? $profile : null }
+      </YondarMap>
+      { modal?.placeForm ? <PlaceForm/> : null }
     </div>
   )
 }

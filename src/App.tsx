@@ -6,6 +6,8 @@ import { Dashboard } from './components/Dashboard.tsx'
 import './scss/App.scss'
 import { Publish } from './components/Publish.tsx'
 import { GeolocationProvider } from './providers/GeolocationProvider.tsx'
+import { DraftPlaceProvider } from './providers/DraftPlaceProvider.tsx'
+import { ModalProvider } from './providers/ModalProvider.tsx'
 
 function App() {
 
@@ -13,12 +15,16 @@ function App() {
     <div id="app">
         <IdentityProvider>
           <GeolocationProvider>
-            <Routes>
-              <Route path="/" element={<Home/>}/>
-              <Route path="/login" element={<Login/>}/>
-              <Route path="/dashboard" element={<Dashboard/>}/>
-              <Route path="/publish" element={<Publish/>}/>
-            </Routes>
+            <DraftPlaceProvider>
+              <ModalProvider>
+                <Routes>
+                  <Route path="/" element={<Home/>}/>
+                  <Route path="/login" element={<Login/>}/>
+                  <Route path="/dashboard" element={<Dashboard/>}/>
+                  <Route path="/publish" element={<Publish/>}/>
+                </Routes>
+              </ModalProvider>
+            </DraftPlaceProvider>
           </GeolocationProvider>
         </IdentityProvider>
     </div>
