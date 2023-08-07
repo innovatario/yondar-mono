@@ -45,7 +45,7 @@ export const Dashboard = () => {
     <div id="dashboard">
       <YondarMap>
         <LogoButton>
-            <HomeButton/><NewPlaceButton/>
+            <HomeButton/>
             <br/>
             <ExportIdentityButton/><WipeIdentityButton/>
 

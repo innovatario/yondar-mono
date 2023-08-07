@@ -94,7 +94,7 @@ $duration: 5s;
 }
 
 .dropped-pin {
-  animation: drop-pin 500ms ease-out forwards;
+  animation: drop-pin 200ms ease-in forwards;
   transform: translateY(0rem);
 
   @keyframes drop-pin {

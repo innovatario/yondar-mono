@@ -70,7 +70,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({edit = false}) => {
 
   return (
     <div id="component-placeform">
-      <h1>{ edit ? "Edit your" : "Add a" } Place</h1>
+      <h1>{ edit ? "Edit your" : "Add a" } Place 📍</h1>
       { edit ? null : <p>Places can be edited later! They are replaceable events.</p> }
       <label htmlFor="name">Name</label>
       <input id="name" ref={nameRef} type="text" placeholder="Name of this Place" />
@@ -79,7 +79,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({edit = false}) => {
       <label htmlFor="description">Description</label>
       <textarea id="description" placeholder="A couple sentences to decribe the Place"></textarea>
       {/* street-address, locality, region, country-name, postal-code fields are under the Address area of the form */}
-      <label htmlFor="address"><h2>Address Information</h2></label>
+      <label htmlFor="address"><h2>Address Information<br/><small>(optional)</small></h2></label>
       <fieldset id="address">
         <label htmlFor="street-address">Street Address</label>
         <input id="street-address" type="text" placeholder="Street Address" />
