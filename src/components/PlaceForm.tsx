@@ -71,6 +71,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({edit = false}) => {
   return (
     <div id="component-placeform">
       <h1>{ edit ? "Edit your" : "Add a" } Place</h1>
+      { edit ? null : <p>Places can be edited later! They are replaceable events.</p> }
       <label htmlFor="name">Name</label>
       <input id="name" ref={nameRef} type="text" placeholder="Name of this Place" />
       <label htmlFor="abbrev">Abbreviation</label>

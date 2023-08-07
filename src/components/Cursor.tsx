@@ -23,14 +23,14 @@ export const Cursor: React.FC<CursorProps> = ({ lnglat }) => {
 
   useEffect(() => {
     setPinDrop(false)
-    modal?.setPlaceForm(false)
+    // modal?.setPlaceForm(false)
   }, [lnglat])
 
   const handleClickCursor = () => {
     if (map && lnglat) {
       map.flyTo({
         center: [lnglat.lng, lnglat.lat],
-        duration: 500,
+        duration: 500
       })
       map.once('moveend', () => {
         setTimeout(() => modal?.setPlaceForm(true), 500)
