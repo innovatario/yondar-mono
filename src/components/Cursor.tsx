@@ -26,16 +26,29 @@ export const Cursor: React.FC<CursorProps> = ({ lnglat }) => {
     // modal?.setPlaceForm(false)
   }, [lnglat])
 
+  const center = (duration = 0) => {
+    map.flyTo({
+      center: [lnglat.lng, lnglat.lat],
+      duration
+    })
+  }
+  const moveCallbackOnce = (callback) => {
+    map.once('moveend', callback)
+  }
+
   const handleClickCursor = () => {
     if (map && lnglat) {
-      map.flyTo({
-        center: [lnglat.lng, lnglat.lat],
-        duration: 500
-      })
-      map.once('moveend', () => {
-        setTimeout(() => modal?.setPlaceForm(true), 500)
-        setPinDrop(true)
-      })
+
+      if (pinDrop) {
+        modal?.setPlaceForm(true)
+      } else {
+        // center, drop pin
+        center(500)
+        moveCallbackOnce( () => {
+          setPinDrop(true)
+          setTimeout(() => modal?.setPlaceForm(true), 500)
+        })
+      }
     }
   }
 

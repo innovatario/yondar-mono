@@ -87,7 +87,7 @@ $duration: 5s;
   }
 
   &.no-shadow {
-    text-shadow: none;
+    // text-shadow: none;
     animation: none;
   }
 
@@ -99,9 +99,11 @@ $duration: 5s;
 
   @keyframes drop-pin {
     0% {
-      transform: translateY(-5rem);
+      text-shadow: 0px 40px 10px #000,0px 40px 10px #000;
+      transform: translateY(-4.5rem);
     }
     100% {
+      text-shadow: 0px 0px 3px #000,0px 0px 0px #000;
       transform: translateY(0rem);
     }
   }
