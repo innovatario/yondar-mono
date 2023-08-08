@@ -6,7 +6,6 @@ import { ExportIdentityButton } from "./ExportIdentityButton"
 import { WipeIdentityButton } from "./WipeIdentityButton"
 import { YondarMap } from "./YondarMap"
 import { LogoButton } from "./LogoButton"
-import { NewPlaceButton } from "./NewPlaceButton"
 import defaultDisplayImage from '../assets/default-display-image.png'
 import defaultBanner from '../assets/default-banner.png'
 import { ModalContextType } from "../types/ModalType"

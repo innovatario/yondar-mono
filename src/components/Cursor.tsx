@@ -4,6 +4,8 @@ import '../scss/Cursor.scss'
 import { WavyText } from './WavyText'
 import { ModalContextType } from "../types/ModalType"
 import { ModalContext } from "../providers/ModalProvider"
+import { useGeolocationData } from '../hooks/useGeolocationData'
+
 
 type CursorProps = {
   lnglat: {
@@ -16,6 +18,9 @@ export const Cursor: React.FC<CursorProps> = ({ lnglat }) => {
 
   const [pinDrop, setPinDrop] = useState(false) // this is used to trigger the pin drop animation
   const {modal} = useContext<ModalContextType>(ModalContext)
+  const {setCursorPosition} = useGeolocationData()
+
+  setCursorPosition(lnglat)
 
   const {current: map} = useMap()
 

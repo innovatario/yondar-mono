@@ -9,20 +9,30 @@ type GeolocationProviderProps = {
 type GeolocationContextType = {
   position: GeolocationPosition | null
   setPosition: Function
+  cursorPosition: CursorPositionType
+  setCursorPosition: Function
 }
+
+type CursorPositionType = {
+  lng: number
+  lat: number
+} | null
 
 const defaultGeolocationContext: GeolocationContextType = {
   position: null,
   setPosition: () => {},
+  cursorPosition: null,
+  setCursorPosition: () => {},
 }
 
 export const GeolocationContext = createContext<GeolocationContextType>(defaultGeolocationContext)
 
 export const GeolocationProvider: React.FC<GeolocationProviderProps> = ({ children }) => {
   const [position, setPosition] = useState(null)
+  const [cursorPosition, setCursorPosition] = useState(null)
 
   return (
-    <GeolocationContext.Provider value={{ position, setPosition }}>
+    <GeolocationContext.Provider value={{ position, setPosition, cursorPosition, setCursorPosition }}>
       {children}
     </GeolocationContext.Provider>
   )
