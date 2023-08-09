@@ -1,6 +1,12 @@
+import { UnsignedEvent } from 'nostr-tools'
+
+export enum Kind {
+  Place = 37515,
+}
+
 export type DraftPlace = {
   kind: 37515,
-  tags: string[][]
+  tags: string[][],
   content: {
     type: "Feature",
     geometry: {
@@ -29,11 +35,15 @@ export type DraftPlace = {
   }
 }
 
+// this is used in code to validate properties
 export const requiredProperties = [
   'name',
   'description',
   'type',
 ]
+
+// create a type for a version of DraftPlace that can be signed and broadcast
+export type SignableDraftPlace<K extends number = Kind> = UnsignedEvent<K>
 
 export type GooglePlaceStatus = 'CLOSED_TEMPORARILY' | 'CLOSED_PERMANENTLY' | 'OPERATIONAL'
 

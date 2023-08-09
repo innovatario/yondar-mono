@@ -1,5 +1,6 @@
-import { EventTemplate, Event } from 'nostr-tools';
+import { Event, UnsignedEvent } from 'nostr-tools';
 import { NostrWindow } from '../types/NostrWindow'
+import { SignableDraftPlace } from '../types/Place';
 
 // This declaration allows us to access window.nostr without TS errors.
 // https://stackoverflow.com/a/47130953
@@ -30,7 +31,7 @@ export const getPublicKey = async (): Promise<string|null> => {
  * Try/catch wrapper for window.nostr.signEvent
  * nostr.signEvent can error if the user rejects the signature request or if no key has been set up yet.
  */
-export const signEvent = async (event: EventTemplate): Promise<Event|null> => {
+export const signEvent = async (event: UnsignedEvent | SignableDraftPlace): Promise<Event|null> => {
   let signed: Event 
   try {
     signed = await window.nostr.signEvent(event)

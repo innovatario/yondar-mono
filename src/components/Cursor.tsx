@@ -20,7 +20,6 @@ export const Cursor: React.FC<CursorProps> = ({ lnglat }) => {
   const {modal} = useContext<ModalContextType>(ModalContext)
   const {setCursorPosition} = useGeolocationData()
 
-  setCursorPosition(lnglat)
 
   const {current: map} = useMap()
 
@@ -28,6 +27,7 @@ export const Cursor: React.FC<CursorProps> = ({ lnglat }) => {
 
   useEffect(() => {
     setPinDrop(false)
+    setCursorPosition(lnglat)
     // modal?.setPlaceForm(false)
   }, [lnglat])
 

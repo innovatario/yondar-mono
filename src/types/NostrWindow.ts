@@ -1,6 +1,7 @@
-import { Event, EventTemplate } from "nostr-tools"
+import { Event, UnsignedEvent } from "nostr-tools"
+import { SignableDraftPlace } from "./Place"
 
 export type NostrWindow = {
   getPublicKey(): Promise<string>
-  signEvent(event: EventTemplate) : Promise<Event>
+  signEvent(event: UnsignedEvent | SignableDraftPlace) : Promise<Event>
 }

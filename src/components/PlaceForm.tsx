@@ -1,11 +1,14 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import { useGeolocationData } from '../hooks/useGeolocationData'
-import { typeDropdown, DraftPlace, GooglePlaceType, GooglePlaceStatus, requiredProperties } from '../types/Place'
-import { IdentityContext, IdentityContextType } from '../providers/IdentityProvider'
+import { typeDropdown, DraftPlace, GooglePlaceType, GooglePlaceStatus, requiredProperties, SignableDraftPlace } from '../types/Place'
+import { IdentityContext } from '../providers/IdentityProvider'
+import { IdentityContextType } from '../types/IdentityType'
 import { FancyButton } from './FancyButton'
-import { nip19 } from 'nostr-tools'
+import { EventTemplate, UnsignedEvent, nip19 } from 'nostr-tools'
 import '../scss/PlaceForm.scss'
 import { defaultRelays } from '../libraries/Nostr'
+import Geohash from 'latlon-geohash'
+import { signEvent } from '../libraries/NIP-07'
 
 /* create a tsx form to handle input for a new place based on the examplePlace: 
 const examplePlace = `
@@ -52,7 +55,8 @@ type PlaceFormProps = {
 
 export const PlaceForm: React.FC<PlaceFormProps> = ({edit = false}) => {
   const {identity} = useContext<IdentityContextType>(IdentityContext)
-  const { cursorPosition } = useGeolocationData()
+  const {cursorPosition} = useGeolocationData()
+  const [naddr, setNaddr] = useState<string>("")
 
   // create a form to handle input for a new place based on the examplePlace. Do not take JSON - this form should be user-friendly.
   // use the following form fields:
@@ -63,32 +67,39 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({edit = false}) => {
   // useState, useEffect
 
   // refs for all fields 
-  const nameRef = React.createRef<HTMLInputElement>()
-  const abbrevRef = React.createRef<HTMLInputElement>()
-  const descriptionRef = React.createRef<HTMLTextAreaElement>()
-  const streetAddressRef = React.createRef<HTMLInputElement>()
-  const localityRef = React.createRef<HTMLInputElement>()
-  const regionRef = React.createRef<HTMLInputElement>()
-  const countryNameRef = React.createRef<HTMLInputElement>()
-  const postalCodeRef = React.createRef<HTMLInputElement>()
-  const typeRef = React.createRef<HTMLSelectElement>()
-  const statusRef = React.createRef<HTMLSelectElement>()
-  const websiteRef = React.createRef<HTMLInputElement>()
-  const phoneRef = React.createRef<HTMLInputElement>()
+  const nameRef = useRef<HTMLInputElement>(null)
+  const [nameFieldValue, setNameFieldValue] = useState("")
+  const abbrevRef = useRef<HTMLInputElement>(null)
+  const descriptionRef = useRef<HTMLTextAreaElement>(null)
+  const streetAddressRef = useRef<HTMLInputElement>(null)
+  const localityRef = useRef<HTMLInputElement>(null)
+  const regionRef = useRef<HTMLInputElement>(null)
+  const countryNameRef = useRef<HTMLInputElement>(null)
+  const postalCodeRef = useRef<HTMLInputElement>(null)
+  const typeRef = useRef<HTMLSelectElement>(null)
+  const statusRef = useRef<HTMLSelectElement>(null)
+  const websiteRef = useRef<HTMLInputElement>(null)
+  const phoneRef = useRef<HTMLInputElement>(null)
 
   // get naddr
-  const naddr = nip19.naddrEncode({
-    pubkey: identity.pubkey,
-    relays: defaultRelays,
-    kind: 37515,
-    identifier: nameRef.current?.value || ""
-  })
+  useEffect(() => {
+    const naddr = nip19.naddrEncode({
+      pubkey: identity.pubkey, 
+      relays: defaultRelays,
+      kind: 37515,
+      identifier: nameFieldValue
+    })
 
-  // TODO: get geohash from coordinates from latlong-geohash library
-  //
-  const geohash = "TODO" 
+    setNaddr(naddr)
 
-  const publish = () => {
+  }, [identity.pubkey, nameFieldValue])
+
+  console.log('naddr',naddr)
+
+  // get geohash from coordinates from latlong-geohash library
+  const geohash = Geohash.encode(cursorPosition.lat, cursorPosition.lng, 5)
+
+  const publish = async () => {
     // create an event from the form data conforming to the type DraftPlace
     if (!nameRef.current?.value) return // name is required
     if (!cursorPosition) return // this should never happen
@@ -134,8 +145,26 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({edit = false}) => {
         delete newPlace.content.properties[key]
       }
     })
+    // eliminate empty fields from address property, and eliminate the address property altogether if it is totally full of empty fields:
+    Object.keys(newPlace.content.properties.address).forEach(key => {
+      if (newPlace.content.properties.address[key] === "") {
+        delete newPlace.content.properties.address[key]
+      }
+    })
+    if (Object.keys(newPlace.content.properties.address).length === 0) {
+      delete newPlace.content.properties.address
+    }
 
-    // TODO: serialize content property
+    // stringify content property
+    const signableDraftPlace: SignableDraftPlace = {
+      ...newPlace,
+      content: JSON.stringify(newPlace.content),
+      created_at: Math.floor(Date.now()/1000),
+      pubkey: identity.pubkey,
+    }
+
+    // publish the event
+    const signedEvent = await signEvent(signableDraftPlace)
 
 
   }
@@ -145,7 +174,14 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({edit = false}) => {
       <h1>{ edit ? "Edit your" : "Add a" } Place 📍</h1>
       { edit ? null : <p>Places can be edited later! They are replaceable events.</p> }
       <label htmlFor="name">Name</label>
-      <input required={true} id="name" ref={nameRef} type="text" placeholder="Name of this Place" />
+      <input
+        required={true}
+        id="name"
+        ref={nameRef}
+        type="text"
+        placeholder="Name of this Place"
+        onChange={e => setNameFieldValue(e.target.value)}
+      />
       <label htmlFor="abbrev">Abbreviation</label>
       <input id="abbrev" ref={abbrevRef} type="text" placeholder="Abbreviated (short) name" />
       <label htmlFor="description">Description</label>
