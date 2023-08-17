@@ -1,12 +1,20 @@
-import { useState, useEffect, useReducer } from 'react'
+import { useState, useEffect, useReducer, useContext } from 'react'
+import { IdentityContextType } from '../types/IdentityType'
+import { IdentityContext } from '../providers/IdentityProvider'
+import { ModalContextType, ModalType } from '../types/ModalType'
+import { ModalContext } from '../providers/ModalProvider'
 import { Event, Filter } from 'nostr-tools'
 import { defaultRelays, pool } from "../libraries/Nostr"
 import { useGeolocation } from '../hooks/useGeolocation'
+import { useGeolocationData } from "../hooks/useGeolocationData";
 import { useMap } from 'react-map-gl'
-import { BeaconCollection } from "../types/Beacon"
 import { Marker } from 'react-map-gl'
 import '../scss//MapPlaces.scss'
 import { isOpenNow } from '../libraries/decodeDay'
+import { DraftPlaceContext } from '../providers/DraftPlaceProvider'
+import { DraftPlaceContextType } from '../types/Place'
+import { beaconToDraftPlace } from '../libraries/draftPlace'
+import { CursorPositionType } from '../providers/GeolocationProvider'
 
 type MapPlacesProps = {
   children?: React.ReactNode
@@ -28,7 +36,9 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
   const [beacons, beaconsDispatch] = useReducer(beaconsReducer, {})
   const { position } = useGeolocation()
   const {current: map} = useMap()
-
+  const { identity } = useContext<IdentityContextType>(IdentityContext)
+  const {modal} = useContext<ModalContextType>(ModalContext)
+  const { draftPlace, setDraftPlace } = useContext<DraftPlaceContextType>(DraftPlaceContext);
 
   useEffect( () => {
     const filter: Filter = {kinds: [37515]}
@@ -36,7 +46,11 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
     sub.on('event', (event) => {
       try {
         event.content = JSON.parse(event.content)
-        // console.log('found beacon', event.tags[0][1])
+        console.log(event.content.properties.name, event)
+        if (event.content.geometry.coordinates.lat) {
+          const lnglat = [event.content.geometry.coordinates.lng, event.content.geometry.coordinates.lat]
+          event.content.geometry.coordinates = lnglat
+        }
         if (!event.content.geometry || !event.content.geometry.coordinates) throw new Error('No coordinates')
         beaconsDispatch({
           type: 'add',
@@ -48,7 +62,7 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
     })
   }, [])
 
-  return Object.values(beacons).map( (beacon) => {
+  return Object.values(beacons).map( (beacon: Event ) => {
     const handleFollow = () => {
       if (map && position) {
         map.flyTo({
@@ -60,24 +74,33 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
     }
     return (
       <Marker key={beacon.id} longitude={beacon.content.geometry.coordinates[0]} latitude={beacon.content.geometry.coordinates[1]} offset={[-20,-52]} anchor={'center'}>
-        <Beacon beaconData={beacon} clickHandler={handleFollow}/>
+        <Beacon
+          currentUserPubkey={identity?.pubkey}
+          modal={modal}
+          beaconData={beacon}
+          clickHandler={handleFollow}
+          draft={{
+            draftPlace,
+            setDraftPlace
+          }} />
       </Marker>
     )
   })
 }
 
 type BeaconProps = {
+  currentUserPubkey: string | undefined,
   beaconData: Event,
-  clickHandler: () => void
+  modal: ModalType,
+  clickHandler: () => void,
+  draft: DraftPlaceContextType
 }
 
-const Beacon = ({beaconData, clickHandler}: BeaconProps) => {
+const Beacon = ({currentUserPubkey, beaconData, modal, clickHandler, draft}: BeaconProps) => {
   const [show, setShow] = useState<boolean>(false)
   const [beaconProfilePicture, setBeaconProfilePicture] = useState<string>('')
-  const toggle = () => {
-    if (!show) clickHandler()
-    setShow(!show)
-  }
+  const { setDraftPlace } = draft 
+  const { setCursorPosition } = useGeolocationData()
 
   useEffect( () => {
     // get profile for beacon owner (pubkey) by querying for most recent kind 0 (profile)
@@ -94,7 +117,28 @@ const Beacon = ({beaconData, clickHandler}: BeaconProps) => {
     })
   }, [])
 
-  const mapMarker = <div className="beacon__marker">{<MapPin color={`#${beaconData.pubkey.substring(0,6)}`} image={beaconProfilePicture}/>}</div>
+  const toggle = () => {
+    if (!show) clickHandler()
+    setShow(!show)
+  }
+
+  const editPlace = () => {
+    // set cursor to beacon's current coordinates
+    const lnglat: CursorPositionType = {
+      lng: beaconData.content.geometry.coordinates[0],
+      lat: beaconData.content.geometry.coordinates[1]
+    }
+    setCursorPosition(lnglat)
+
+    // load place data into modal 
+    const newPlace = beaconToDraftPlace(beaconData) 
+
+    // set draft place
+    setDraftPlace(newPlace)
+    modal?.setPlaceForm(true)
+  }
+
+  const mapMarker = <div className="beacon__marker" onClick={toggle}>{<MapPin color={`#${beaconData.pubkey.substring(0,6)}`} image={beaconProfilePicture}/>}</div>
 
   const showBeaconInfo = () => {
 
@@ -119,17 +163,26 @@ const Beacon = ({beaconData, clickHandler}: BeaconProps) => {
       console.log('failed to parse hours', e)
     }
 
+    let edit = null
+    try {
+      if (currentUserPubkey === beaconData.pubkey)
+        edit = <button onClick={editPlace} style={{float: "right", marginTop: "2rem", marginRight: "-1rem"}}>Edit</button>
+    } catch (e) {
+      console.log('', e)
+    }
+
     return (
-      <div className="beacon__info">
+      <div className="beacon__info" onClick={toggle}>
         {beaconName}
         {beaconDescription}
         {hours}
+        {edit}
       </div>
     )
   }
 
   return (
-      <div className="beacon" onClick={toggle}>
+      <div className="beacon">
         {mapMarker}
         { show ? showBeaconInfo() : null }
       </div>

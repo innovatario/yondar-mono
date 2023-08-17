@@ -16,5 +16,11 @@
     "desc": "edit beacon",
     "status": "pending",
     "modified": "2023-08-17 14:33:29.1933905 -0500 CDT"
+  },
+  {
+    "id": 4,
+    "desc": "editing beacon creates null coordinates",
+    "status": "pending",
+    "modified": "2023-08-17 16:49:54.781641 -0500 CDT"
   }
 ]

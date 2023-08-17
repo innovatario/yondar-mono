@@ -3,8 +3,6 @@ import { useGeolocationData } from "../hooks/useGeolocationData";
 import {
   typeDropdown,
   DraftPlace,
-  GooglePlaceType,
-  GooglePlaceStatus,
   requiredProperties,
   SignableDraftPlace,
 } from "../types/Place";
@@ -16,11 +14,11 @@ import { DraftPlaceContext } from "../providers/DraftPlaceProvider";
 import { DraftPlaceContextType } from "../types/Place";
 import { freshDefaultPlace } from "../libraries/defaultPlace";
 import { FancyButton } from "./FancyButton";
-import { nip19 } from "nostr-tools";
 import "../scss/PlaceForm.scss";
 import { defaultRelays, pool } from "../libraries/Nostr";
 import Geohash from "latlon-geohash";
 import { signEvent } from "../libraries/NIP-07";
+import { createDraftPlace, createNaddr } from "../libraries/draftPlace";
 
 /* create a tsx form to handle input for a new place based on the examplePlace: 
 const examplePlace = `
@@ -67,8 +65,7 @@ type PlaceFormProps = {
 
 export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
   const { identity } = useContext<IdentityContextType>(IdentityContext);
-  const { draftPlace, setDraftPlace } =
-    useContext<DraftPlaceContextType>(DraftPlaceContext);
+  const { draftPlace, setDraftPlace } = useContext<DraftPlaceContextType>(DraftPlaceContext);
   const { cursorPosition } = useGeolocationData();
   const { modal } = useContext<ModalContextType>(ModalContext);
 
@@ -94,63 +91,35 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
 
   // get naddr
   useEffect(() => {
-    const naddr = nip19.naddrEncode({
-      pubkey: identity.pubkey,
-      relays: defaultRelays,
-      kind: 37515,
-      identifier: draftPlace.content.properties.name || "",
-    })
-
+    const naddr = createNaddr(identity.pubkey, nameRef.current?.value)
     setNaddr(naddr)
   }, [identity.pubkey, draftPlace])
 
   // get geohash from coordinates from latlong-geohash library
   const geohash = Geohash.encode(cursorPosition.lat, cursorPosition.lng, 5)
 
-  /**
-   * 
-   * @returns a DraftPlace object based on the form data
-   */
-  const createDraftPlace = () => {
-    const newPlace: DraftPlace = {
-      kind: 37515,
-      tags: [
-        ["d", nameRef.current?.value],
-        ["g", geohash],
-        [
-          "alt",
-          `This event represents a place. View it on https://go.yondar.me/place/${naddr}`,
-        ],
-      ],
-      content: {
-        type: "Feature",
-        geometry: {
-          coordinates: [cursorPosition.lng, cursorPosition.lat],
-          type: "Point",
-        },
-        properties: {
-          name: nameRef.current?.value || "",
-          abbrev: abbrevRef.current?.value || "",
-          description: descriptionRef.current?.value || "",
-          address: {
-            "street-address": streetAddressRef.current?.value || "",
-            locality: localityRef.current?.value || "",
-            region: regionRef.current?.value || "",
-            "country-name": countryNameRef.current?.value || "",
-            "postal-code": postalCodeRef.current?.value || "",
-          },
-          type: (typeRef.current?.value || "") as GooglePlaceType,
-          status: (statusRef.current?.value || "") as GooglePlaceStatus,
-          website: websiteRef.current?.value || "",
-          phone: phoneRef.current?.value || "",
-        },
-      },
-    }
-    return newPlace
+  const prepareFormData = (): DraftPlace => {
+    return createDraftPlace(
+      nameRef.current?.value || "",
+      geohash,
+      naddr,
+      cursorPosition,
+      abbrevRef.current?.value || "",
+      descriptionRef.current?.value || "",
+      streetAddressRef.current?.value || "",
+      localityRef.current?.value || "",
+      regionRef.current?.value || "",
+      countryNameRef.current?.value || "",
+      postalCodeRef.current?.value || "",
+      typeRef.current?.value || "",
+      statusRef.current?.value || "",
+      websiteRef.current?.value || "",
+      phoneRef.current?.value || ""
+    )
   }
 
   const updateDraft = () => {
-    const newPlace = createDraftPlace()
+    const newPlace = prepareFormData()
     setDraftPlace(newPlace)
   }
 
@@ -164,7 +133,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
     if (!nameRef.current?.value) return // name is required
     if (!cursorPosition) return // this should never happen
 
-    const newPlace = createDraftPlace()
+    const newPlace = prepareFormData()
 
     // eliminate empty optional fields
     Object.keys(newPlace.content.properties).forEach((key) => {

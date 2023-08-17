@@ -16,7 +16,7 @@ type YondarMapProps = {
 export const YondarMap = ({ children }: YondarMapProps) => {
   const [longitude, setLongitude] = useState<number>(-80)
   const [latitude, setLatitude] = useState<number>(0)
-  const [cursorPosition, setCursorPosition] = useState<{lng: number, lat: number} | null>(null)
+  const {setCursorPosition} = useGeolocationData()
   const [zoom, setZoom] = useState<number>(1)
   const [triggerGeo, setTriggerGeo] = useState<boolean>(false)
   const [follow, setFollow] = useState<FollowTarget>(null)
@@ -65,7 +65,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       {/* { !triggerGeo ? <MapClickHint longitude={longitude} latitude={latitude} /> : null } */}
       { triggerGeo ? <Me setFollow={setFollow}/> : null }
       <MapPlaces/>
-      <Cursor lnglat={cursorPosition}/>
+      <Cursor/>
       { children }
     </Map>
     </>

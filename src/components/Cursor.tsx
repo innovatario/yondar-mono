@@ -7,18 +7,11 @@ import { ModalContext } from "../providers/ModalProvider"
 import { useGeolocationData } from '../hooks/useGeolocationData'
 
 
-type CursorProps = {
-  lnglat: {
-    lng: number, 
-    lat: number
-  }
-}
-
-export const Cursor: React.FC<CursorProps> = ({ lnglat }) => {
+export const Cursor: React.FC = () => {
 
   const [pinDrop, setPinDrop] = useState(false) // this is used to trigger the pin drop animation
   const {modal} = useContext<ModalContextType>(ModalContext)
-  const {setCursorPosition} = useGeolocationData()
+  const {cursorPosition} = useGeolocationData()
 
 
   const {current: map} = useMap()
@@ -27,13 +20,11 @@ export const Cursor: React.FC<CursorProps> = ({ lnglat }) => {
 
   useEffect(() => {
     setPinDrop(false)
-    setCursorPosition(lnglat)
-    // modal?.setPlaceForm(false)
-  }, [lnglat])
+  }, [cursorPosition])
 
   const center = (duration = 0) => {
     map.flyTo({
-      center: [lnglat.lng, lnglat.lat],
+      center: [cursorPosition.lng, cursorPosition.lat],
       duration
     })
   }
@@ -42,7 +33,7 @@ export const Cursor: React.FC<CursorProps> = ({ lnglat }) => {
   }
 
   const handleClickCursor = () => {
-    if (map && lnglat) {
+    if (map && cursorPosition) {
 
       if (pinDrop) {
         modal?.setPlaceForm(true)
@@ -58,9 +49,9 @@ export const Cursor: React.FC<CursorProps> = ({ lnglat }) => {
   }
 
   // this will fire on each navigator watch position update
-  if (lnglat) {
+  if (cursorPosition) {
     return (
-      <Marker longitude={lnglat.lng} latitude={lnglat.lat} anchor={'center'} offset={[0,0]}>
+      <Marker longitude={cursorPosition.lng} latitude={cursorPosition.lat} anchor={'center'} offset={[0,0]}>
         <div id="cursor" className="component-cursor" onClick={handleClickCursor}>
           <AddPlace drop={pinDrop}/>
           <svg className="spinner" width={`${size}px`} height={`${size}px`} viewBox={`0 0 ${size+1} ${size+1}`} xmlns="http://www.w3.org/2000/svg">

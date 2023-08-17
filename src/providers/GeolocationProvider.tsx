@@ -13,7 +13,7 @@ type GeolocationContextType = {
   setCursorPosition: Function
 }
 
-type CursorPositionType = {
+export type CursorPositionType = {
   lng: number
   lat: number
 } | null
