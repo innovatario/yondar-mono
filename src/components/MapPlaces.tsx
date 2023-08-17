@@ -57,17 +57,26 @@ type BeaconProps = {
 
 const Beacon = ({beaconData}: BeaconProps) => {
   const [show, setShow] = useState<boolean>(false)
+  const [beaconProfilePicture, setBeaconProfilePicture] = useState<string>('')
   const toggle = () => setShow(!show)
 
-  // get profile for beacon owner (pubkey) by querying for most recent kind 0 (profile)
-  const filter: Filter = {kinds: [0], authors: [beaconData.pubkey]}
-  const profileSub = pool.sub(defaultRelays, [filter])
-  profileSub.on('event', (event) => {
-    console.log('profile',event)
-    // setBeaconProfilePicture(event)
-  })
+  useEffect( () => {
+    // get profile for beacon owner (pubkey) by querying for most recent kind 0 (profile)
+    const filter: Filter = {kinds: [0], authors: [beaconData.pubkey]}
+    console.log('filter',filter,'beaconData',beaconData)
+    const profileSub = pool.sub(defaultRelays, [filter])
+    profileSub.on('event', (event) => {
+      try {
+        const profile = JSON.parse(event.content)
+        console.log('found profile', profile)
+        setBeaconProfilePicture(profile.picture)
+      } catch (e) {
+        console.log('Failed to parse event content:', e)
+      }
+    })
+  }, [])
 
-  const mapMarker = <div className="beacon__marker">{<MapPin color={`#${beaconData.pubkey.substring(0,6)}`} image={"https://avatars.githubusercontent.com/u/99223753?s=400&u=a5c6e84e34485e3ebbf93c9cd4ae2e85ef0e293c&v=4"}/>}</div>
+  const mapMarker = <div className="beacon__marker">{<MapPin color={`#${beaconData.pubkey.substring(0,6)}`} image={beaconProfilePicture}/>}</div>
 
   const showBeaconCreator = async () => {
     return null
