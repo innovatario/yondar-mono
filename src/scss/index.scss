@@ -25,6 +25,10 @@ body,
   -webkit-text-size-adjust: 100%;
 }
 
+.mapboxgl-map * {
+  font-family: "sofia-pro-soft", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
