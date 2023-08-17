@@ -6,6 +6,7 @@ import { useMap } from 'react-map-gl'
 import { BeaconCollection } from "../types/Beacon"
 import { Marker } from 'react-map-gl'
 import '../scss//MapPlaces.scss'
+import { isOpenNow } from '../libraries/decodeDay'
 
 type MapPlacesProps = {
   children?: React.ReactNode
@@ -81,7 +82,6 @@ const Beacon = ({beaconData, clickHandler}: BeaconProps) => {
   useEffect( () => {
     // get profile for beacon owner (pubkey) by querying for most recent kind 0 (profile)
     const filter: Filter = {kinds: [0], authors: [beaconData.pubkey]}
-    console.log('filter',filter,'beaconData',beaconData)
     const profileSub = pool.sub(defaultRelays, [filter])
     profileSub.on('event', (event) => {
       // this will return the most recent profile event for the beacon owner; only the most recent is stored as specified in NIP-01
@@ -96,21 +96,36 @@ const Beacon = ({beaconData, clickHandler}: BeaconProps) => {
 
   const mapMarker = <div className="beacon__marker">{<MapPin color={`#${beaconData.pubkey.substring(0,6)}`} image={beaconProfilePicture}/>}</div>
 
-  const showBeaconCreator = async () => {
-    return null
-  }
-
   const showBeaconInfo = () => {
+
+    let beaconName = null
     try {
-      return (
-        <div className="beacon__info">
-          <h2>{beaconData.content.properties.name}</h2>
-          <p>{beaconData.content.properties.description}</p>
-        </div>
-      )
-    } catch(e) {
-      console.log('beacon was malformed, skip rendering',e)
+      beaconName = <h2>{beaconData.content.properties.name}</h2>
+    } catch (e) {
+      console.log('failed to parse name', e)
     }
+
+    let beaconDescription = null
+    try {
+      beaconDescription = <p>{beaconData.content.properties.description}</p>
+    } catch (e) {
+      console.log('failed to parse description', e)
+    }
+
+    let hours = null
+    try {
+      hours = <p>{ isOpenNow(beaconData.content.properties.hours) ? "🟢 Open Now" : "⛔ Not Open Right Now"}</p>
+    } catch (e) {
+      console.log('failed to parse hours', e)
+    }
+
+    return (
+      <div className="beacon__info">
+        {beaconName}
+        {beaconDescription}
+        {hours}
+      </div>
+    )
   }
 
   return (
