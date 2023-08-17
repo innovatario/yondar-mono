@@ -52,7 +52,7 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
     const handleFollow = () => {
       if (map && position) {
         map.flyTo({
-          center: [beacon.content.geometry.coordinates[0], beacon.content.geometry.coordinates[1]],
+          center: [beacon.content.geometry.coordinates[0] + 0.0015, beacon.content.geometry.coordinates[1]],
           zoom: 16,
           duration: 1000,
         })
