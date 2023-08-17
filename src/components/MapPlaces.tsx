@@ -114,7 +114,7 @@ const Beacon = ({beaconData, clickHandler}: BeaconProps) => {
 
     let hours = null
     try {
-      hours = <p>{ isOpenNow(beaconData.content.properties.hours) ? "🟢 Open Now" : "⛔ Not Open Right Now"}</p>
+      hours = <p className="hours">{ isOpenNow(beaconData.content.properties.hours) ? "🟢 Open Now" : "⛔ Not Open Right Now"}<br/><small>{beaconData.content.properties.hours}</small></p>
     } catch (e) {
       console.log('failed to parse hours', e)
     }
