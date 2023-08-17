@@ -104,8 +104,6 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
     setNaddr(naddr)
   }, [identity.pubkey, draftPlace])
 
-  console.log("naddr", naddr)
-
   // get geohash from coordinates from latlong-geohash library
   const geohash = Geohash.encode(cursorPosition.lat, cursorPosition.lng, 5)
 

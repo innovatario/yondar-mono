@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useReducer } from 'react'
 import { Event, Filter } from 'nostr-tools'
 import { defaultRelays, pool } from "../libraries/Nostr"
 import { BeaconCollection } from "../types/Beacon"
@@ -9,8 +9,20 @@ type MapPlacesProps = {
   children?: React.ReactNode
 }
 
+const beaconsReducer = (state, action) => {
+  switch(action.type) {
+    case 'add': 
+      return {
+        ...state,
+        [action.beacon.id]: action.beacon  
+      }
+    default:
+      return state
+  }
+}
+
 export const MapPlaces = ({ children }: MapPlacesProps) => {
-  const [beacons, setBeacons] = useState<BeaconCollection>({})
+  const [beacons, beaconsDispatch] = useReducer(beaconsReducer, {})
 
   useEffect( () => {
     const filter: Filter = {kinds: [37515]}
@@ -18,10 +30,12 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
     sub.on('event', (event) => {
       try {
         event.content = JSON.parse(event.content)
-        console.log(event)
+        // console.log('found beacon', event.tags[0][1])
         if (!event.content.geometry || !event.content.geometry.coordinates) throw new Error('No coordinates')
-        const updatedBeacons = {...beacons, [event.id]: event}
-        setBeacons(updatedBeacons)
+        beaconsDispatch({
+          type: 'add',
+          beacon: event
+        })
       } catch (e) {
         // console.log('Failed to parse event content:', e)
       }
@@ -48,12 +62,16 @@ const Beacon = ({beaconData}: BeaconProps) => {
   const mapMarker = <div className="beacon__marker">📍</div>
 
   const showBeaconInfo = () => {
-    return (
-      <div className="beacon__info">
-        <h2>{beaconData.content.properties.name}</h2>
-        <p>{beaconData.content.properties.description}</p>
-      </div>
-    )
+    try {
+      return (
+        <div className="beacon__info">
+          <h2>{beaconData.content.properties.name}</h2>
+          <p>{beaconData.content.properties.description}</p>
+        </div>
+      )
+    } catch(e) {
+      console.log('beacon was malformed, skip rendering',e)
+    }
   }
 
   return (
