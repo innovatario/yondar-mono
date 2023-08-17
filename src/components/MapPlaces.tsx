@@ -1,6 +1,8 @@
 import { useState, useEffect, useReducer } from 'react'
 import { Event, Filter } from 'nostr-tools'
 import { defaultRelays, pool } from "../libraries/Nostr"
+import { useGeolocation } from '../hooks/useGeolocation'
+import { useMap } from 'react-map-gl'
 import { BeaconCollection } from "../types/Beacon"
 import { Marker } from 'react-map-gl'
 import '../scss//MapPlaces.scss'
@@ -23,6 +25,9 @@ const beaconsReducer = (state, action) => {
 
 export const MapPlaces = ({ children }: MapPlacesProps) => {
   const [beacons, beaconsDispatch] = useReducer(beaconsReducer, {})
+  const { position } = useGeolocation()
+  const {current: map} = useMap()
+
 
   useEffect( () => {
     const filter: Filter = {kinds: [37515]}
@@ -43,22 +48,35 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
   }, [])
 
   return Object.values(beacons).map( (beacon) => {
+    const handleFollow = () => {
+      if (map && position) {
+        map.flyTo({
+          center: [beacon.content.geometry.coordinates[0], beacon.content.geometry.coordinates[1]],
+          zoom: 16,
+          duration: 1000,
+        })
+      }
+    }
     return (
       <Marker key={beacon.id} longitude={beacon.content.geometry.coordinates[0]} latitude={beacon.content.geometry.coordinates[1]} offset={[-20,-52]} anchor={'center'}>
-        <Beacon beaconData={beacon}/>
+        <Beacon beaconData={beacon} clickHandler={handleFollow}/>
       </Marker>
     )
   })
 }
 
 type BeaconProps = {
-  beaconData: Event
+  beaconData: Event,
+  clickHandler: () => void
 }
 
-const Beacon = ({beaconData}: BeaconProps) => {
+const Beacon = ({beaconData, clickHandler}: BeaconProps) => {
   const [show, setShow] = useState<boolean>(false)
   const [beaconProfilePicture, setBeaconProfilePicture] = useState<string>('')
-  const toggle = () => setShow(!show)
+  const toggle = () => {
+    if (!show) clickHandler()
+    setShow(!show)
+  }
 
   useEffect( () => {
     // get profile for beacon owner (pubkey) by querying for most recent kind 0 (profile)
@@ -66,9 +84,9 @@ const Beacon = ({beaconData}: BeaconProps) => {
     console.log('filter',filter,'beaconData',beaconData)
     const profileSub = pool.sub(defaultRelays, [filter])
     profileSub.on('event', (event) => {
+      // this will return the most recent profile event for the beacon owner; only the most recent is stored as specified in NIP-01
       try {
         const profile = JSON.parse(event.content)
-        console.log('found profile', profile)
         setBeaconProfilePicture(profile.picture)
       } catch (e) {
         console.log('Failed to parse event content:', e)

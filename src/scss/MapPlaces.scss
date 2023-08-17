@@ -18,7 +18,7 @@
     width: 75vw;
     max-width: 300px;
     z-index: 10000;
-    animation: beacon-info-fade-in 250ms ease-out forwards;
+    animation: beacon-info-fade-in 500ms ease-out forwards;
     @keyframes beacon-info-fade-in {
       0% {
         opacity: 0;
