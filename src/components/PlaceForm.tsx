@@ -177,6 +177,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
       // TODO: clear form, show success message, close modal, happy animation, zoom in on new place?
       modal?.setPlaceForm(false)
       resetForm()
+      setCursorPosition(null)
     })
     pub.on("failed", (reason: string) => {
       console.error(`Failed to publish event. ${reason}`)
