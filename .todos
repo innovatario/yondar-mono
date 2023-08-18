@@ -28,5 +28,11 @@
     "desc": "if using generated identity, must not rely on extension to sign",
     "status": "pending",
     "modified": "2023-08-18 12:38:51.5715362 -0500 CDT"
+  },
+  {
+    "id": 6,
+    "desc": "add navigate-to button on beacon; invoke mapbox navigation instructions from current location if available",
+    "status": "pending",
+    "modified": "2023-08-18 12:40:00.5001859 -0500 CDT"
   }
 ]
