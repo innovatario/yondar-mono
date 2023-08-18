@@ -1,5 +1,4 @@
 import { nip19 } from "nostr-tools"
-import { CursorPositionType } from "../providers/GeolocationProvider"
 import { DraftPlace } from "../types/Place"
 import { defaultRelays } from "./Nostr"
 import { Event } from "nostr-tools";

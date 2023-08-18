@@ -11,12 +11,18 @@ import defaultBanner from '../assets/default-banner.png'
 import { ModalContextType } from "../types/ModalType"
 import { ModalContext } from "../providers/ModalProvider"
 import { PlaceForm } from "./PlaceForm"
+import { GeolocationProvider } from '../providers/GeolocationProvider.tsx'
 import '../scss/Dashboard.scss'
 
 export const Dashboard = () => {
   const {identity} = useContext<IdentityContextType>(IdentityContext)
   const {modal} = useContext<ModalContextType>(ModalContext)
   const [showProfile, setShowProfile] = useState(false)
+  const [userInteracted, setUserInteracted] = useState(false)
+
+  const initialInteraction = () => {
+    setUserInteracted(true)
+  }
 
   const displayImage = identity?.picture && identity.picture !== 'unknown' ? identity.picture : defaultDisplayImage
 
@@ -41,17 +47,19 @@ export const Dashboard = () => {
   )
 
   return (
-    <div id="dashboard">
-      <YondarMap>
-        <LogoButton>
-            <HomeButton/>
-            <br/>
-            <ExportIdentityButton/><WipeIdentityButton/>
+    <div id="dashboard" onClick={initialInteraction}>
+      <GeolocationProvider trigger={userInteracted}>
+        <YondarMap>
+          <LogoButton>
+              <HomeButton/>
+              <br/>
+              <ExportIdentityButton/><WipeIdentityButton/>
 
-        </LogoButton>
-        { showProfile ? $profile : null }
-      </YondarMap>
-      { modal?.placeForm ? <PlaceForm/> : null }
+          </LogoButton>
+          { showProfile ? $profile : null }
+        </YondarMap>
+        { modal?.placeForm ? modal.placeForm === 'edit' ? <PlaceForm edit={true}/> : <PlaceForm edit={false}/> : null }
+      </GeolocationProvider>
     </div>
   )
 }

@@ -17,6 +17,11 @@
   width: 90vw;
   z-index: 2;
 
+  &.edit {
+    height: 50vh;
+    top: 44vh;
+  }
+
   h1 {
     font-size: 2rem;
     margin: 0;

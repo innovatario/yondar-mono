@@ -1,18 +1,25 @@
-import React, { Dispatch, SetStateAction, useEffect }  from 'react'
-import { useGeolocation, validGeolocation } from '../hooks/useGeolocation'
-import { useGeolocationData } from '../hooks/useGeolocationData'
+import React, { Dispatch, SetStateAction }  from 'react'
 import { Marker, useMap } from 'react-map-gl'
 import { FollowTarget } from '../types/Follow'
 import '../scss/Me.scss'
+import { useGeolocationData } from '../hooks/useGeolocationData'
 
 type MeProps = {
   setFollow: Dispatch<SetStateAction<FollowTarget>>
 }
 
+const validGeolocation = ( position: GeolocationPosition | null) => {
+  if (position?.coords && position.coords.longitude && position.coords.latitude) {
+    return true
+  }
+  return false
+}
+
 export const Me: React.FC<MeProps> = ({ setFollow }) => {
 
-  const { position } = useGeolocation()
-  const { setPosition } = useGeolocationData()
+  const { position } = useGeolocationData()
+
+  console.log('me',position)
 
   const {current: map} = useMap()
 
@@ -31,13 +38,6 @@ export const Me: React.FC<MeProps> = ({ setFollow }) => {
       map.once('moveend', () => setFollow("USER"))
     }
   }
-
-  // this will fire on each navigator watch position update
-  useEffect(() => {
-    if (validGeolocation(position)) {
-      setPosition(position)
-    }
-  }, [position, setPosition])
 
   if (validGeolocation(position)) {
     return (

@@ -6,8 +6,11 @@ import { ModalContextType } from "../types/ModalType"
 import { ModalContext } from "../providers/ModalProvider"
 import { useGeolocationData } from '../hooks/useGeolocationData'
 
+type CursorProps = {
+  edit: boolean
+}
 
-export const Cursor: React.FC = () => {
+export const Cursor = ({edit}: CursorProps) => {
 
   const [pinDrop, setPinDrop] = useState(false) // this is used to trigger the pin drop animation
   const {modal} = useContext<ModalContextType>(ModalContext)
@@ -33,6 +36,8 @@ export const Cursor: React.FC = () => {
   }
 
   const handleClickCursor = () => {
+    if (edit) return
+
     if (map && cursorPosition) {
 
       if (pinDrop) {
@@ -53,7 +58,7 @@ export const Cursor: React.FC = () => {
     return (
       <Marker longitude={cursorPosition.lng} latitude={cursorPosition.lat} anchor={'center'} offset={[0,0]}>
         <div id="cursor" className="component-cursor" onClick={handleClickCursor}>
-          <AddPlace drop={pinDrop}/>
+          { edit ? null : <AddPlace drop={pinDrop}/> }
           <svg className="spinner" width={`${size}px`} height={`${size}px`} viewBox={`0 0 ${size+1} ${size+1}`} xmlns="http://www.w3.org/2000/svg">
             <circle className="path" fill="none" strokeWidth="4" strokeLinecap="round" cx={`${(size+1)/2}`} cy={`${(size+1)/2}`} r="15"></circle>
           </svg>

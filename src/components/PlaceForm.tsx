@@ -60,13 +60,13 @@ const examplePlace = `
 */
 
 type PlaceFormProps = {
-  edit?: boolean;
+  edit: boolean // the modal may be set to false to hide, true to show, or 'edit' to show and allow editing. But edit can only be true or false, and is only true when modal is set to 'edit'.
 };
 
 export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
   const { identity } = useContext<IdentityContextType>(IdentityContext);
   const { draftPlace, setDraftPlace } = useContext<DraftPlaceContextType>(DraftPlaceContext);
-  const { cursorPosition } = useGeolocationData();
+  const { cursorPosition, setCursorPosition } = useGeolocationData();
   const { modal } = useContext<ModalContextType>(ModalContext);
 
   // state for name field value so we can get an updated naddr
@@ -103,7 +103,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
       nameRef.current?.value || "",
       geohash,
       naddr,
-      cursorPosition,
+      [cursorPosition.lng, cursorPosition.lat],
       abbrevRef.current?.value || "",
       descriptionRef.current?.value || "",
       streetAddressRef.current?.value || "",
@@ -127,6 +127,12 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
     setDraftPlace(freshDefaultPlace())
     setFormKey(formKey + 1)
   }
+  const cancelEdit = () => {
+    resetForm()
+    setCursorPosition(null)
+    modal?.setPlaceForm(false)
+  }
+
 
   const publish = async () => {
     // create an event from the form data conforming to the type DraftPlace
@@ -177,9 +183,11 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
     })
   }
 
+  const editClass = edit ? 'edit' : ''
+
   return (
-    <div id="component-placeform" key={formKey}>
-      <button style={{float: 'right'}} onClick={resetForm}>Reset Form</button>
+    <div id="component-placeform" className={editClass} key={formKey}>
+      { edit ? <button style={{float: 'right'}} onClick={cancelEdit}>Cancel Edit</button> : <button style={{float: 'right'}} onClick={resetForm}>Reset Form</button> } 
       <h1>{edit ? "Edit your" : "Add a"} Place 📍</h1>
       {edit ? null : (
         <p>Places can be edited later! They are replaceable events.</p>

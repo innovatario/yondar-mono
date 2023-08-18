@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-export const useGeolocation = () => {
+export const useGeolocation = (trigger: boolean) => {
   const [position, setPosition] = useState<GeolocationPosition | null>(null)
   const [error, setError] = useState<GeolocationPositionError | null>(null)
 
@@ -14,17 +14,13 @@ export const useGeolocation = () => {
       return
     }
 
-    const watcher = geo.watchPosition(setPosition, setError)
+    let watcher: number
+    if (trigger) {
+      watcher = geo.watchPosition(setPosition,setError)
+    }
 
     return () => geo.clearWatch(watcher)
-  }, [])
+  }, [trigger])
 
-  return { position, error }
-}
-
-export const validGeolocation = ( position: GeolocationPosition | null) => {
-  if (position?.coords && position.coords.longitude && position.coords.latitude) {
-    return true
-  }
-  return false
+  return [ position ]
 }

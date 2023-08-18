@@ -16,11 +16,9 @@ type YondarMapProps = {
 export const YondarMap = ({ children }: YondarMapProps) => {
   const [longitude, setLongitude] = useState<number>(-80)
   const [latitude, setLatitude] = useState<number>(0)
-  const {setCursorPosition} = useGeolocationData()
+  const {position, setCursorPosition} = useGeolocationData()
   const [zoom, setZoom] = useState<number>(1)
-  const [triggerGeo, setTriggerGeo] = useState<boolean>(false)
   const [follow, setFollow] = useState<FollowTarget>(null)
-  const {position} = useGeolocationData()
   const {modal} = useContext<ModalContextType>(ModalContext)
 
   function setViewState(viewState: ViewState) {
@@ -29,15 +27,12 @@ export const YondarMap = ({ children }: YondarMapProps) => {
     setLongitude(viewState.longitude)
     setLatitude(viewState.latitude)
     setZoom(viewState.zoom)
-    // user has interacted with map, so request geolocation
-    if (!triggerGeo) setTriggerGeo(true)
   }
 
   function handleClick(event: mapboxgl.MapLayerMouseEvent) {
-    if (!triggerGeo) setTriggerGeo(true)
     if (event.originalEvent?.target?.tagName === "CANVAS") {
       // we touched the map. Place the cursor.
-      if (modal?.placeForm) {
+      if (modal?.placeForm === true) {
         // if the place form is open, don't move the cursor
         // close the place form
         modal.setPlaceForm(false)
@@ -63,9 +58,9 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       mapStyle='mapbox://styles/innovatar/ckg6zpegq44ym19pen438iclf'
     >
       {/* { !triggerGeo ? <MapClickHint longitude={longitude} latitude={latitude} /> : null } */}
-      { triggerGeo ? <Me setFollow={setFollow}/> : null }
-      <MapPlaces/>
-      <Cursor/>
+      <Me setFollow={setFollow}/>
+      <Cursor edit={modal?.placeForm === 'edit'}/>
+      { modal?.placeForm ? null : <MapPlaces/> }
       { children }
     </Map>
     </>

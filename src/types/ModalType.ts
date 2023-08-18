@@ -1,6 +1,6 @@
 export type ModalType = {
-  placeForm: boolean;
-  setPlaceForm: React.Dispatch<React.SetStateAction<boolean>>;
+  placeForm: boolean|'edit';
+  setPlaceForm: React.Dispatch<React.SetStateAction<boolean|'edit'>>;
 } | null
 
 export type ModalContextType = {

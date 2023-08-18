@@ -5,7 +5,6 @@ import { Login } from './components/Login'
 import { Dashboard } from './components/Dashboard.tsx'
 import './scss/App.scss'
 import { Publish } from './components/Publish.tsx'
-import { GeolocationProvider } from './providers/GeolocationProvider.tsx'
 import { DraftPlaceProvider } from './providers/DraftPlaceProvider.tsx'
 import { ModalProvider } from './providers/ModalProvider.tsx'
 
@@ -14,7 +13,6 @@ function App() {
   return (
     <div id="app">
         <IdentityProvider>
-          <GeolocationProvider>
             <DraftPlaceProvider>
               <ModalProvider>
                 <Routes>
@@ -25,7 +23,6 @@ function App() {
                 </Routes>
               </ModalProvider>
             </DraftPlaceProvider>
-          </GeolocationProvider>
         </IdentityProvider>
     </div>
   )

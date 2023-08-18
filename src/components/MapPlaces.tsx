@@ -5,7 +5,6 @@ import { ModalContextType, ModalType } from '../types/ModalType'
 import { ModalContext } from '../providers/ModalProvider'
 import { Event, Filter } from 'nostr-tools'
 import { defaultRelays, pool } from "../libraries/Nostr"
-import { useGeolocation } from '../hooks/useGeolocation'
 import { useGeolocationData } from "../hooks/useGeolocationData";
 import { useMap } from 'react-map-gl'
 import { Marker } from 'react-map-gl'
@@ -34,7 +33,7 @@ const beaconsReducer = (state, action) => {
 
 export const MapPlaces = ({ children }: MapPlacesProps) => {
   const [beacons, beaconsDispatch] = useReducer(beaconsReducer, {})
-  const { position } = useGeolocation()
+  const { position } = useGeolocationData()
   const {current: map} = useMap()
   const { identity } = useContext<IdentityContextType>(IdentityContext)
   const {modal} = useContext<ModalContextType>(ModalContext)
@@ -46,7 +45,7 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
     sub.on('event', (event) => {
       try {
         event.content = JSON.parse(event.content)
-        console.log(event.content.properties.name, event)
+        // console.log(event.content.properties.name, event)
         if (event.content.geometry.coordinates.lat) {
           const lnglat = [event.content.geometry.coordinates.lng, event.content.geometry.coordinates.lat]
           event.content.geometry.coordinates = lnglat
@@ -63,10 +62,21 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
   }, [])
 
   return Object.values(beacons).map( (beacon: Event ) => {
+    // move map so the beacon is left of the details box
     const handleFollow = () => {
       if (map && position) {
         map.flyTo({
           center: [beacon.content.geometry.coordinates[0] + 0.0015, beacon.content.geometry.coordinates[1]],
+          zoom: 16,
+          duration: 1000,
+        })
+      }
+    }
+    // move map so the beacon is above the edit form
+    const handleEdit = () => {
+      if (map && position) {
+        map.flyTo({
+          center: [beacon.content.geometry.coordinates[0], beacon.content.geometry.coordinates[1] - 0.0010],
           zoom: 16,
           duration: 1000,
         })
@@ -79,6 +89,7 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
           modal={modal}
           beaconData={beacon}
           clickHandler={handleFollow}
+          editHandler={handleEdit}
           draft={{
             draftPlace,
             setDraftPlace
@@ -93,10 +104,11 @@ type BeaconProps = {
   beaconData: Event,
   modal: ModalType,
   clickHandler: () => void,
+  editHandler: () => void,
   draft: DraftPlaceContextType
 }
 
-const Beacon = ({currentUserPubkey, beaconData, modal, clickHandler, draft}: BeaconProps) => {
+const Beacon = ({currentUserPubkey, beaconData, modal, clickHandler, editHandler, draft}: BeaconProps) => {
   const [show, setShow] = useState<boolean>(false)
   const [beaconProfilePicture, setBeaconProfilePicture] = useState<string>('')
   const { setDraftPlace } = draft 
@@ -118,24 +130,26 @@ const Beacon = ({currentUserPubkey, beaconData, modal, clickHandler, draft}: Bea
   }, [])
 
   const toggle = () => {
-    if (!show) clickHandler()
-    setShow(!show)
+    if (!modal?.placeForm) {
+      if (!show) clickHandler()
+      if (!show) setCursorPosition(null)
+      setShow(!show)
+    }
   }
 
   const editPlace = () => {
+    editHandler()
     // set cursor to beacon's current coordinates
     const lnglat: CursorPositionType = {
       lng: beaconData.content.geometry.coordinates[0],
       lat: beaconData.content.geometry.coordinates[1]
     }
     setCursorPosition(lnglat)
-
     // load place data into modal 
     const newPlace = beaconToDraftPlace(beaconData) 
-
     // set draft place
     setDraftPlace(newPlace)
-    modal?.setPlaceForm(true)
+    modal?.setPlaceForm('edit')
   }
 
   const mapMarker = <div className="beacon__marker" onClick={toggle}>{<MapPin color={`#${beaconData.pubkey.substring(0,6)}`} image={beaconProfilePicture}/>}</div>
@@ -160,7 +174,7 @@ const Beacon = ({currentUserPubkey, beaconData, modal, clickHandler, draft}: Bea
     try {
       hours = <p className="hours">{ isOpenNow(beaconData.content.properties.hours) ? "🟢 Open Now" : "⛔ Not Open Right Now"}<br/><small>{beaconData.content.properties.hours}</small></p>
     } catch (e) {
-      console.log('failed to parse hours', e)
+      // console.log('failed to parse hours', e)
     }
 
     let edit = null

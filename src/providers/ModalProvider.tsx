@@ -8,7 +8,7 @@ type ModalProviderProps = {
 export const ModalContext = createContext<ModalContextType>(defaultModalContext)
 
 export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
-  const [placeForm, setPlaceForm] = useState(false)
+  const [placeForm, setPlaceForm] = useState<boolean|'edit'>(false)
 
   const context: ModalContextType = {
     modal: {
