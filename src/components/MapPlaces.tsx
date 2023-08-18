@@ -76,7 +76,7 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
     const handleEdit = () => {
       if (map && position) {
         map.flyTo({
-          center: [beacon.content.geometry.coordinates[0], beacon.content.geometry.coordinates[1] - 0.0010],
+          center: [beacon.content.geometry.coordinates[0], beacon.content.geometry.coordinates[1] - 0.0015],
           zoom: 16,
           duration: 1000,
         })
