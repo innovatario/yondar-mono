@@ -180,7 +180,7 @@ const Beacon = ({currentUserPubkey, beaconData, modal, clickHandler, editHandler
     let edit = null
     try {
       if (currentUserPubkey === beaconData.pubkey)
-        edit = <button onClick={editPlace} style={{float: "right", marginTop: "2rem", marginRight: "-1rem"}}>Edit</button>
+        edit = <button onClick={editPlace} style={{float: "right", marginTop: "1.5rem", marginRight: "-1.0rem"}}>Edit</button>
     } catch (e) {
       console.log('', e)
     }
