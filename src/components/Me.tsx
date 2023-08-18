@@ -19,8 +19,6 @@ export const Me: React.FC<MeProps> = ({ setFollow }) => {
 
   const { position } = useGeolocationData()
 
-  console.log('me',position)
-
   const {current: map} = useMap()
 
   const emoji = "😀"

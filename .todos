@@ -14,13 +14,19 @@
   {
     "id": 3,
     "desc": "edit beacon",
-    "status": "pending",
-    "modified": "2023-08-17 14:33:29.1933905 -0500 CDT"
+    "status": "done",
+    "modified": "2023-08-18 12:38:59.1297031 -0500 CDT"
   },
   {
     "id": 4,
     "desc": "editing beacon creates null coordinates",
+    "status": "done",
+    "modified": "2023-08-18 12:38:55.5283401 -0500 CDT"
+  },
+  {
+    "id": 5,
+    "desc": "if using generated identity, must not rely on extension to sign",
     "status": "pending",
-    "modified": "2023-08-17 16:49:54.781641 -0500 CDT"
+    "modified": "2023-08-18 12:38:51.5715362 -0500 CDT"
   }
 ]
