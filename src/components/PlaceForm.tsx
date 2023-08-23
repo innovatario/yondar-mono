@@ -64,7 +64,7 @@ type PlaceFormProps = {
 };
 
 export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
-  const { identity } = useContext<IdentityContextType>(IdentityContext);
+  const { identity, relays } = useContext<IdentityContextType>(IdentityContext);
   const { draftPlace, setDraftPlace } = useContext<DraftPlaceContextType>(DraftPlaceContext);
   const { cursorPosition, setCursorPosition } = useGeolocationData();
   const { modal } = useContext<ModalContextType>(ModalContext);
@@ -171,7 +171,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
     // publish the event
     const signedEvent = await signEvent(signableDraftPlace)
 
-    const pub = pool.publish(defaultRelays, signedEvent)
+    const pub = pool.publish(relays, signedEvent)
     pub.on("ok", () => {
       console.log("Event published successfully!")
       // TODO: clear form, show success message, close modal, happy animation, zoom in on new place?

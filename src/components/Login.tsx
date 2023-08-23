@@ -2,17 +2,17 @@ import { useContext, useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
 import { IdentityContext } from "../providers/IdentityProvider"
 import { IdentityContextType } from "../types/IdentityType"
-import { defaultProfile, getMyProfile } from "../libraries/Nostr"
+import { defaultProfile, defaultRelays, getMyProfile, getMyRelays } from "../libraries/Nostr"
 import { Spinner } from './Spinner'
 
 export const Login = () => {
   const [loading, setLoading] = useState(false)
-  const {identity, setIdentity, isIdentityFresh} = useContext<IdentityContextType>(IdentityContext)
+  const {identity, setIdentity, isIdentityFresh, setRelays} = useContext<IdentityContextType>(IdentityContext)
   const navigate = useNavigate()
 
   useEffect(() => {
     const loadProfile = async () => {
-      // retrieve profile from relays
+      // retrieve profile
       const loadedProfile = await getMyProfile(identity.pubkey)
       if (loadedProfile === defaultProfile) {
         // no profile found. use default as template but add pubkey
@@ -21,6 +21,11 @@ export const Login = () => {
       } else {
         const profile = {...loadedProfile, pubkey: identity.pubkey, last_updated: +new Date()}
         setIdentity(profile)
+      }
+      // retrieve relays
+      const loadedRelays = await getMyRelays(identity.pubkey)
+      if (loadedRelays !== defaultRelays) {
+        setRelays(loadedRelays)
       }
     }
     // redirect to homepage if login page is accessed with no identity
@@ -34,7 +39,8 @@ export const Login = () => {
       setLoading(true)
       loadProfile()
     }
-  }, [identity])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [identity,navigate /* isIdentityFresh, setIdentity, setRelays are ok to exclude */])
 
   return (
     <div id="login">

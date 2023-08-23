@@ -14,16 +14,12 @@ export type IdentityType = {
   banner?: string
   lud16?: string
   // [key: string]: string | undefined
-} | null
+}
 
 export type IdentityContextType = {
   identity: IdentityType,
   setIdentity: Function,
   isIdentityFresh: Function,
-}
-
-export const defaultIdentityContext: IdentityContextType = {
-  identity: null,
-  setIdentity: () => {},
-  isIdentityFresh: () => {},
+  relays: string[],
+  setRelays: Function,
 }

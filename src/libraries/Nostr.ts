@@ -37,7 +37,7 @@ export const getAll = async (pubkey: string[] | undefined, kinds: number[], rela
   return all
 }
 
-export const getMostRecent = async (pubkey: string, kinds: number[], relays: string[] = defaultRelays) => {
+export const getMostRecent = async (pubkey: string, kinds: number[], relays: string[] = defaultRelays): Promise<Event | null> => {
   if (kinds.length > 1) console.warn('getMostRecent will only return the single most recent event of all supplied kinds.')
   const filter: Filter<number> = {kinds: [...kinds], authors: [pubkey]}
   const sub: Sub = pool.sub(relays,[filter])
@@ -50,11 +50,11 @@ export const getMostRecent = async (pubkey: string, kinds: number[], relays: str
     }
   })
   try {
-    const mostRecent = await new Promise<Event>((resolve,reject)  => {
+    const mostRecent = await new Promise<Event|null>((resolve,reject)  => {
       sub.on('eose', () => {
         // find most recent kind event
         if (kind.length === 0) {
-          reject('No events found.')
+          reject(null)
         } else {
           const mostRecent = kind.reduce((a, b) => a.created_at > b.created_at ? a : b)
           resolve(mostRecent)
@@ -64,12 +64,13 @@ export const getMostRecent = async (pubkey: string, kinds: number[], relays: str
     return mostRecent
   } catch (e) {
     console.warn('Failed to get most recent events.',kinds, pubkey)
-    return []
+    return null
   }
 }
 
-export const getMyRelays = async (pubkey: string) => {
+export const getMyRelays = async (pubkey: string): Promise<string[]> => {
   const myMetadata = await getMostRecent(pubkey,[3])
+  if (!myMetadata) return defaultRelays
   try {
     return JSON.parse(myMetadata.content)
   } catch (e) {
@@ -80,6 +81,7 @@ export const getMyRelays = async (pubkey: string) => {
 
 export const getMyProfile = async (pubkey: string): Promise<IdentityType> => {
   const myProfile = await getMostRecent(pubkey,[0])
+  if (!myProfile) return defaultProfile
   try {
     const parsedProfile = JSON.parse(myProfile.content) as IdentityType
     return Object.assign({}, parsedProfile, {pubkey})
