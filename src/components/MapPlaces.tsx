@@ -5,13 +5,13 @@ import { ModalContextType, ModalType } from '../types/ModalType'
 import { ModalContext } from '../providers/ModalProvider'
 import { Event, Filter } from 'nostr-tools'
 import { defaultRelays, pool } from "../libraries/Nostr"
-import { useGeolocationData } from "../hooks/useGeolocationData";
+import { useGeolocationData } from "../hooks/useGeolocationData"
 import { useMap } from 'react-map-gl'
 import { Marker } from 'react-map-gl'
 import '../scss//MapPlaces.scss'
 import { isOpenNow } from '../libraries/decodeDay'
 import { DraftPlaceContext } from '../providers/DraftPlaceProvider'
-import { DraftPlaceContextType } from '../types/Place'
+import { DraftPlaceContextType, PlaceProperties } from '../types/Place'
 import { beaconToDraftPlace } from '../libraries/draftPlace'
 import { CursorPositionType } from '../providers/GeolocationProvider'
 
@@ -19,7 +19,7 @@ type MapPlacesProps = {
   children?: React.ReactNode
 }
 
-const beaconsReducer = (state, action) => {
+const beaconsReducer = (state: object, action: { type: string; beacon: { id: string} }) => {
   switch(action.type) {
     case 'add': 
       return {
@@ -37,20 +37,24 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
   const {current: map} = useMap()
   const { identity } = useContext<IdentityContextType>(IdentityContext)
   const {modal} = useContext<ModalContextType>(ModalContext)
-  const { draftPlace, setDraftPlace } = useContext<DraftPlaceContextType>(DraftPlaceContext);
+  const { draftPlace, setDraftPlace } = useContext<DraftPlaceContextType>(DraftPlaceContext)
 
   useEffect( () => {
-    const filter: Filter = {kinds: [37515]}
+    const filter: Filter<37515> = {kinds: [37515]}
     const sub = pool.sub(defaultRelays, [filter])
     sub.on('event', (event) => {
+      let placeProperties: PlaceProperties
       try {
-        event.content = JSON.parse(event.content)
-        // console.log(event.content.properties.name, event)
-        if (event.content.geometry.coordinates.lat) {
-          const lnglat = [event.content.geometry.coordinates.lng, event.content.geometry.coordinates.lat]
-          event.content.geometry.coordinates = lnglat
+        placeProperties = JSON.parse(event.content)
+        if (!placeProperties.geometry || !placeProperties.geometry.coordinates) throw new Error('No coordinates')
+        // if any events have malformed coordinates using an object with lat or lng properties, convert them to array/mapbox format
+        if (!Array.isArray(placeProperties.geometry.coordinates)) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const {lng, lat} = placeProperties.geometry.coordinates as any
+          const lngLatArray: [number, number] = [lng, lat]
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          placeProperties.geometry.coordinates = lngLatArray
         }
-        if (!event.content.geometry || !event.content.geometry.coordinates) throw new Error('No coordinates')
         beaconsDispatch({
           type: 'add',
           beacon: event

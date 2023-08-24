@@ -7,31 +7,33 @@ export enum Kind {
 export type DraftPlace = {
   kind: 37515,
   tags: string[][],
-  content: {
-    type: "Feature",
-    geometry: {
-      coordinates: [number, number],
-      type: "Point"
+  content: PlaceProperties,
+}
+
+export type PlaceProperties = {
+  type: "Feature",
+  geometry: {
+    coordinates: [number, number],
+    type: "Point"
+  },
+  properties: {
+    name: string,
+    abbrev?: string,
+    description: string,
+    address?: {
+      "street-address"?: string,
+      locality?: string, // city
+      region?: string, // state
+      "country-name"?: string,
+      "postal-code"?: string,
     },
-    properties: {
-      name: string,
-      abbrev?: string,
-      description: string,
-      address?: {
-        "street-address"?: string,
-        locality?: string, // city
-        region?: string, // state
-        "country-name"?: string,
-        "postal-code"?: string,
-      },
-      type: GooglePlaceType,
-      status?: GooglePlaceStatus,
-      website?: string,
-      phone?: string,
-      hours?: string,
-      // string index
-      [key: string]: string | object | undefined
-    }
+    type: GooglePlaceType,
+    status?: GooglePlaceStatus,
+    website?: string,
+    phone?: string,
+    hours?: string,
+    // string index
+    [key: string]: string | object | undefined
   }
 }
 
