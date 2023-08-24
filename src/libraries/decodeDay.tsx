@@ -1,5 +1,7 @@
 // Parse hours string and return true if open now
-export function isOpenNow(hoursString: string) {
+export function isOpenNow(hoursString: string | undefined) {
+
+  if (!hoursString) return false
 
   // Split into day groups
   const regex = /(?<=[0-9]);?:?\s*(?=[a-zA-Z])/

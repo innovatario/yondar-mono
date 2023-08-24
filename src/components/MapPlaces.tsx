@@ -215,7 +215,7 @@ const Beacon = ({currentUserPubkey, beaconData, modal, clickHandler, editHandler
   )
 }
 
-const MapPin = ({ color, image }) => (
+const MapPin = ({ color, image }: {color: string, image: string}) => (
   <svg width="40" height="60" viewBox="0 0 40 60">
     
     <defs>

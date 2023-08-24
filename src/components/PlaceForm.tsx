@@ -5,6 +5,9 @@ import {
   DraftPlace,
   requiredProperties,
   SignableDraftPlace,
+  GooglePlaceType,
+  GooglePlaceStatus,
+  AddressKeys,
 } from "../types/Place"
 import { IdentityContext } from "../providers/IdentityProvider"
 import { IdentityContextType } from "../types/IdentityType"
@@ -87,19 +90,21 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
   const phoneRef = useRef<HTMLInputElement>(null)
   // get naddr
   useEffect(() => {
-    const naddr = createNaddr(identity.pubkey, nameRef.current?.value)
+    const naddr = createNaddr(identity.pubkey, nameRef.current?.value || "")
     setNaddr(naddr)
   }, [identity.pubkey, draftPlace])
 
   // get geohash from coordinates from latlong-geohash library
-  const geohash = Geohash.encode(cursorPosition.lat, cursorPosition.lng, 5)
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const geohash = Geohash.encode(cursorPosition!.lat, cursorPosition!.lng, 5)
 
   const prepareFormData = (): DraftPlace => {
     return createDraftPlace(
       nameRef.current?.value || "",
       geohash,
       naddr,
-      [cursorPosition.lng, cursorPosition.lat],
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      [cursorPosition!.lng, cursorPosition!.lat],
       abbrevRef.current?.value || "",
       descriptionRef.current?.value || "",
       streetAddressRef.current?.value || "",
@@ -107,8 +112,8 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
       regionRef.current?.value || "",
       countryNameRef.current?.value || "",
       postalCodeRef.current?.value || "",
-      typeRef.current?.value || "",
-      statusRef.current?.value || "",
+      typeRef.current?.value as GooglePlaceType || "point_of_interest" as GooglePlaceType, 
+      statusRef.current?.value as GooglePlaceStatus || "OPERATIONAL" as GooglePlaceStatus,
       websiteRef.current?.value || "",
       phoneRef.current?.value || ""
     )
@@ -147,13 +152,17 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
       }
     })
     // eliminate empty fields from address property, and eliminate the address property altogether if it is totally full of empty fields:
-    Object.keys(newPlace.content.properties.address).forEach((key) => {
-      if (newPlace.content.properties.address[key] === "") {
-        delete newPlace.content.properties.address[key]
+    if (newPlace.content.properties.address !== undefined) {
+      Object.keys(newPlace.content.properties.address).forEach((key) => {
+        if (newPlace.content.properties.address !== undefined) {
+          if (newPlace.content.properties.address[key as AddressKeys] === "" || newPlace.content.properties.address[key as AddressKeys] === undefined) {
+            delete newPlace.content.properties.address[key as AddressKeys]
+          }
+        }
+      })
+      if (Object.keys(newPlace.content.properties.address).length === 0) {
+        delete newPlace.content.properties.address
       }
-    })
-    if (Object.keys(newPlace.content.properties.address).length === 0) {
-      delete newPlace.content.properties.address
     }
 
     // stringify content property
@@ -166,6 +175,12 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
 
     // publish the event
     const signedEvent = await signEvent(signableDraftPlace)
+
+    if (signedEvent === null) {
+      // TODO: notify user
+      console.error("Failed to sign event.")
+      return
+    }
 
     const pub = pool.publish(relays, signedEvent)
     pub.on("ok", () => {

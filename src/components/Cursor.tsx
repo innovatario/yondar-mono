@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { Marker, useMap } from 'react-map-gl'
 import '../scss/Cursor.scss'
 import { WavyText } from './WavyText'
@@ -26,13 +26,13 @@ export const Cursor = ({edit}: CursorProps) => {
   }, [cursorPosition])
 
   const center = (duration = 0) => {
-    map.flyTo({
+    map && cursorPosition && map.flyTo({
       center: [cursorPosition.lng, cursorPosition.lat],
       duration
     })
   }
-  const moveCallbackOnce = (callback) => {
-    map.once('moveend', callback)
+  const moveCallbackOnce = (callback: () => void) => {
+    map && map.once('moveend', callback)
   }
 
   const handleClickCursor = () => {
@@ -70,7 +70,7 @@ export const Cursor = ({edit}: CursorProps) => {
   }
 }
 
-const AddPlace = ({drop}) => {
+const AddPlace = ({drop}: {drop: boolean}) => {
   const classes = "cursor-menu " + (drop ? "no-shadow" : "")
   return (
     <div className={classes}>
