@@ -11,7 +11,7 @@ import { Marker } from 'react-map-gl'
 import '../scss//MapPlaces.scss'
 import { isOpenNow } from '../libraries/decodeDay'
 import { DraftPlaceContext } from '../providers/DraftPlaceProvider'
-import { DraftPlaceContextType, PlaceProperties } from '../types/Place'
+import { DraftPlaceContextType, EventWithoutContent, Place, PlaceProperties } from '../types/Place'
 import { beaconToDraftPlace } from '../libraries/draftPlace'
 import { CursorPositionType } from '../providers/GeolocationProvider'
 
@@ -33,15 +33,15 @@ const beaconsReducer = (state: object, action: { type: string; beacon: { id: str
 
 export const MapPlaces = ({ children }: MapPlacesProps) => {
   const [beacons, beaconsDispatch] = useReducer(beaconsReducer, {})
-  const { position } = useGeolocationData()
+  const {position} = useGeolocationData()
   const {current: map} = useMap()
-  const { identity } = useContext<IdentityContextType>(IdentityContext)
+  const {identity, relays} = useContext<IdentityContextType>(IdentityContext)
   const {modal} = useContext<ModalContextType>(ModalContext)
-  const { draftPlace, setDraftPlace } = useContext<DraftPlaceContextType>(DraftPlaceContext)
+  const {draftPlace, setDraftPlace} = useContext<DraftPlaceContextType>(DraftPlaceContext)
 
   useEffect( () => {
     const filter: Filter<37515> = {kinds: [37515]}
-    const sub = pool.sub(defaultRelays, [filter])
+    const sub = pool.sub(relays, [filter])
     sub.on('event', (event) => {
       let placeProperties: PlaceProperties
       try {
@@ -55,9 +55,17 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           placeProperties.geometry.coordinates = lngLatArray
         }
+        const foundEvent: EventWithoutContent = {
+          ... event
+        }
+        const place: Place = {
+          ... foundEvent,
+          content: placeProperties as PlaceProperties
+        }
+
         beaconsDispatch({
           type: 'add',
-          beacon: event
+          beacon: place 
         })
       } catch (e) {
         // console.log('Failed to parse event content:', e)
@@ -65,7 +73,7 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
     })
   }, [])
 
-  return Object.values(beacons).map( (beacon: Event ) => {
+  return Object.values(beacons).map( (beacon: Place ) => {
     // move map so the beacon is left of the details box
     const handleFollow = () => {
       if (map && position) {
@@ -105,7 +113,7 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
 
 type BeaconProps = {
   currentUserPubkey: string | undefined,
-  beaconData: Event,
+  beaconData: Place,
   modal: ModalType,
   clickHandler: () => void,
   editHandler: () => void,

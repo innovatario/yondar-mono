@@ -1,4 +1,5 @@
 import { UnsignedEvent } from 'nostr-tools'
+import { Event, EventTemplate } from 'nostr-tools'
 
 export enum Kind {
   Place = 37515,
@@ -9,6 +10,18 @@ export type DraftPlace = {
   tags: string[][],
   content: PlaceProperties,
 }
+
+export type Place = {
+  kind: 37515,
+  tags: string[][],
+  content: PlaceProperties,
+  created_at: number,
+  pubkey: string,
+  id: string,
+  sig: string,
+}
+
+export type EventWithoutContent = Omit<Event<37515>, 'content'>
 
 export type PlaceProperties = {
   type: "Feature",
