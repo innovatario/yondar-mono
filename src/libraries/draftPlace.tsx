@@ -1,7 +1,6 @@
 import { nip19 } from "nostr-tools"
 import { DraftPlace, GooglePlaceStatus, GooglePlaceType, Place } from "../types/Place"
 import { defaultRelays } from "./Nostr"
-import { Event } from "nostr-tools"
 
 /**
  * 
@@ -63,25 +62,35 @@ export const createDraftPlace = (
 
 
 // write a properly typed getTag function to pass into the find method that takes a tag string and returns the value for that key
-type FindTag = (tag: string[], i: number, o: string[][]) => string
+type FindTag = (tag: string[], i: number, o: string[][]) => boolean 
+
 const getTag = (key: string): FindTag => {
-  return (tag): string => {
-    return tag && Array.isArray(tag) && tag[0] === key ? key : ""
+  return (tag): boolean => {
+    return tag && Array.isArray(tag) && tag[0] === key
   }
 }
 
-
-
 export const beaconToDraftPlace = (beacon: Place) => {
   // attempt to gather the properiets we aren't sure of
-  const geohash = beacon?.tags.find(getTag("g"))
-  const naddr = "naddr" + beacon.tags.find((tag) => tag[0] === "alt")![1].split("https://go.yondar.me/place/naddr")![1],
+  const gtag = beacon.tags.find(getTag("g"))
+  const geohash = gtag ? gtag[1] : ""
+  const alttag = beacon.tags.find(getTag("alt"))
+  const previousAlt = alttag ? alttag[1] : null
+  let alt
+  if (!previousAlt) {
+    // no previous alt tag with naddr, create a new one
+    const naddr = createNaddr(beacon.pubkey, beacon.content.properties.name)
+    alt = `This event represents a place. View it on https://go.yondar.me/place/${naddr}`
+  } else {
+    // use the previous alt tag
+    alt = previousAlt
+  }
   return createDraftPlace(
     beacon.content.properties.name,
     geohash,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    naddr,
+    alt,
     beacon.content?.geometry?.coordinates,
     beacon.content?.properties?.abbrev,
     beacon.content?.properties?.description,
