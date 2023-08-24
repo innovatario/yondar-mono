@@ -18,7 +18,7 @@ export const Publish = () => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect( () => {
-    const filter: Filter = {kinds: [37515]}
+    const filter: Filter<37515> = {kinds: [37515]}
     const sub = pool.sub(defaultRelays, [filter])
     sub.on('event', (event) => {
       const updatedBeacons = {...beacons, [event.id]: event}

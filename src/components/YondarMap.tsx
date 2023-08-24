@@ -30,7 +30,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
   }
 
   function handleClick(event: mapboxgl.MapLayerMouseEvent) {
-    if (event.originalEvent?.target?.tagName === "CANVAS") {
+    if ((event.originalEvent?.target as HTMLElement)?.tagName === "CANVAS") {
       // we touched the map. Place the cursor.
       if (modal?.placeForm === true) {
         // if the place form is open, don't move the cursor
