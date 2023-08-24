@@ -1,6 +1,7 @@
 import { nip19 } from "nostr-tools"
 import { DraftPlace, GooglePlaceStatus, GooglePlaceType, Place } from "../types/Place"
 import { defaultRelays } from "./Nostr"
+import { Event } from "nostr-tools"
 
 /**
  * 
@@ -60,11 +61,27 @@ export const createDraftPlace = (
   return newPlace
 }
 
+
+// write a properly typed getTag function to pass into the find method that takes a tag string and returns the value for that key
+type FindTag = (tag: string[], i: number, o: string[][]) => string
+const getTag = (key: string): FindTag => {
+  return (tag): string => {
+    return tag && Array.isArray(tag) && tag[0] === key ? key : ""
+  }
+}
+
+
+
 export const beaconToDraftPlace = (beacon: Place) => {
+  // attempt to gather the properiets we aren't sure of
+  const geohash = beacon?.tags.find(getTag("g"))
+  const naddr = "naddr" + beacon.tags.find((tag) => tag[0] === "alt")![1].split("https://go.yondar.me/place/naddr")![1],
   return createDraftPlace(
     beacon.content.properties.name,
-    beacon.content.properties.geohash,
-    beacon.naddr,
+    geohash,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    naddr,
     beacon.content?.geometry?.coordinates,
     beacon.content?.properties?.abbrev,
     beacon.content?.properties?.description,
