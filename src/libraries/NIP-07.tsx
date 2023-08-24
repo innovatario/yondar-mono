@@ -1,6 +1,6 @@
-import { Event, UnsignedEvent } from 'nostr-tools';
+import { Event, UnsignedEvent } from 'nostr-tools'
 import { NostrWindow } from '../types/NostrWindow'
-import { SignableDraftPlace } from '../types/Place';
+import { SignableDraftPlace } from '../types/Place'
 
 // This declaration allows us to access window.nostr without TS errors.
 // https://stackoverflow.com/a/47130953

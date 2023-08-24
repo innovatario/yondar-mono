@@ -1,5 +1,5 @@
 import { UnsignedEvent } from 'nostr-tools'
-import { Event, EventTemplate } from 'nostr-tools'
+import { Event } from 'nostr-tools'
 
 export enum Kind {
   Place = 37515,
@@ -51,11 +51,11 @@ export type PlaceProperties = {
 }
 
 export type DraftPlaceProviderProps = {
-  children: React.ReactNode;
+  children: React.ReactNode
 };
 export type DraftPlaceContextType = {
-  draftPlace: DraftPlace;
-  setDraftPlace: Function;
+  draftPlace: DraftPlace
+  setDraftPlace: (draftPlace: DraftPlace) => void
 };
 
 // this is used in code to validate properties

@@ -5,7 +5,6 @@ import { IdentityContextType } from "../types/IdentityType"
 import {
   getEventHash,
   Filter,
-  Event,
   nip19,
 } from 'nostr-tools'
 import { signEvent } from "../libraries/NIP-07"
@@ -25,7 +24,7 @@ export const Publish = () => {
       const updatedBeacons = {...beacons, [event.id]: event}
       setBeacons(updatedBeacons)
     })
-  }, [])
+  }, [beacons])
 
   const publish = async () => {
     const json = textAreaRef.current?.value
@@ -35,7 +34,7 @@ export const Publish = () => {
     event.pubkey = identity?.pubkey
     if (typeof event.content !== 'string') {
       event.content = JSON.stringify(event.content)
-        .replace(/"/g, '\"')
+        .replace(/"/g, '"')
         .replace(/(?![^"])\s+/g, '')
       console.log('stringified content:', event.content)
     }

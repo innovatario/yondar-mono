@@ -1,7 +1,6 @@
 import { nip19 } from "nostr-tools"
-import { DraftPlace } from "../types/Place"
+import { DraftPlace, GooglePlaceStatus, GooglePlaceType, Place } from "../types/Place"
 import { defaultRelays } from "./Nostr"
-import { Event } from "nostr-tools";
 
 /**
  * 
@@ -19,8 +18,8 @@ export const createDraftPlace = (
   region: string,
   countryName: string,
   postalCode: string,
-  type: string,
-  status: string,
+  type: GooglePlaceType,
+  status: GooglePlaceStatus,
   website: string,
   phone: string
 ) => {
@@ -61,7 +60,7 @@ export const createDraftPlace = (
   return newPlace
 }
 
-export const beaconToDraftPlace = (beacon: Event) => {
+export const beaconToDraftPlace = (beacon: Place) => {
   return createDraftPlace(
     beacon.content.properties.name,
     beacon.content.properties.geohash,

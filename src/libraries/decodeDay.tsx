@@ -1,5 +1,5 @@
 // Parse hours string and return true if open now
-export function isOpenNow(hoursString) {
+export function isOpenNow(hoursString: string) {
 
   // Split into day groups
   const regex = /(?<=[0-9]);?:?\s*(?=[a-zA-Z])/
@@ -10,7 +10,7 @@ export function isOpenNow(hoursString) {
   const time = now.getHours() + now.getMinutes()/60
 
   // Loop through groups
-  for (let group of dayGroups) {
+  for (const group of dayGroups) {
 
     // Split days and hours
     const [days, hours] = group.split(' ')
@@ -34,10 +34,10 @@ export function isOpenNow(hoursString) {
 }
 
 // Helper function to get day name
-function getDayName(dayNumber) {
-  const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
-  return days[dayNumber]
-}
+// function getDayName(dayNumber) {
+//   const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+//   return days[dayNumber]
+// }
 
 // Find if day is in series
 function isDayInSeries(start: string, end: string, day: number) {
@@ -52,7 +52,7 @@ function isDayInSeries(start: string, end: string, day: number) {
   }
 }
 
-function parseTime(timeStr) {
+function parseTime(timeStr: string) {
   const [hours, minutes] = timeStr.split(':')
   return parseInt(hours) + parseInt(minutes) / 60
 }

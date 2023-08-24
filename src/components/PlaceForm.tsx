@@ -1,25 +1,24 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
-import { useGeolocationData } from "../hooks/useGeolocationData";
+import React, { useContext, useState, useEffect, useRef } from "react"
+import { useGeolocationData } from "../hooks/useGeolocationData"
 import {
   typeDropdown,
   DraftPlace,
   requiredProperties,
   SignableDraftPlace,
-} from "../types/Place";
-import { IdentityContext } from "../providers/IdentityProvider";
-import { IdentityContextType } from "../types/IdentityType";
-import { ModalContextType } from "../types/ModalType";
-import { ModalContext } from "../providers/ModalProvider";
-import { DraftPlaceContext } from "../providers/DraftPlaceProvider";
-import { DraftPlaceContextType } from "../types/Place";
-import { freshDefaultPlace } from "../libraries/defaultPlace";
-import { FancyButton } from "./FancyButton";
-import "../scss/PlaceForm.scss";
-import { defaultRelays, pool } from "../libraries/Nostr";
-import Geohash from "latlon-geohash";
-import { signEvent } from "../libraries/NIP-07";
-import { createDraftPlace, createNaddr } from "../libraries/draftPlace";
-
+} from "../types/Place"
+import { IdentityContext } from "../providers/IdentityProvider"
+import { IdentityContextType } from "../types/IdentityType"
+import { ModalContextType } from "../types/ModalType"
+import { ModalContext } from "../providers/ModalProvider"
+import { DraftPlaceContext } from "../providers/DraftPlaceProvider"
+import { DraftPlaceContextType } from "../types/Place"
+import { freshDefaultPlace } from "../libraries/defaultPlace"
+import { FancyButton } from "./FancyButton"
+import "../scss/PlaceForm.scss"
+import { pool } from "../libraries/Nostr"
+import Geohash from "latlon-geohash"
+import { signEvent } from "../libraries/NIP-07"
+import { createDraftPlace, createNaddr } from "../libraries/draftPlace"
 /* create a tsx form to handle input for a new place based on the examplePlace: 
 const examplePlace = `
 {
@@ -61,34 +60,31 @@ const examplePlace = `
 
 type PlaceFormProps = {
   edit: boolean // the modal may be set to false to hide, true to show, or 'edit' to show and allow editing. But edit can only be true or false, and is only true when modal is set to 'edit'.
-};
-
+}
 export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
-  const { identity, relays } = useContext<IdentityContextType>(IdentityContext);
-  const { draftPlace, setDraftPlace } = useContext<DraftPlaceContextType>(DraftPlaceContext);
-  const { cursorPosition, setCursorPosition } = useGeolocationData();
-  const { modal } = useContext<ModalContextType>(ModalContext);
+  const { identity, relays } = useContext<IdentityContextType>(IdentityContext)
+  const { draftPlace, setDraftPlace } = useContext<DraftPlaceContextType>(DraftPlaceContext)
+  const { cursorPosition, setCursorPosition } = useGeolocationData()
+  const { modal } = useContext<ModalContextType>(ModalContext)
 
   // state for name field value so we can get an updated naddr
-  const [naddr, setNaddr] = useState<string>("");
-
+  const [naddr, setNaddr] = useState<string>("")
   // state to refresh form on reset
   const [formKey, setFormKey] = useState<number>(0)
 
   // refs for all fields
-  const nameRef = useRef<HTMLInputElement>(null);
-  const abbrevRef = useRef<HTMLInputElement>(null);
-  const descriptionRef = useRef<HTMLTextAreaElement>(null);
-  const streetAddressRef = useRef<HTMLInputElement>(null);
-  const localityRef = useRef<HTMLInputElement>(null);
-  const regionRef = useRef<HTMLInputElement>(null);
-  const countryNameRef = useRef<HTMLInputElement>(null);
-  const postalCodeRef = useRef<HTMLInputElement>(null);
-  const typeRef = useRef<HTMLSelectElement>(null);
-  const statusRef = useRef<HTMLSelectElement>(null);
-  const websiteRef = useRef<HTMLInputElement>(null);
-  const phoneRef = useRef<HTMLInputElement>(null);
-
+  const nameRef = useRef<HTMLInputElement>(null)
+  const abbrevRef = useRef<HTMLInputElement>(null)
+  const descriptionRef = useRef<HTMLTextAreaElement>(null)
+  const streetAddressRef = useRef<HTMLInputElement>(null)
+  const localityRef = useRef<HTMLInputElement>(null)
+  const regionRef = useRef<HTMLInputElement>(null)
+  const countryNameRef = useRef<HTMLInputElement>(null)
+  const postalCodeRef = useRef<HTMLInputElement>(null)
+  const typeRef = useRef<HTMLSelectElement>(null)
+  const statusRef = useRef<HTMLSelectElement>(null)
+  const websiteRef = useRef<HTMLInputElement>(null)
+  const phoneRef = useRef<HTMLInputElement>(null)
   // get naddr
   useEffect(() => {
     const naddr = createNaddr(identity.pubkey, nameRef.current?.value)
@@ -149,13 +145,13 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
       ) {
         delete newPlace.content.properties[key]
       }
-    });
+    })
     // eliminate empty fields from address property, and eliminate the address property altogether if it is totally full of empty fields:
     Object.keys(newPlace.content.properties.address).forEach((key) => {
       if (newPlace.content.properties.address[key] === "") {
         delete newPlace.content.properties.address[key]
       }
-    });
+    })
     if (Object.keys(newPlace.content.properties.address).length === 0) {
       delete newPlace.content.properties.address
     }
@@ -314,5 +310,5 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
       <br />
       <br />
     </div>
-  );
-};
+  )
+}

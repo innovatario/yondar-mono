@@ -1683,6 +1683,11 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.12.tgz#d70faba7039d5fca54c83c7dbab41051d2b6f6cb"
   integrity sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==
 
+"@types/latlon-geohash@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/latlon-geohash/-/latlon-geohash-2.0.0.tgz#384723d354cfe40197bb0fadaf2e72f649736314"
+  integrity sha512-bwTttcqf8StBA+ABJ4gxbgA+PgueUJGxjYzuWrlFfzDbIQd2FvOcE5l/0fY+BOKqmeWYAzjBQFdnKweI8KKNpA==
+
 "@types/mapbox-gl@^2.6.0":
   version "2.7.11"
   resolved "https://registry.yarnpkg.com/@types/mapbox-gl/-/mapbox-gl-2.7.11.tgz#c9b9ed2ed24970aeef947609fdfcfcf826a3aa49"

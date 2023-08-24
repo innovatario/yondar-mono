@@ -3,7 +3,7 @@ import { IdentityContextType } from '../types/IdentityType'
 import { IdentityContext } from '../providers/IdentityProvider'
 import { ModalContextType, ModalType } from '../types/ModalType'
 import { ModalContext } from '../providers/ModalProvider'
-import { Event, Filter } from 'nostr-tools'
+import { Filter } from 'nostr-tools'
 import { defaultRelays, pool } from "../libraries/Nostr"
 import { useGeolocationData } from "../hooks/useGeolocationData"
 import { useMap } from 'react-map-gl'
@@ -15,9 +15,9 @@ import { DraftPlaceContextType, EventWithoutContent, Place, PlaceProperties } fr
 import { beaconToDraftPlace } from '../libraries/draftPlace'
 import { CursorPositionType } from '../providers/GeolocationProvider'
 
-type MapPlacesProps = {
-  children?: React.ReactNode
-}
+// type MapPlacesProps = {
+//   children?: React.ReactNode
+// }
 
 const beaconsReducer = (state: object, action: { type: string; beacon: { id: string} }) => {
   switch(action.type) {
@@ -31,7 +31,7 @@ const beaconsReducer = (state: object, action: { type: string; beacon: { id: str
   }
 }
 
-export const MapPlaces = ({ children }: MapPlacesProps) => {
+export const MapPlaces = () => {
   const [beacons, beaconsDispatch] = useReducer(beaconsReducer, {})
   const {position} = useGeolocationData()
   const {current: map} = useMap()
@@ -52,7 +52,6 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const {lng, lat} = placeProperties.geometry.coordinates as any
           const lngLatArray: [number, number] = [lng, lat]
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           placeProperties.geometry.coordinates = lngLatArray
         }
         const foundEvent: EventWithoutContent = {
@@ -71,7 +70,7 @@ export const MapPlaces = ({ children }: MapPlacesProps) => {
         // console.log('Failed to parse event content:', e)
       }
     })
-  }, [])
+  }, [relays])
 
   return Object.values(beacons).map( (beacon: Place ) => {
     // move map so the beacon is left of the details box
@@ -123,8 +122,8 @@ type BeaconProps = {
 const Beacon = ({currentUserPubkey, beaconData, modal, clickHandler, editHandler, draft}: BeaconProps) => {
   const [show, setShow] = useState<boolean>(false)
   const [beaconProfilePicture, setBeaconProfilePicture] = useState<string>('')
-  const { setDraftPlace } = draft 
-  const { setCursorPosition } = useGeolocationData()
+  const {setDraftPlace} = draft 
+  const {setCursorPosition} = useGeolocationData()
 
   useEffect( () => {
     // get profile for beacon owner (pubkey) by querying for most recent kind 0 (profile)
@@ -139,6 +138,7 @@ const Beacon = ({currentUserPubkey, beaconData, modal, clickHandler, editHandler
         console.log('Failed to parse event content:', e)
       }
     })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const toggle = () => {

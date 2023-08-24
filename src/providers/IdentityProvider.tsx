@@ -6,7 +6,7 @@ import { defaultRelays } from '../libraries/Nostr.ts'
 
 const STALE_PROFILE = 1000 * 60 * 60 * 24 * 7
 
-export const defaultIdentityContext: IdentityContextType = {
+const defaultIdentityContext: IdentityContextType = {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   identity: null!,
   setIdentity: () => {},

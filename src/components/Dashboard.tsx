@@ -17,7 +17,7 @@ import '../scss/Dashboard.scss'
 export const Dashboard = () => {
   const {identity} = useContext<IdentityContextType>(IdentityContext)
   const {modal} = useContext<ModalContextType>(ModalContext)
-  const [showProfile, setShowProfile] = useState(false)
+  const [showProfile] = useState(false)
   const [userInteracted, setUserInteracted] = useState(false)
 
   const initialInteraction = () => {

@@ -1,4 +1,4 @@
-import { DraftPlace } from '../types/Place';
+import { DraftPlace } from '../types/Place'
 
 export const defaultPlace: DraftPlace = {
   kind: 37515,
@@ -20,7 +20,7 @@ export const defaultPlace: DraftPlace = {
       type: "point_of_interest",
     }
   }
-};
+}
 
 export const freshDefaultPlace = (): DraftPlace => {
   return JSON.parse(JSON.stringify(defaultPlace))

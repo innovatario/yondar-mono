@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 
 export const useGeolocation = (trigger: boolean) => {
   const [position, setPosition] = useState<GeolocationPosition | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<GeolocationPositionError | null>(null)
 
   useEffect(() => {
