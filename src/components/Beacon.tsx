@@ -15,11 +15,15 @@ type BeaconProps = {
   relays: RelayObject
   beaconData: Place
   modal: ModalType
+  toggleHandler: React.Dispatch<{
+    type: string;
+    beacon: Place;
+  }>
   clickHandler: () => void
   editHandler: () => void
   draft: DraftPlaceContextType
 }
-export const Beacon = ({ currentUserPubkey, relays, beaconData, modal, clickHandler, editHandler, draft }: BeaconProps) => {
+export const Beacon = ({ currentUserPubkey, relays, beaconData, modal, toggleHandler, clickHandler, editHandler, draft }: BeaconProps) => {
   const [show, setShow] = useState<boolean>(false)
   const [beaconProfilePicture, setBeaconProfilePicture] = useState<string>('')
   const { setDraftPlace } = draft
@@ -44,8 +48,22 @@ export const Beacon = ({ currentUserPubkey, relays, beaconData, modal, clickHand
 
   const toggle = () => {
     if (!modal?.placeForm) {
-      if (!show) clickHandler()
-      if (!show) setCursorPosition(null)
+      if (!show) {
+        // we are opening the beacon details
+        clickHandler()
+        setCursorPosition(null)
+        toggleHandler({
+          type: 'add',
+          beacon: beaconData
+        })
+      } else {
+        // we are closing the beacon details
+        toggleHandler({
+          type: 'remove',
+          beacon: beaconData
+        })
+      }
+      // do toggle
       setShow(!show)
     }
   }
