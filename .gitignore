@@ -23,5 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
+.env
 .notes.md
 .marketing
