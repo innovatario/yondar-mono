@@ -10,18 +10,18 @@ export const createDraftPlace = (
   name: string,
   geohash: string,
   naddr: string,
-  coords: [number, number],
-  abbrev: string,
   description: string,
-  streetAddress: string,
-  locality: string,
-  region: string,
-  countryName: string,
-  postalCode: string,
   type: GooglePlaceType,
-  status: GooglePlaceStatus,
-  website: string,
-  phone: string
+  coords: [number, number],
+  abbrev?: string,
+  streetAddress?: string,
+  locality?: string,
+  region?: string,
+  countryName?: string,
+  postalCode?: string,
+  status?: GooglePlaceStatus,
+  website?: string,
+  phone?: string
 ) => {
   const newPlace: DraftPlace = {
     kind: 37515,
@@ -91,15 +91,15 @@ export const beaconToDraftPlace = (beacon: Place) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     alt,
+    beacon.content?.properties?.description,
+    beacon.content?.properties?.type,
     beacon.content?.geometry?.coordinates,
     beacon.content?.properties?.abbrev,
-    beacon.content?.properties?.description,
     beacon.content?.properties?.address?.["street-address"],
     beacon.content?.properties?.address?.locality,
     beacon.content?.properties?.address?.region,
     beacon.content?.properties?.address?.["country-name"],
     beacon.content?.properties?.address?.["postal-code"],
-    beacon.content?.properties?.type,
     beacon.content?.properties?.status,
     beacon.content?.properties?.website,
     beacon.content?.properties?.phone

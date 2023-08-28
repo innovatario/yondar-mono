@@ -19,8 +19,10 @@ export const useGeolocation = (trigger: boolean) => {
       watcher = geo.watchPosition(setPosition,setError)
     }
 
-    return () => geo.clearWatch(watcher)
-  }, [trigger])
+    if (error) console.warn(error)
 
-  return [ position, error ]
+    return () => geo.clearWatch(watcher)
+  }, [trigger, error])
+
+  return [ position ]
 }

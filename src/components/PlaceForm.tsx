@@ -104,15 +104,15 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
       geohash,
       naddr,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      descriptionRef.current?.value || "",
+      typeRef.current?.value as GooglePlaceType || "point_of_interest" as GooglePlaceType, 
       [cursorPosition!.lng, cursorPosition!.lat],
       abbrevRef.current?.value || "",
-      descriptionRef.current?.value || "",
       streetAddressRef.current?.value || "",
       localityRef.current?.value || "",
       regionRef.current?.value || "",
       countryNameRef.current?.value || "",
       postalCodeRef.current?.value || "",
-      typeRef.current?.value as GooglePlaceType || "point_of_interest" as GooglePlaceType, 
       statusRef.current?.value as GooglePlaceStatus || "OPERATIONAL" as GooglePlaceStatus,
       websiteRef.current?.value || "",
       phoneRef.current?.value || ""
