@@ -22,7 +22,7 @@ type IdentityProviderProps = {
 }
 
 export const IdentityProvider: React.FC<IdentityProviderProps> = ({children})=> {
-  const [identity, setIdentity] = usePersistedState<IdentityType | null>('identity', null)
+  const [identity, setIdentity] = usePersistedState<IdentityType>('identity')
   const [relays, setRelays] = usePersistedState<string[]>('relays', defaultRelays)
 
   const isIdentityFresh = (): boolean => {

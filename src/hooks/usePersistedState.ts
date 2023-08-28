@@ -1,13 +1,13 @@
 import React from 'react'
 
-export default function usePersistedState<T>(key: string, defaultValue: T): [T, React.Dispatch<React.SetStateAction<T>>] { // use unknown here https://typescript-eslint.io/rules/no-unsafe-return/#examples
+export default function usePersistedState<T>(key: string, defaultValue?: T): [T, React.Dispatch<React.SetStateAction<T>>] { // use unknown here https://typescript-eslint.io/rules/no-unsafe-return/#examples
   const [state, setState] = React.useState<T>(() => {
     const persistedState = localStorage.getItem(key)
     try {
       return persistedState ? JSON.parse(persistedState) : defaultValue
     } catch (error) {
       console.error(error)
-      return defaultValue
+      return defaultValue ?? null
     }
   })
   React.useEffect(() => {
