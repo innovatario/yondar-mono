@@ -2,6 +2,7 @@
 import { createContext } from 'react'
 import { IdentityType, IdentityContextType } from '../types/IdentityType.tsx'
 import usePersistedState from '../hooks/usePersistedState'
+import { RelayObject } from '../types/NostrRelay'
 import { defaultRelays } from '../libraries/Nostr.ts'
 
 const STALE_PROFILE = 1000 * 60 * 60 * 24 * 7
@@ -23,7 +24,7 @@ type IdentityProviderProps = {
 
 export const IdentityProvider: React.FC<IdentityProviderProps> = ({children})=> {
   const [identity, setIdentity] = usePersistedState<IdentityType>('identity')
-  const [relays, setRelays] = usePersistedState<string[]>('relays', defaultRelays)
+  const [relays, setRelays] = usePersistedState<RelayObject>('relays', defaultRelays)
 
   const isIdentityFresh = (): boolean => {
     if (identity?.last_updated && +new Date() - identity.last_updated < STALE_PROFILE) {

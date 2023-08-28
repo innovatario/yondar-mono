@@ -1,6 +1,6 @@
 import { nip19 } from "nostr-tools"
 import { DraftPlace, GooglePlaceStatus, GooglePlaceType, Place } from "../types/Place"
-import { defaultRelays } from "./Nostr"
+import { RelayList } from "../types/NostrRelay"
 
 /**
  * 
@@ -70,7 +70,7 @@ const getTag = (key: string): FindTag => {
   }
 }
 
-export const beaconToDraftPlace = (beacon: Place) => {
+export const beaconToDraftPlace = (beacon: Place, relayList: RelayList) => {
   // attempt to gather the properiets we aren't sure of
   const gtag = beacon.tags.find(getTag("g"))
   const geohash = gtag ? gtag[1] : ""
@@ -79,7 +79,7 @@ export const beaconToDraftPlace = (beacon: Place) => {
   let alt
   if (!previousAlt) {
     // no previous alt tag with naddr, create a new one
-    const naddr = createNaddr(beacon.pubkey, beacon.content.properties.name)
+    const naddr = createNaddr(beacon.pubkey, beacon.content.properties.name, relayList)
     alt = `This event represents a place. View it on https://go.yondar.me/place/${naddr}`
   } else {
     // use the previous alt tag
@@ -106,11 +106,11 @@ export const beaconToDraftPlace = (beacon: Place) => {
   )
 }
 
-export const createNaddr = (pubkey: string, name: string) => {
+export const createNaddr = (pubkey: string, name: string, relays: RelayList) => {
   const naddr = nip19.naddrEncode({
     pubkey: pubkey,
     // TODO: replace with relay provider
-    relays: defaultRelays,
+    relays,
     kind: 37515,
     identifier: name,
   })

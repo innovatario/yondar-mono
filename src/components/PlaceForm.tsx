@@ -18,7 +18,7 @@ import { DraftPlaceContextType } from "../types/Place"
 import { freshDefaultPlace } from "../libraries/defaultPlace"
 import { FancyButton } from "./FancyButton"
 import "../scss/PlaceForm.scss"
-import { pool } from "../libraries/Nostr"
+import { getRelayList, pool } from "../libraries/Nostr"
 import Geohash from "latlon-geohash"
 import { signEvent } from "../libraries/NIP-07"
 import { createDraftPlace, createNaddr } from "../libraries/draftPlace"
@@ -89,10 +89,15 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
   const websiteRef = useRef<HTMLInputElement>(null)
   const phoneRef = useRef<HTMLInputElement>(null)
   // get naddr
+  const relayList = getRelayList(relays, ['write'])
   useEffect(() => {
-    const naddr = createNaddr(identity.pubkey, nameRef.current?.value || "")
+    const naddr = createNaddr(
+      identity.pubkey,
+      nameRef.current?.value || "",
+      relayList
+    )
     setNaddr(naddr)
-  }, [identity.pubkey, draftPlace])
+  }, [identity.pubkey, draftPlace, relayList])
 
   // get geohash from coordinates from latlong-geohash library
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -182,7 +187,8 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
       return
     }
 
-    const pub = pool.publish(relays, signedEvent)
+    const relayList = getRelayList(relays, ['write'])
+    const pub = pool.publish(relayList, signedEvent)
     pub.on("ok", () => {
       console.log("Event published successfully!")
       // TODO: clear form, show success message, close modal, happy animation, zoom in on new place?

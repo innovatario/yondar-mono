@@ -4,7 +4,7 @@ import { IdentityContext } from '../providers/IdentityProvider'
 import { ModalContextType, ModalType } from '../types/ModalType'
 import { ModalContext } from '../providers/ModalProvider'
 import { Filter } from 'nostr-tools'
-import { defaultRelays, pool } from "../libraries/Nostr"
+import { getRelayList, pool } from "../libraries/Nostr"
 import { useGeolocationData } from "../hooks/useGeolocationData"
 import { useMap } from 'react-map-gl'
 import { Marker } from 'react-map-gl'
@@ -14,6 +14,7 @@ import { DraftPlaceContext } from '../providers/DraftPlaceProvider'
 import { DraftPlaceContextType, EventWithoutContent, Place, PlaceProperties } from '../types/Place'
 import { beaconToDraftPlace } from '../libraries/draftPlace'
 import { CursorPositionType } from '../providers/GeolocationProvider'
+import { RelayList, RelayObject } from '../types/NostrRelay'
 
 // type MapPlacesProps = {
 //   children?: React.ReactNode
@@ -41,7 +42,8 @@ export const MapPlaces = () => {
 
   useEffect( () => {
     const filter: Filter<37515> = {kinds: [37515]}
-    const sub = pool.sub(relays, [filter])
+    const relayList: RelayList = getRelayList(relays, ['read'])
+    const sub = pool.sub(relayList, [filter])
     sub.on('event', (event) => {
       let placeProperties: PlaceProperties
       try {
@@ -97,6 +99,7 @@ export const MapPlaces = () => {
       <Marker key={beacon.id} longitude={beacon.content.geometry.coordinates[0]} latitude={beacon.content.geometry.coordinates[1]} offset={[-20,-52]} anchor={'center'}>
         <Beacon
           currentUserPubkey={identity?.pubkey}
+          relays={relays}
           modal={modal}
           beaconData={beacon}
           clickHandler={handleFollow}
@@ -112,6 +115,7 @@ export const MapPlaces = () => {
 
 type BeaconProps = {
   currentUserPubkey: string | undefined,
+  relays: RelayObject,
   beaconData: Place,
   modal: ModalType,
   clickHandler: () => void,
@@ -119,16 +123,17 @@ type BeaconProps = {
   draft: DraftPlaceContextType
 }
 
-const Beacon = ({currentUserPubkey, beaconData, modal, clickHandler, editHandler, draft}: BeaconProps) => {
+const Beacon = ({currentUserPubkey, relays, beaconData, modal, clickHandler, editHandler, draft}: BeaconProps) => {
   const [show, setShow] = useState<boolean>(false)
   const [beaconProfilePicture, setBeaconProfilePicture] = useState<string>('')
   const {setDraftPlace} = draft 
   const {setCursorPosition} = useGeolocationData()
+  const relayList: RelayList = getRelayList(relays, ['read'])
 
   useEffect( () => {
     // get profile for beacon owner (pubkey) by querying for most recent kind 0 (profile)
     const filter: Filter = {kinds: [0], authors: [beaconData.pubkey]}
-    const profileSub = pool.sub(defaultRelays, [filter])
+    const profileSub = pool.sub(relayList, [filter])
     profileSub.on('event', (event) => {
       // this will return the most recent profile event for the beacon owner; only the most recent is stored as specified in NIP-01
       try {
@@ -158,7 +163,7 @@ const Beacon = ({currentUserPubkey, beaconData, modal, clickHandler, editHandler
     }
     setCursorPosition(lnglat)
     // load place data into modal 
-    const newPlace = beaconToDraftPlace(beaconData) 
+    const newPlace = beaconToDraftPlace(beaconData, relayList) 
     // set draft place
     setDraftPlace(newPlace)
     modal?.setPlaceForm('edit')

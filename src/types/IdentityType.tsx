@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
+import { RelayObject } from './NostrRelay'
+
 export type IdentityType = {
   pubkey: string
   last_updated?: number // record the last time the profile was updated from relays. This also serves as a marker that the account has been loaded. Updated in Login component.
@@ -19,6 +21,6 @@ export type IdentityContextType = {
   identity: IdentityType,
   setIdentity: Function,
   isIdentityFresh: Function,
-  relays: string[],
+  relays: RelayObject,
   setRelays: Function,
 }

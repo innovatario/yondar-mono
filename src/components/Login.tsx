@@ -24,6 +24,7 @@ export const Login = () => {
       }
       // retrieve relays
       const loadedRelays = await getMyRelays(identity.pubkey)
+      console.log('loadedRelays', loadedRelays)
       if (loadedRelays !== defaultRelays) {
         setRelays(loadedRelays)
       }
