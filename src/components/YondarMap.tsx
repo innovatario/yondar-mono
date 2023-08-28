@@ -48,7 +48,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
   return (
     <>
     <Map
-      mapboxAccessToken='pk.eyJ1IjoiaW5ub3ZhdGFyIiwiYSI6ImNrZW0wZWwybjAyYnUyeW85bW4za3dtNDUifQ.xa1351lJ3mZH1P9c1fFsGg'
+      mapboxAccessToken={import.meta.env.VITE_MAPBOX_API}
       longitude={mapLongitude}
       latitude={mapLatitude}
       zoom={zoom}
