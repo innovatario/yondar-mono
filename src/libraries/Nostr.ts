@@ -24,6 +24,14 @@ type EventsByKind = {
   [key: number]: Event[]
 }
 
+// write a properly typed getTag function to pass into the find method that takes a tag string and returns the value for that key
+type FindTag = (tag: string[], i: number, o: string[][]) => boolean;
+export const getTag = (key: string): FindTag => {
+  return (tag): boolean => {
+    return tag && Array.isArray(tag) && tag[0] === key
+  }
+}
+
 /**
  * 
  * @param relays RelayObject

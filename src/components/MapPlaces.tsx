@@ -15,17 +15,22 @@ import { DraftPlaceContextType, EventWithoutContent, Place, PlaceProperties } fr
 import { beaconToDraftPlace } from '../libraries/draftPlace'
 import { CursorPositionType } from '../providers/GeolocationProvider'
 import { RelayList, RelayObject } from '../types/NostrRelay'
+import { getTag } from "../libraries/Nostr"
 
 // type MapPlacesProps = {
 //   children?: React.ReactNode
 // }
 
-const beaconsReducer = (state: object, action: { type: string; beacon: { id: string} }) => {
+const beaconsReducer = (state: object, action: { type: string; beacon: Place }) => {
+  const dtag = action.beacon.tags.find(getTag("d"))
+  const pubkey = action.beacon.pubkey
+  const kind = action.beacon.kind
+  const unique = `${dtag}-${pubkey}-${kind}`
   switch(action.type) {
     case 'add': 
       return {
         ...state,
-        [action.beacon.id]: action.beacon  
+        [unique]: action.beacon  
       }
     default:
       return state
