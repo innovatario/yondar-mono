@@ -22,7 +22,7 @@ export const SignUpButton = () => {
     return null
   } else {
     return (
-      <button onClick={newIdentity}>Create new identity</button>
+      <button type='button' onClick={newIdentity}>Create new identity</button>
     )
   }
 }

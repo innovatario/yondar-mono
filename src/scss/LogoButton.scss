@@ -22,15 +22,26 @@
       top: 0.5rem;
     }
   }
-  
-  // & .button {
-  //   position: relative;
-  //   top: 0rem;
-  //   transition: none;
-  // }
+  .component-logobutton-menu {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+  }
 
-  // & .button:active {
-  //   top: 0.5rem;
-  //   transition: all 150ms ease-out;
-  // }
+  .wrapper {
+    background-color: #000b;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin: 0 auto;
+    padding-top: 15vh;
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+    * {
+      display: block;
+      width: max(30vw, 300px);
+      margin: 0 auto;
+    }
+  }
 }
