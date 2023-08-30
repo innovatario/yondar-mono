@@ -63,10 +63,10 @@ $duration: 5s;
   transform: translateX(calc(-20vw + 26px));
   width: 40vw;
   // create a fade in and swoop up effect animation on load
-  animation: fade-in 500ms ease-out forwards, swoop-up 500ms ease-out forwards;
+  animation: cursor-fade-in 500ms ease-out forwards, swoop-up 500ms ease-out forwards;
 
 
-  @keyframes fade-in {
+  @keyframes cursor-fade-in {
     0% {
       opacity: 0;
       text-shadow: 0px 0px 10px #000,0px 0px 10px #000;

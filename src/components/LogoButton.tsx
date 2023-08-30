@@ -15,15 +15,20 @@ export const LogoButton = ({ color = '#00aeef', children }: LogoButtonProps) => 
   const outerClasses = 'component-logobutton ' + (toggle ? 'active' : 'inactive') 
   const classes = 'button ' + (toggle ? 'active' : 'inactive')
 
+  const menu = (
+    <div className='component-logobutton-menu'>
+      <div className='wrapper'>
+        { children }
+      </div>
+    </div>
+  )
+
   return (
     <div className={outerClasses} onClick={doToggle}>
+      { toggle ? menu : null }
       <div className={classes}>
         <YLogo color={color}/>
       </div>
-      { toggle ? (<div className='component-logobutton-menu'>
-        { children }
-      </div>
-      ) : null }
     </div>
   )
 }

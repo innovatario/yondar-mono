@@ -22,7 +22,12 @@ export const SignInButton = () => {
   }
   if (isIdentityFresh()) {
     return (
-      <button type='button' onClick={() => navigate('/login')}>Go Yondar!</button>
+      <div className="column">
+      You're already logged in!
+      <br/>
+      <br/>
+      <button type='button' onClick={() => navigate('/login')}>Go Yondar</button>
+      </div>
     )
   } else {
     return (
