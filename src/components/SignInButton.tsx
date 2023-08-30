@@ -22,11 +22,11 @@ export const SignInButton = () => {
   }
   if (isIdentityFresh()) {
     return (
-      <button onClick={() => navigate('/login')}>Go Yondar!</button>
+      <button type='button' onClick={() => navigate('/login')}>Go Yondar!</button>
     )
   } else {
     return (
-      <button onClick={signIn}>Sign in with Extension</button>
+      <button type='button' onClick={signIn}>Sign in with Extension</button>
     )
   }
 }
