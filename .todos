@@ -2,8 +2,8 @@
   {
     "id": 1,
     "desc": "load relays from user profile",
-    "status": "pending",
-    "modified": "2023-08-17 14:32:14.5060491 -0500 CDT"
+    "status": "done",
+    "modified": "2023-08-30 16:08:05.8455021 -0500 CDT"
   },
   {
     "id": 2,
@@ -40,5 +40,11 @@
     "desc": "when editing, the d tag must stay the same even if they change the Name of the beacon; add var to draft context for this",
     "status": "pending",
     "modified": "2023-08-18 12:41:20.8769629 -0500 CDT"
+  },
+  {
+    "id": 8,
+    "desc": "show profile in modal when you click on user",
+    "status": "pending",
+    "modified": "2023-08-30 16:08:28.4591647 -0500 CDT"
   }
 ]
