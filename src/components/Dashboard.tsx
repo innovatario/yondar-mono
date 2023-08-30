@@ -51,10 +51,11 @@ export const Dashboard = () => {
       <GeolocationProvider trigger={userInteracted}>
         <YondarMap>
           <LogoButton>
-              <HomeButton/>
-              <br/>
-              <ExportIdentityButton/><WipeIdentityButton/>
-
+            <HomeButton/>
+            <br/>
+            <ExportIdentityButton/>
+            <br/>
+            <WipeIdentityButton/>
           </LogoButton>
           { showProfile ? $profile : null }
         </YondarMap>

@@ -9,7 +9,9 @@ export const ExportIdentityButton = () => {
   const [showExport, setShowExport] = useState<JSX.Element|null>(null)
   const [wrongPassword, setWrongPassword] = useState(false)
 
-  const exportIdentity = async () => {
+  // what is the type of e?
+  const exportIdentity = async (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation()
     try {
       const sk = await decryptPrivateKey()
       if (sk === false) {
@@ -53,7 +55,7 @@ export const ExportIdentityButton = () => {
     return (
       <>
         <button onClick={exportIdentity}>Export Identity</button>
-        <div className="secret export messagebox full">
+        <div className="secret export messagebox full" onClick={e => e.stopPropagation()}>
           <span>Wrong password. Please try again.</span>
           <button className="close" onClick={closeButton}>&times;</button>
         </div>
@@ -61,7 +63,7 @@ export const ExportIdentityButton = () => {
     )
   } else if (showExport) {
     return (
-      <div className="secret export messagebox full">
+      <div className="secret export messagebox full" onClick={e => e.stopPropagation()}>
         {showExport}
         <button className="close" onClick={closeButton}>&times;</button>
       </div>
