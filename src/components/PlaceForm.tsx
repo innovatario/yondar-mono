@@ -22,6 +22,8 @@ import { getRelayList, pool } from "../libraries/Nostr"
 import Geohash from "latlon-geohash"
 import { signEvent } from "../libraries/NIP-07"
 import { createDraftPlace, createNaddr } from "../libraries/draftPlace"
+import { Event, getEventHash, getSignature } from "nostr-tools"
+import { decryptPrivateKey } from "../libraries/EncryptAndStoreLocal"
 /* create a tsx form to handle input for a new place based on the examplePlace: 
 const examplePlace = `
 {
@@ -179,7 +181,22 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
     }
 
     // publish the event
-    const signedEvent = await signEvent(signableDraftPlace)
+    let signedEvent
+    if (localStorage.getItem("storens")){
+      // sign via nostr-tools
+      const sk = await decryptPrivateKey() 
+      if (!sk) signedEvent = null
+      else {
+        const eventHash = await getEventHash(signableDraftPlace)
+        const eventSig = await getSignature(signableDraftPlace, sk)
+        signedEvent = signableDraftPlace as Event<37515>
+        signedEvent.id = eventHash
+        signedEvent.sig = eventSig
+        signedEvent = signableDraftPlace
+      }
+    } else {
+      signedEvent = await signEvent(signableDraftPlace)
+    }
 
     if (signedEvent === null) {
       // TODO: notify user
