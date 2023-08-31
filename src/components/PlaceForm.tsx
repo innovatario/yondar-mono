@@ -192,7 +192,6 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
         signedEvent = signableDraftPlace as Event<37515>
         signedEvent.id = eventHash
         signedEvent.sig = eventSig
-        signedEvent = signableDraftPlace
       }
     } else {
       signedEvent = await signEvent(signableDraftPlace)
