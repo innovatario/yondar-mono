@@ -184,7 +184,15 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
     let signedEvent
     if (localStorage.getItem("storens")){
       // sign via nostr-tools
-      const sk = await decryptPrivateKey() 
+      let sk
+      const tryToSign = async () => {
+        try {
+          sk = await decryptPrivateKey('signing') 
+        } catch (e) {
+          alert("Wrong password! Could not decrypt local signing key. Please try publishing again.")
+        }
+      }
+      await tryToSign()
       if (!sk) signedEvent = null
       else {
         const eventHash = await getEventHash(signableDraftPlace)

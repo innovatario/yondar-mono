@@ -26,8 +26,8 @@
   {
     "id": 5,
     "desc": "if using generated identity, must not rely on extension to sign",
-    "status": "pending",
-    "modified": "2023-08-18 12:38:51.5715362 -0500 CDT"
+    "status": "done",
+    "modified": "2023-08-31 16:58:46.8671476 -0500 CDT"
   },
   {
     "id": 6,
@@ -46,5 +46,11 @@
     "desc": "show profile in modal when you click on user",
     "status": "pending",
     "modified": "2023-08-30 16:08:28.4591647 -0500 CDT"
+  },
+  {
+    "id": 9,
+    "desc": "do not fail silently when you enter the wrong decryption password for your local key",
+    "status": "done",
+    "modified": "2023-08-31 16:58:37.7007119 -0500 CDT"
   }
 ]

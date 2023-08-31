@@ -52,7 +52,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       longitude={mapLongitude}
       latitude={mapLatitude}
       zoom={zoom}
-      style={{ maxWidth: '100%', height: '100vh' }}
+      style={{ maxWidth: '100%', height: '100vh', cursor: 'crosshair!important' }}
       onMove={e => setViewState(e.viewState)}
       onClick={handleClick}
       mapStyle='mapbox://styles/innovatar/ckg6zpegq44ym19pen438iclf'

@@ -13,7 +13,7 @@ export const ExportIdentityButton = () => {
   const exportIdentity = async (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
     try {
-      const sk = await decryptPrivateKey()
+      const sk = await decryptPrivateKey('export')
       if (sk === false) {
         return
       }

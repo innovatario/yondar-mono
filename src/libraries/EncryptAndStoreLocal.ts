@@ -18,8 +18,8 @@ function setPassword() {
   }
 }
 
-function recallPassword(){
-  return prompt('Enter your password to unlock your identity for export. \n\nLeave blank if you did not encrypt your identity with a password.')
+function recallPassword(reason: 'export' | 'signing'){
+  return prompt(`Enter your password to unlock your identity for ${reason}. \n\nLeave blank if you did not encrypt your identity with a password.`)
 }
 
 export async function encryptAndStorePrivateKey(privateKeyHex: string): Promise<boolean>{
@@ -65,9 +65,10 @@ export async function encryptAndStorePrivateKey(privateKeyHex: string): Promise<
 }
 
 // Function to decrypt the private key from localStorage
-export async function decryptPrivateKey() {
-    const recall = recallPassword()
+export async function decryptPrivateKey(reason: 'export' | 'signing') {
+    const recall = recallPassword(reason)
     if (recall === null){
+      // user canceled
       return false
     }
     const password = new TextEncoder().encode(defaultPassword + recall)
