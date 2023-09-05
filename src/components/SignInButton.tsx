@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { IdentityContextType } from "../types/IdentityType"
 import { IdentityContext } from "../providers/IdentityProvider"
 import { getPublicKey } from "../libraries/NIP-07"
+import { WavyText } from './WavyText'
 
 export const SignInButton = () => {
   const { setIdentity, isIdentityFresh } = useContext<IdentityContextType>(IdentityContext)
@@ -26,7 +27,7 @@ export const SignInButton = () => {
       You're already logged in!
       <br/>
       <br/>
-      <button type='button' onClick={() => navigate('/login')}>Go Yondar</button>
+      <button type='button' onClick={() => navigate('/login')}><WavyText text="Go Yondar"/></button>
       </div>
     )
   } else {
