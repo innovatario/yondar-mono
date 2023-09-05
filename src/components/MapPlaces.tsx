@@ -8,12 +8,12 @@ import { getRelayList, pool } from "../libraries/Nostr"
 import { useGeolocationData } from "../hooks/useGeolocationData"
 import { useMap } from 'react-map-gl'
 import { Marker } from 'react-map-gl'
-import '../scss//MapPlaces.scss'
 import { DraftPlaceContext } from '../providers/DraftPlaceProvider'
 import { DraftPlaceContextType, EventWithoutContent, Place, PlaceProperties } from '../types/Place'
 import { RelayList } from '../types/NostrRelay'
 import { getTag } from "../libraries/Nostr"
 import { Beacon } from './Beacon'
+import '../scss//MapPlaces.scss'
 
 type beaconsReducerType = {
   [key: string]: Place

@@ -29,6 +29,17 @@
         top: 4px;
       }
     }
+    p .ellipses {
+      display: block;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    a {
+      display: block;
+      margin-top: 1rem;
+      text-decoration: underline;
+    }
     .hours small {
       // make color half transparent
       color: #fff6;

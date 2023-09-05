@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { ModalType } from '../types/ModalType'
-import { Filter } from 'nostr-tools'
+import { Filter, nip19 } from 'nostr-tools'
 import { getRelayList, pool } from "../libraries/Nostr"
 import { useGeolocationData } from "../hooks/useGeolocationData"
 import { isOpenNow } from '../libraries/decodeDay'
@@ -25,6 +25,7 @@ type BeaconProps = {
 }
 export const Beacon = ({ currentUserPubkey, relays, beaconData, modal, toggleHandler, clickHandler, editHandler, draft }: BeaconProps) => {
   const [show, setShow] = useState<boolean>(false)
+  const [author, setAuthor] = useState({})
   const [beaconProfilePicture, setBeaconProfilePicture] = useState<string>('')
   const { setDraftPlace } = draft
   const { setCursorPosition } = useGeolocationData()
@@ -38,6 +39,7 @@ export const Beacon = ({ currentUserPubkey, relays, beaconData, modal, toggleHan
       // this will return the most recent profile event for the beacon owner; only the most recent is stored as specified in NIP-01
       try {
         const profile = JSON.parse(event.content)
+        setAuthor(profile)
         setBeaconProfilePicture(profile.picture)
       } catch (e) {
         console.log('Failed to parse event content:', e)
@@ -120,6 +122,10 @@ export const Beacon = ({ currentUserPubkey, relays, beaconData, modal, toggleHan
       // console.log('failed to parse hours', e)
     }
 
+    let authorInfo = null
+    const authorLink = nip19.npubEncode(beaconData.pubkey)
+    authorInfo = <p onClick={e => e.stopPropagation()}><a href={`https://nostr.com/${authorLink}`} target="_blank" rel="noopener noreferrer"><small className="ellipses">Created by {author.displayName || author.display_name || author.username || beaconData.pubkey}</small></a></p>
+
     let edit = null
     try {
       if (currentUserPubkey === beaconData.pubkey)
@@ -134,6 +140,7 @@ export const Beacon = ({ currentUserPubkey, relays, beaconData, modal, toggleHan
         {beaconDescription}
         {hours}
         {edit}
+        {authorInfo}
       </div>
     )
   }
