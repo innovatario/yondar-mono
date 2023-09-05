@@ -28,19 +28,26 @@ const getUniqueBeaconID = (beacon: Place) => {
   return `${dtagValue}-${pubkey}-${kind}`
 }
 
-const beaconsReducer = (state: beaconsReducerType, action: { type: string; beacon: Place }) => {
-  const unique = getUniqueBeaconID(action.beacon)
-  const existing = state[unique]
-  // only save the newest beacon by created_at timestamp; if this incoming beacon s older, don't save it.
-  if (existing && existing.created_at > action.beacon.created_at) return state
+const beaconsReducer = (state: beaconsReducerType, action: { type: string; beacon?: Place }) => {
 
-  // proceed with save
-  switch(action.type) {
-    case 'add': 
+  if (action.beacon) {
+    const unique = getUniqueBeaconID(action?.beacon)
+    const existing = state[unique]
+    // only save the newest beacon by created_at timestamp; if this incoming beacon s older, don't save it.
+    if (existing && existing.created_at > action.beacon.created_at) return state
+
+    if (action.type === 'add') {
       return {
         ...state,
         [unique]: action.beacon  
       }
+    }
+  }
+
+  // proceed with save
+  switch(action.type) {
+    case 'clear':
+      return {}
     default:
       return state
   }
@@ -67,7 +74,7 @@ const beaconsStateReducer = (state: beaconsStateReducerType, action: { type: str
   }
 }
 
-export const MapPlaces = () => {
+export const MapPlaces = ({global}: {global: boolean}) => {
   const [beacons, beaconsDispatch] = useReducer(beaconsReducer, {})
   const [beaconsToggleState, setBeaconsToggleState] = useReducer(beaconsStateReducer, [])
   const {position} = useGeolocationData()
@@ -77,8 +84,11 @@ export const MapPlaces = () => {
   const {draftPlace, setDraftPlace} = useContext<DraftPlaceContextType>(DraftPlaceContext)
 
   useEffect( () => {
+    beaconsDispatch({
+      type: 'clear'
+    })
     const contactList: ContactList = [identity.pubkey, ...Object.keys(contacts || {}) ]
-    const filter: Filter<37515> = {kinds: [37515], authors: contactList}
+    const filter: Filter<37515> = global ? {kinds: [37515]} : {kinds: [37515], authors: contactList}
     const relayList: RelayList = getRelayList(relays, ['read'])
     const sub = pool.sub(relayList, [filter])
     // get places from your relays
@@ -113,7 +123,7 @@ export const MapPlaces = () => {
     return () => {
       sub.unsub()
     }
-  }, [relays])
+  }, [relays, global,contacts,identity])
 
   const beaconsArray = Object.values(beacons)
 

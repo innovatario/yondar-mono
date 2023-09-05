@@ -8,6 +8,7 @@ import { useGeolocationData } from '../hooks/useGeolocationData'
 import { FollowTarget } from '../types/Follow'
 import { ModalContextType } from "../types/ModalType"
 import { ModalContext } from "../providers/ModalProvider"
+import { FeedToggle } from './FeedToggle'
 
 type YondarMapProps = {
   children?: React.ReactNode
@@ -20,6 +21,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
   const [zoom, setZoom] = useState<number>(1)
   const [follow, setFollow] = useState<FollowTarget>(null)
   const {modal} = useContext<ModalContextType>(ModalContext)
+  const [globalFeed, setGlobalFeed] = useState<boolean>(true)
 
   function setViewState(viewState: ViewState) {
     // unlock map, we moved the map by interaction
@@ -42,6 +44,10 @@ export const YondarMap = ({ children }: YondarMapProps) => {
     }
   }
 
+  const toggleFeed = () => {
+    setGlobalFeed(!globalFeed)
+  }
+
   const mapLongitude = position && follow === "USER" ? position?.coords.longitude : longitude
   const mapLatitude = position && follow === "USER" ? position?.coords.latitude : latitude
 
@@ -60,7 +66,8 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       {/* { !triggerGeo ? <MapClickHint longitude={longitude} latitude={latitude} /> : null } */}
       <Me setFollow={setFollow}/>
       <Cursor edit={modal?.placeForm === 'edit'}/>
-      { modal?.placeForm ? null : <MapPlaces/> }
+      { modal?.placeForm ? null : <MapPlaces global={globalFeed}/> }
+      <FeedToggle globalFeed={globalFeed} toggleFeed={toggleFeed}/>
       { children }
     </Map>
     </>

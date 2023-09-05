@@ -93,6 +93,7 @@ export const getMostRecent = async (pubkey: string, kinds: number[], relays: Rel
           const mostRecent = kind.reduce((a, b) => a.created_at > b.created_at ? a : b)
           resolve(mostRecent)
         }
+        sub.unsub()
       })
     })
     return mostRecent

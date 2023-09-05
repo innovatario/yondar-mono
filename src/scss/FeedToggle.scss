@@ -1,0 +1,9 @@
+$width: 70px;
+
+button.component-feedtoggle {
+  position: absolute;
+  top: 0.5rem;
+  left: calc(50vw - calc($width / 2));
+  width: $width;
+  background-color: #000;
+}
