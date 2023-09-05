@@ -12,6 +12,7 @@ import { ModalContextType } from "../types/ModalType"
 import { ModalContext } from "../providers/ModalProvider"
 import { PlaceForm } from "./PlaceForm"
 import { GeolocationProvider } from '../providers/GeolocationProvider.tsx'
+import { MyAccount } from "./MyAccount"
 import '../scss/Dashboard.scss'
 
 export const Dashboard = () => {
@@ -52,6 +53,8 @@ export const Dashboard = () => {
         <YondarMap>
           <LogoButton>
             <HomeButton/>
+            <br/>
+            <MyAccount/>
             <br/>
             <ExportIdentityButton/>
             <br/>
