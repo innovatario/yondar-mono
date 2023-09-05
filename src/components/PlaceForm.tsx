@@ -18,7 +18,7 @@ import { DraftPlaceContextType } from "../types/Place"
 import { freshDefaultPlace } from "../libraries/defaultPlace"
 import { FancyButton } from "./FancyButton"
 import "../scss/PlaceForm.scss"
-import { getRelayList, pool } from "../libraries/Nostr"
+import { getRelayList, getTag, pool } from "../libraries/Nostr"
 import Geohash from "latlon-geohash"
 import { signEvent } from "../libraries/NIP-07"
 import { createDraftPlace, createNaddr } from "../libraries/draftPlace"
@@ -106,6 +106,8 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
   const geohash = Geohash.encode(cursorPosition!.lat, cursorPosition!.lng, 5)
 
   const prepareFormData = (): DraftPlace => {
+    const dtag = draftPlace.tags.find(getTag("d"))
+    const unique = dtag ? dtag[1] : null
     return createDraftPlace(
       nameRef.current?.value || "",
       geohash,
@@ -114,6 +116,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
       descriptionRef.current?.value || "",
       typeRef.current?.value as GooglePlaceType || "point_of_interest" as GooglePlaceType, 
       [cursorPosition!.lng, cursorPosition!.lat],
+      unique ? unique : nameRef.current?.value || "",
       abbrevRef.current?.value || "",
       streetAddressRef.current?.value || "",
       localityRef.current?.value || "",

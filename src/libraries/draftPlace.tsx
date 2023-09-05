@@ -14,6 +14,7 @@ export const createDraftPlace = (
   description: string,
   type: GooglePlaceType,
   coords: [number, number],
+  dtag: string,
   abbrev?: string,
   streetAddress?: string,
   locality?: string,
@@ -27,7 +28,7 @@ export const createDraftPlace = (
   const newPlace: DraftPlace = {
     kind: 37515,
     tags: [
-      ["d", name],
+      ["d", dtag],
       ["g", geohash],
       [
         "alt",
@@ -64,6 +65,8 @@ export const createDraftPlace = (
 
 export const beaconToDraftPlace = (beacon: Place, relayList: RelayList) => {
   // attempt to gather the properiets we aren't sure of
+  const dtag = beacon.tags.find(getTag("d"))
+  const unique = dtag ? dtag[1] : null
   const gtag = beacon.tags.find(getTag("g"))
   const geohash = gtag ? gtag[1] : ""
   const alttag = beacon.tags.find(getTag("alt"))
@@ -86,6 +89,7 @@ export const beaconToDraftPlace = (beacon: Place, relayList: RelayList) => {
     beacon.content?.properties?.description,
     beacon.content?.properties?.type,
     beacon.content?.geometry?.coordinates,
+    unique || beacon.content.properties.name,
     beacon.content?.properties?.abbrev,
     beacon.content?.properties?.address?.["street-address"],
     beacon.content?.properties?.address?.locality,
