@@ -157,7 +157,7 @@ export const MapPlaces = ({global}: {global: boolean}) => {
       const handleFollow = () => {
         if (map && position) {
           map.flyTo({
-            center: [beacon.content.geometry.coordinates[0] + 0.0013, beacon.content.geometry.coordinates[1]],
+            center: [beacon.content.geometry.coordinates[0] + 0.00135, beacon.content.geometry.coordinates[1]],
             zoom: 16,
             duration: 1000,
           })
@@ -167,7 +167,7 @@ export const MapPlaces = ({global}: {global: boolean}) => {
       const handleEdit = () => {
         if (map && position) {
           map.flyTo({
-            center: [beacon.content.geometry.coordinates[0], beacon.content.geometry.coordinates[1] - 0.0015],
+            center: [beacon.content.geometry.coordinates[0], beacon.content.geometry.coordinates[1] - 0.0010],
             zoom: 16,
             duration: 1000,
           })

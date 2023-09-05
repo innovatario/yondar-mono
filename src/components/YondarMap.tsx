@@ -9,6 +9,7 @@ import { FollowTarget } from '../types/Follow'
 import { ModalContextType } from "../types/ModalType"
 import { ModalContext } from "../providers/ModalProvider"
 import { FeedToggle } from './FeedToggle'
+import usePersistedState from '../hooks/usePersistedState'
 
 type YondarMapProps = {
   children?: React.ReactNode
@@ -21,7 +22,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
   const [zoom, setZoom] = useState<number>(1)
   const [follow, setFollow] = useState<FollowTarget>(null)
   const {modal} = useContext<ModalContextType>(ModalContext)
-  const [globalFeed, setGlobalFeed] = useState<boolean>(true)
+  const [globalFeed, setGlobalFeed] = usePersistedState<boolean>('feed', true)
 
   function setViewState(viewState: ViewState) {
     // unlock map, we moved the map by interaction

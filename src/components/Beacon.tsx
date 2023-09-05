@@ -37,7 +37,6 @@ export const Beacon = ({ currentUserPubkey, relays, beaconData, modal, toggleHan
     const filter: Filter = { kinds: [0], authors: [beaconData.pubkey] }
     const profileSub = pool.sub(relayList, [filter])
     profileSub.on('event', (event) => {
-      console.log(event)
       // this will return the most recent profile event for the beacon owner; only the most recent is stored as specified in NIP-01
       try {
         const profile = JSON.parse(event.content)

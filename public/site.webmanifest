@@ -1,0 +1,29 @@
+{
+    "name": "Yondar",
+    "short_name": "Yondar",
+    "start_url": "https://go.yondar.me",
+    "categories": ["augmented reality","gps","social","private"],
+    "description": "Your Places. Your Friends. Your world.",
+    "dir": "ltr",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png?v=47B2vJ95E7",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-256x256.png?v=47B2vJ95E7",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png?v=47B2vJ95E7",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#343434",
+    "background_color": "#343434",
+    "display": "standalone",
+    "scope": "https://go.yondar.me/"
+}
