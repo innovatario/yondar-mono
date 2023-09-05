@@ -2,12 +2,12 @@ import { useContext, useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
 import { IdentityContext } from "../providers/IdentityProvider"
 import { IdentityContextType } from "../types/IdentityType"
-import { defaultProfile, defaultRelays, getMyProfile, getMyRelays } from "../libraries/Nostr"
+import { defaultProfile, defaultRelays, defaultContacts, getMyProfile, getMyRelays, getMyContacts } from "../libraries/Nostr"
 import { Spinner } from './Spinner'
 
 export const Login = () => {
   const [loading, setLoading] = useState(false)
-  const {identity, setIdentity, isIdentityFresh, setRelays} = useContext<IdentityContextType>(IdentityContext)
+  const {identity, setIdentity, isIdentityFresh, setRelays, setContacts} = useContext<IdentityContextType>(IdentityContext)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -27,6 +27,10 @@ export const Login = () => {
       console.log('loadedRelays', loadedRelays)
       if (loadedRelays !== defaultRelays) {
         setRelays(loadedRelays)
+      }
+      const loadedContacts = await getMyContacts(identity.pubkey)
+      if (loadedContacts !== defaultContacts) {
+        setContacts(loadedContacts)
       }
     }
     // redirect to homepage if login page is accessed with no identity

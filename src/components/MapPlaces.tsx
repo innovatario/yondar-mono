@@ -14,6 +14,7 @@ import { RelayList } from '../types/NostrRelay'
 import { getTag } from "../libraries/Nostr"
 import { Beacon } from './Beacon'
 import '../scss//MapPlaces.scss'
+import { ContactList } from '../types/NostrContact'
 
 type beaconsReducerType = {
   [key: string]: Place
@@ -71,12 +72,13 @@ export const MapPlaces = () => {
   const [beaconsToggleState, setBeaconsToggleState] = useReducer(beaconsStateReducer, [])
   const {position} = useGeolocationData()
   const {current: map} = useMap()
-  const {identity, relays} = useContext<IdentityContextType>(IdentityContext)
+  const {identity, relays, contacts} = useContext<IdentityContextType>(IdentityContext)
   const {modal} = useContext<ModalContextType>(ModalContext)
   const {draftPlace, setDraftPlace} = useContext<DraftPlaceContextType>(DraftPlaceContext)
 
   useEffect( () => {
-    const filter: Filter<37515> = {kinds: [37515]}
+    const contactList: ContactList = [identity.pubkey, ...Object.keys(contacts || {}) ]
+    const filter: Filter<37515> = {kinds: [37515], authors: contactList}
     const relayList: RelayList = getRelayList(relays, ['read'])
     const sub = pool.sub(relayList, [filter])
     // get places from your relays

@@ -1,6 +1,7 @@
 import { SimplePool, Filter, Sub, Event } from "nostr-tools"
 import { IdentityType } from "../types/IdentityType"
 import { RelayList, RelayObject, RelayReadWrite, FilterReadWrite } from "../types/NostrRelay"
+import { ContactObject } from "../types/NostrContact"
 
 const readWrite: RelayReadWrite = {read: true, write: true}
 
@@ -15,8 +16,10 @@ export const defaultProfile: IdentityType = {
   'display_name': 'unknown',
   'displayName': 'unknown',
   'nip05': 'unknown',
-  'pubkey': '0000000000000000000000000000000000000000000000000000000000000000'
+  'pubkey': '0000000000000000000000000000000000000000000000000000000000000000',
 }
+
+export const defaultContacts: ContactObject = {}
 
 export const pool = new SimplePool()
 
@@ -119,5 +122,28 @@ export const getMyProfile = async (pubkey: string): Promise<IdentityType> => {
   } catch (e) {
     console.warn('Failed to parse profile from user metadata.')
     return defaultProfile
+  }
+}
+
+export const getMyContacts = async (pubkey: string): Promise<ContactObject> => {
+  const myContacts = await getMostRecent(pubkey,[3])
+  if (!myContacts) return defaultContacts
+  try {
+    const parsedContacts: ContactObject = {}
+    myContacts.tags.forEach(tag => {
+      if (tag[0] === 'p' && typeof tag[1] === 'string' && tag[1].length === 64) {
+        parsedContacts[tag[1]] = {relay: null, petname: null}
+        if (typeof tag[2] === 'string' && tag[2].indexOf('wss://') === 0) {
+          parsedContacts[tag[1]].relay = tag[2]
+        }
+        if (typeof tag[3] === 'string') {
+          parsedContacts[tag[1]].petname = tag[3]
+        }
+      }
+    })
+    return parsedContacts
+  } catch (e) {
+    console.warn('Failed to parse contacts from user metadata.')
+    return defaultContacts
   }
 }

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { RelayObject } from './NostrRelay'
+import { ContactObject } from './NostrContact'
 
 export type IdentityType = {
   pubkey: string
@@ -14,7 +15,7 @@ export type IdentityType = {
   picture?: string
   banner?: string
   lud16?: string
-  // [key: string]: string | undefined
+  [key: string]: unknown
 }
 
 export type IdentityContextType = {
@@ -23,4 +24,6 @@ export type IdentityContextType = {
   isIdentityFresh: Function,
   relays: RelayObject,
   setRelays: Function,
+  contacts: ContactObject,
+  setContacts: Function,
 }

@@ -7,6 +7,7 @@ import { isOpenNow } from '../libraries/decodeDay'
 import { DraftPlaceContextType, Place } from '../types/Place'
 import { beaconToDraftPlace } from '../libraries/draftPlace'
 import { CursorPositionType } from '../providers/GeolocationProvider'
+import { IdentityType } from '../types/IdentityType'
 import { RelayList, RelayObject } from '../types/NostrRelay'
 import { MapPin } from './MapPin'
 
@@ -25,7 +26,7 @@ type BeaconProps = {
 }
 export const Beacon = ({ currentUserPubkey, relays, beaconData, modal, toggleHandler, clickHandler, editHandler, draft }: BeaconProps) => {
   const [show, setShow] = useState<boolean>(false)
-  const [author, setAuthor] = useState({})
+  const [author, setAuthor] = useState<IdentityType>()
   const [beaconProfilePicture, setBeaconProfilePicture] = useState<string>('')
   const { setDraftPlace } = draft
   const { setCursorPosition } = useGeolocationData()
@@ -36,6 +37,7 @@ export const Beacon = ({ currentUserPubkey, relays, beaconData, modal, toggleHan
     const filter: Filter = { kinds: [0], authors: [beaconData.pubkey] }
     const profileSub = pool.sub(relayList, [filter])
     profileSub.on('event', (event) => {
+      console.log(event)
       // this will return the most recent profile event for the beacon owner; only the most recent is stored as specified in NIP-01
       try {
         const profile = JSON.parse(event.content)
@@ -124,12 +126,12 @@ export const Beacon = ({ currentUserPubkey, relays, beaconData, modal, toggleHan
 
     let authorInfo = null
     const authorLink = nip19.npubEncode(beaconData.pubkey)
-    authorInfo = <p onClick={e => e.stopPropagation()}><a href={`https://nostr.com/${authorLink}`} target="_blank" rel="noopener noreferrer"><small className="ellipses">Created by {author.displayName || author.display_name || author.username || beaconData.pubkey}</small></a></p>
+    authorInfo = <p onClick={e => e.stopPropagation()}><a href={`https://nostr.com/${authorLink}`} target="_blank" rel="noopener noreferrer"><small className="ellipses">Created by {author?.displayName || author?.display_name || author?.username || beaconData.pubkey}</small></a></p>
 
     let edit = null
     try {
       if (currentUserPubkey === beaconData.pubkey)
-        edit = <button onClick={editPlace} style={{ float: "right", marginTop: "1.5rem", marginRight: "-1.0rem" }}>Edit</button>
+        edit = <button onClick={editPlace} style={{ float: "right", marginTop: "2.75rem", marginRight: "-1.0rem" }}>Edit</button>
     } catch (e) {
       console.log('', e)
     }

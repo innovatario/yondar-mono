@@ -4,6 +4,7 @@ import { IdentityType, IdentityContextType } from '../types/IdentityType.tsx'
 import usePersistedState from '../hooks/usePersistedState'
 import { RelayObject } from '../types/NostrRelay'
 import { defaultRelays } from '../libraries/Nostr.ts'
+import { ContactObject } from '../types/NostrContact.ts'
 
 const STALE_PROFILE = 1000 * 60 * 60 * 24 * 7
 
@@ -14,6 +15,8 @@ const defaultIdentityContext: IdentityContextType = {
   isIdentityFresh: () => {},
   relays: defaultRelays,
   setRelays: () => {},
+  contacts: {},
+  setContacts: () => {},
 }
 
 export const IdentityContext = createContext<IdentityContextType>(defaultIdentityContext)
@@ -25,6 +28,7 @@ type IdentityProviderProps = {
 export const IdentityProvider: React.FC<IdentityProviderProps> = ({children})=> {
   const [identity, setIdentity] = usePersistedState<IdentityType>('identity')
   const [relays, setRelays] = usePersistedState<RelayObject>('relays', defaultRelays)
+  const [contacts, setContacts] = usePersistedState<ContactObject>('contacts', {})
 
   const isIdentityFresh = (): boolean => {
     if (identity?.last_updated && +new Date() - identity.last_updated < STALE_PROFILE) {
@@ -34,7 +38,7 @@ export const IdentityProvider: React.FC<IdentityProviderProps> = ({children})=> 
   }
 
   return (
-    <IdentityContext.Provider value={{identity, setIdentity, isIdentityFresh, relays, setRelays}}>
+    <IdentityContext.Provider value={{identity, setIdentity, isIdentityFresh, relays, setRelays, contacts, setContacts}}>
       {children}
     </IdentityContext.Provider>
   )
