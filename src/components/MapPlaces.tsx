@@ -15,10 +15,6 @@ import { RelayList } from '../types/NostrRelay'
 import { getTag } from "../libraries/Nostr"
 import { Beacon } from './Beacon'
 
-// type MapPlacesProps = {
-//   children?: React.ReactNode
-// }
-
 type beaconsReducerType = {
   [key: string]: Place
 }
@@ -139,7 +135,7 @@ export const MapPlaces = () => {
       }
     }).reverse()
 
-  console.log(beaconsArray.map( b => getUniqueBeaconID(b).split('-')[0]))
+  // console.log(beaconsArray.map( b => getUniqueBeaconID(b).split('-')[0]))
 
   // iterate through beacon data and prepare it for map display. 
   return beaconsArray 
@@ -149,7 +145,7 @@ export const MapPlaces = () => {
       const handleFollow = () => {
         if (map && position) {
           map.flyTo({
-            center: [beacon.content.geometry.coordinates[0] + 0.0015, beacon.content.geometry.coordinates[1]],
+            center: [beacon.content.geometry.coordinates[0] + 0.0013, beacon.content.geometry.coordinates[1]],
             zoom: 16,
             duration: 1000,
           })

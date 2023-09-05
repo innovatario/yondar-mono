@@ -40,7 +40,7 @@
     max-height: 100%;
     & > * {
       display: block;
-      width: max(30vw, 300px);
+      width: min( max(30vw, 300px), 100%);
       margin: 0 auto;
     }
   }
