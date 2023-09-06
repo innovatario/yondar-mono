@@ -55,9 +55,7 @@ export const Dashboard = () => {
             <HomeButton/>
             <br/>
             <MyAccount/>
-            <br/>
             <ExportIdentityButton/>
-            <br/>
             <WipeIdentityButton/>
           </LogoButton>
           { showProfile ? $profile : null }

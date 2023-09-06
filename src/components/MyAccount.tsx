@@ -11,6 +11,9 @@ export const MyAccount = () => {
     window.open(`https://nostr.com/${npub}`, '_blank', 'noopener noreferrer')
   }
   return (
+    <>
     <button onClick={handleClick}>View My Account</button>
+    <br/>
+    </>
   )
 }

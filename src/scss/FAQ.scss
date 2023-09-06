@@ -1,0 +1,51 @@
+.faq {
+  max-width: 320px;
+  margin: 2rem auto;
+}
+
+p.send,
+p.receive {
+  padding: 1rem;
+  position: relative;
+  width: 100%;
+  font-weight: 300;
+}
+
+p.send {
+  background-color: #00aeef;
+  border-radius: 2em 2em 0 2em;
+  color: #ffffff;
+  margin-left: 30%;
+  width: 70%;
+  &:after {
+    content: '';
+    width: 1rem;
+    height: 1rem;
+    background-color: #00aeef;
+    bottom: -0.5rem;
+    right: 0;
+    border-radius: 0 0 0 1rem;
+    position: absolute;
+  }
+}
+
+p.receive {
+  background-color: #292929;
+  border-radius: 2em 2em 2em 0;
+  margin-right: 30%;
+  width: 70%;
+  a {
+    color: rgb(154, 214, 255);
+    text-decoration: underline;
+  }
+  &:after {
+    content: '';
+    width: 1rem;
+    height: 1rem;
+    background-color: #292929;
+    bottom: -0.5rem;
+    left: 0;
+    border-radius: 0 0 1rem 0;
+    position: absolute;
+  }
+}

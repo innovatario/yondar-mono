@@ -11,7 +11,7 @@
     border: globals.$fancyBorders;
     box-shadow: 0px 3px 5px -1px globals.$buttonShadow;
     color: #ffffff;
-    font-size: 3.5vw;
+    font-size: 5.0vw;
     @media screen and (min-width: 769px){
         font-size: 26px;
     }
@@ -20,7 +20,10 @@
     text-transform: uppercase;
     transition: globals.$fastAnim;
     padding: 1px 6px;
-    
+
+    &.chill {
+        text-transform: none;
+    }
     &:focus, &:active {
       outline: none;
     }

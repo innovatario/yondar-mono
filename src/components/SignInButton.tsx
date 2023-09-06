@@ -24,10 +24,10 @@ export const SignInButton = () => {
   if (isIdentityFresh()) {
     return (
       <div className="column">
-      You're already logged in!
+      You are already signed in!
       <br/>
       <br/>
-      <button type='button' onClick={() => navigate('/login')}><WavyText text="Go Yondar"/></button>
+      <button className="fancybutton lg" type='button' onClick={() => navigate('/login')}><WavyText text="Go Yondar"/></button>
       </div>
     )
   } else {

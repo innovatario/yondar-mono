@@ -50,7 +50,10 @@ export const ExportIdentityButton = () => {
     return null
   } else if (!showExport && !wrongPassword) {
     return (
+      <>
       <button onClick={exportIdentity}>Export Identity</button>
+      <br/>
+      </>
     )
   } else if (!showExport && wrongPassword) {
     return (
@@ -60,14 +63,18 @@ export const ExportIdentityButton = () => {
           <span>Wrong password. Please try again.</span>
           <button className="close" onClick={closeButton}>&times;</button>
         </div>
+        <br/>
       </>
     )
   } else if (showExport) {
     return (
+      <>
       <div className="secret export messagebox full" onClick={e => e.stopPropagation()}>
         {showExport}
         <button className="close" onClick={closeButton}>&times;</button>
       </div>
+      <br/>
+      </>
     )
   }
 }
