@@ -123,6 +123,16 @@ export const Beacon = ({ currentUserPubkey, relays, beaconData, modal, toggleHan
       // console.log('failed to parse hours', e)
     }
 
+    let typeInfo = null
+    try {
+      const currentType = beaconData.content.properties.type
+      if (currentType) {
+        typeInfo = <p className="type">{currentType.replace(/_/g,' ')}</p>
+      }
+    } catch (e) {
+      console.log('failed to parse type', e)
+    }
+
     let authorInfo = null
     const authorLink = nip19.npubEncode(beaconData.pubkey)
     authorInfo = <p onClick={e => e.stopPropagation()}><a href={`https://nostr.com/${authorLink}`} target="_blank" rel="noopener noreferrer"><small className="ellipses">Created by {author?.displayName || author?.display_name || author?.username || beaconData.pubkey}</small></a></p>
@@ -138,10 +148,12 @@ export const Beacon = ({ currentUserPubkey, relays, beaconData, modal, toggleHan
     return (
       <div className="beacon__info" onClick={toggle}>
         {beaconName}
+        {typeInfo}
+        <hr/>
         {beaconDescription}
         {hours}
-        {edit}
         {authorInfo}
+        {edit}
       </div>
     )
   }
