@@ -264,6 +264,37 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
         placeholder="A couple sentences to decribe the Place"
         onChange={() => updateDraft()}
       ></textarea>
+      <label htmlFor="type">Type</label>
+      {typeDropdown(typeRef, draftPlace.content.properties.type || "", updateDraft)}
+      <label htmlFor="status">Status</label>
+      <select
+        id="status"
+        ref={statusRef}
+        defaultValue={draftPlace.content.properties.status || ""}
+        onChange={() => updateDraft()}
+      >
+        <option value="OPERATIONAL">Operational</option>
+        <option value="CLOSED_TEMPORARILY">Closed Temporarily</option>
+        <option value="CLOSED_PERMANENTLY">Closed Permanently</option>
+      </select>
+      <label htmlFor="website">Website</label>
+      <input
+        id="website"
+        ref={websiteRef}
+        defaultValue={draftPlace.content.properties.website || ""}
+        type="text"
+        placeholder="https://yondar.me"
+        onChange={() => updateDraft()}
+      />
+      <label htmlFor="phone">Phone</label>
+      <input
+        id="phone"
+        ref={phoneRef}
+        defaultValue={draftPlace.content.properties.phone || ""}
+        type="text"
+        placeholder="+1 123 456 7890"
+        onChange={() => updateDraft()}
+      />
       <label htmlFor="address">
         <h2>
           Address Information
@@ -320,39 +351,8 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
           onChange={() => updateDraft()}
         />
       </fieldset>
-      <label htmlFor="type">Type</label>
-      {typeDropdown(typeRef, draftPlace.content.properties.type || "", updateDraft)}
-      <label htmlFor="status">Status</label>
-      <select
-        id="status"
-        ref={statusRef}
-        defaultValue={draftPlace.content.properties.status || ""}
-        onChange={() => updateDraft()}
-      >
-        <option value="OPERATIONAL">Operational</option>
-        <option value="CLOSED_TEMPORARILY">Closed Temporarily</option>
-        <option value="CLOSED_PERMANENTLY">Closed Permanently</option>
-      </select>
-      <label htmlFor="website">Website</label>
-      <input
-        id="website"
-        ref={websiteRef}
-        defaultValue={draftPlace.content.properties.website || ""}
-        type="text"
-        placeholder="https://yondar.me"
-        onChange={() => updateDraft()}
-      />
-      <label htmlFor="phone">Phone</label>
-      <input
-        id="phone"
-        ref={phoneRef}
-        defaultValue={draftPlace.content.properties.phone || ""}
-        type="text"
-        placeholder="+1 123 456 7890"
-        onChange={() => updateDraft()}
-      />
       <br />
-      <FancyButton size={"lg"} onClick={publish}>
+      <FancyButton size={"sm"} onClick={publish}>
         {edit ? "Edit" : "Publish"} Place
       </FancyButton>
       <br />

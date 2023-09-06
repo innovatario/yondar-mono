@@ -3,7 +3,7 @@
 #component-placeform {
   background-color: #121212;
   border-color: #fff;
-  border-radius: 1rem;
+  border-radius: 0.25rem;
   box-shadow: 0px 0px 10px #4a5968;
   box-sizing: border-box;
   height: 74vh;
@@ -38,14 +38,16 @@
   }
   label + input, label + textarea, label + select {
     padding: 0.5rem;
-    border-radius: 1rem;
+    border-radius: 0.25rem;
+    border-color: transparent;
     margin-bottom: 0.5rem;
   }
   select {
     margin-right: 1rem;
   }
   fieldset {
-    border: none;
+    border: 1px solid #fff3;
+    border-radius: 0.25rem;
   }
 
   animation: placeform-fade-in 150ms ease-out forwards, modal-swoop-up 150ms ease-out forwards;
@@ -66,6 +68,4 @@
       transform: translateY(0vh);
     }
   }
-
-
 }
