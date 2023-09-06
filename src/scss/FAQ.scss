@@ -27,6 +27,9 @@ p.send {
     border-radius: 0 0 0 1rem;
     position: absolute;
   }
+  .blue {
+    color: blue;
+  }
 }
 
 p.receive {
@@ -47,5 +50,8 @@ p.receive {
     left: 0;
     border-radius: 0 0 1rem 0;
     position: absolute;
+  }
+  .blue {
+    color: #00aeef;
   }
 }

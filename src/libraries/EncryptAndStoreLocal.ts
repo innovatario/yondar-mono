@@ -3,7 +3,7 @@ const defaultPassword = 'nostridentitypassword'
 export const localStorageKey = 'storens'
 
 function setPassword() {
-  const newpass = prompt('Secure your new identity with a password:')
+  const newpass = prompt('Create a password:')
   if (newpass === null) return false
   if (newpass === '') {
     const sure = confirm('Your identity be stored unencrypted. This is less safe. OK? Cancel to enter a password.')

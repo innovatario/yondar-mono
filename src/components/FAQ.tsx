@@ -3,10 +3,10 @@ import "../scss/FAQ.scss"
 
 const Goolag = () => (
   <>
-    <span style={{ color: "#00aeef" }}>G</span>
+    <span className="blue">G</span>
     <span style={{ color: "red" }}>o</span>
     <span style={{ color: "yellow" }}>o</span>
-    <span style={{ color: "#00aeef" }}>l</span>
+    <span className="blue">l</span>
     <span style={{ color: "#93e930" }}>a</span>
     <span style={{ color: "red" }}>g</span>
   </>
@@ -25,13 +25,14 @@ export const FAQ = () => {
         <span role="img" aria-label="thumbs up">
           👍
         </span>{" "}
-        You can publish your places on a decentralized global map for the world to see! 
+        You can publish your business, event, or attraction on a decentralized global map for the world to see! 
+      </p>
+      <p className="send">Is it like putting a business on <Goolag/> Maps?</p>
+      <p className="receive">
+        Yeah, but without the <Goolag />!
         <br />
         <br />
-        It's like <Goolag /> Maps, but with no <Goolag />!
-        <br />
-        <br />
-        You can also see Places owned by the people you follow on <a href="https://heynostr.com" target="_blank" rel="noopener noreferrer">nostr</a>
+        You can also see Places owned by the people you follow on <a href="https://heynostr.com" target="_blank" rel="noopener noreferrer">nostr</a>.
         <br />
         <br />
         More exciting features are coming too, like end-to-end encrypted
@@ -43,7 +44,7 @@ export const FAQ = () => {
       </p>
 
       <p className="receive">
-        To create a Place, you need to have a <strong>nostr</strong> identity, which is just a really long unguessable number.
+        To create a Place, you need to have a <a href="https://heynostr.com" target="_blank" rel="noopener noreferrer">nostr</a> identity, which is just a really long unguessable number.
         <br/>
         <br/>
         Using magical mathematics ✨🧙‍♂️ you can create Places that you have provable ownership of, and nobody can fake it or take it away from you!
@@ -54,8 +55,7 @@ export const FAQ = () => {
       </p>
 
       <p className="receive">
-        Yondar can generate one for you. Then you can take your identity to any other <a href="https://nostrapps.com" target="_blank" rel="noopener noreferrer" >nostr-compatible app</a> and use it there too! <a href="https://heynostr.com" target="_blank" rel="noopener noreferrer" > That's the superpower of the nostr protocol!
-        </a>
+        Yondar can generate one for you. Then you can take your identity to any other <a href="https://nostrapps.com" target="_blank" rel="noopener noreferrer" >nostr-compatible app</a> and use it there too! That's the superpower of the nostr protocol!
         <br/>
         <br/>
         If you already have a nostr id, you can use it through a browser extension like <a href="https://getalby.com" target="_blank" rel="noopener noreferrer">Alby on Desktop</a>, <a href="https://apps.apple.com/us/app/nostore/id1666553677" target="_blank" rel="noopener noreferrer">Nostore for iOS</a>, or <a href="https://github.com/nostrband/nostr-universe/releases/tag/v0.1.4" target="_blank" rel="noopener noreferrer">Spring browser for Android</a>.
@@ -83,16 +83,10 @@ export const FAQ = () => {
         <span role="img" aria-label="business">
           🏢
         </span>{" "}
-        to create custom Yondar experiences{" "}
-        <span role="img" aria-label="pin">
-          📍
-        </span>
-        <span role="img" aria-label="map">
-          🗺
-        </span>
+        to create custom Yondar experiences 🎁🎡🗺
       </p>
       <p className="receive">
-        Do you want to gamify your event or attraction and help your visitors
+        Do you want to gamify👾🕹 your event or attraction and help your visitors
         find what they need? Do you host more than 10,000 people at your
         destination?{" "}
         <a
@@ -130,7 +124,15 @@ export const FAQ = () => {
         so keep that sky in view!
       </p>
 
-      <p className="send">kthnx</p>
+      <p className="send">What is <a href="https://yondar.me">https://yondar.me</a>? Is it a different app?</p>
+
+      <p className="receive">Yondar.me started out as a centralized web2 PWA, but go.yondar.me is our new decentralized and end-to-end encrypted version of Yondar built on the nostr protocol!
+      <br/>
+      <br/>
+      Once go.yondar.me reaches feature parity with yondar.me, we will shut down the old Yondar and replace it with the new nostr-powered Yondar! Nostr is the future and we are excited to be a part of it! 🚀
+      </p>
+
+      <p className="send">ok cool! thnx</p>
       <p className="receive">
         np{" "}
         <span role="img" aria-label="wave">
