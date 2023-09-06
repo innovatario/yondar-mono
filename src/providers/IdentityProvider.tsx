@@ -31,7 +31,7 @@ export const IdentityProvider: React.FC<IdentityProviderProps> = ({children})=> 
   const [contacts, setContacts] = usePersistedState<ContactObject>('contacts', {})
 
   const isIdentityFresh = (): boolean => {
-    if (identity?.last_updated && +new Date() - identity.last_updated < STALE_PROFILE) {
+    if (identity?.last_updated && (+new Date()) - identity.last_updated < STALE_PROFILE) {
       return true 
     }
     return false

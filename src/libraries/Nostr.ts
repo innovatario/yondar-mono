@@ -11,11 +11,13 @@ export const defaultRelays: RelayObject = {
 }
 
 export const defaultProfile: IdentityType = {
-  'name': 'unknown',
-  'username': 'unknown',
-  'display_name': 'unknown',
-  'displayName': 'unknown',
-  'nip05': 'unknown',
+  'name': 'a lone Yondarer',
+  'about': 'Just Yondaring about the world. I\'m new to nostr and haven\'t set up my profile yet. Check out https://go.yondar.me',
+  'picture': 'https://yondar-user-content.s3.us-east-2.amazonaws.com/android-chrome-256x256.png',
+  'username': 'a lone Yondarer',
+  'display_name': 'a lone Yondarer',
+  'displayName': 'a lone Yondarer',
+  'nip05': '',
   'pubkey': '0000000000000000000000000000000000000000000000000000000000000000',
 }
 

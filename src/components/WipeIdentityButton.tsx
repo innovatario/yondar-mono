@@ -9,11 +9,7 @@ export const WipeIdentityButton = () => {
   const navigate = useNavigate()
 
   const wipe = () => {
-    localStorage.removeItem(localStorageKey)
-    localStorage.removeItem(localStorageKey+'v')
-    localStorage.removeItem(localStorageKey+'s')
-    navigate('/')
-    setIdentity(null)
+    navigate('/logout')
   }
 
   const initiateWipe = () => {
