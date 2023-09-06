@@ -1,5 +1,5 @@
-import { WavyText } from "./WavyText";
-import "../scss/FAQ.scss";
+import { WavyText } from "./WavyText"
+import "../scss/FAQ.scss"
 
 const Goolag = () => (
   <>
@@ -10,7 +10,7 @@ const Goolag = () => (
     <span style={{ color: "#93e930" }}>a</span>
     <span style={{ color: "red" }}>g</span>
   </>
-);
+)
 
 export const FAQ = () => {
   return (
@@ -139,5 +139,5 @@ export const FAQ = () => {
         have fun!
       </p>
     </div>
-  );
-};
+  )
+}
