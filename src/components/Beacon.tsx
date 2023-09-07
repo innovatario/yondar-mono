@@ -94,7 +94,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
           isOpenNow(beaconData.content.properties.hours)
           ? 
             <>
-              "🟢 Open Now" : "⛔ Not Open Right Now"
+              "🟢 Open Now" : "💤 Not Open Right Now"
               <br />
               <small>{beaconData.content.properties.hours}</small>
             </>
@@ -114,6 +114,19 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
     } catch (e) {
       console.log('failed to parse type', e)
     }
+    
+    let statusInfo = null
+    try {
+      const currentStatus = beaconData.content.properties.status
+      if (currentStatus !== 'OPERATIONAL' || currentStatus === undefined) {
+        // don't render OPERATIONAL because it is implied
+        const currentStatusColor = currentStatus === 'CLOSED_TEMPORARILY' ? 'gray' : 'red'
+        const currentStatusEmoji = currentStatus === 'CLOSED_TEMPORARILY' ? '⛔' : '⛔'
+        statusInfo = <p className="status" style={{ color: currentStatusColor }}>{currentStatus ? currentStatus.replace('_',' ') : null}{currentStatusEmoji}</p>
+      }
+    } catch (e) {
+      console.log('failed to parse status', e)
+    }
 
     let authorInfo = null
     const authorLink = nip19.npubEncode(beaconData.pubkey)
@@ -131,6 +144,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
       <div className="beacon__info" onClick={toggle}>
         {beaconName}
         {typeInfo}
+        {statusInfo}
         <hr/>
         {beaconDescription}
         {hours}
