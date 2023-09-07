@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { ModalType } from '../types/ModalType'
-import { Filter, nip19 } from 'nostr-tools'
-import { getRelayList, pool } from "../libraries/Nostr"
+import { Event, nip19 } from 'nostr-tools'
+import { getRelayList } from "../libraries/Nostr"
 import { useGeolocationData } from "../hooks/useGeolocationData"
 import { isOpenNow } from '../libraries/decodeDay'
 import { DraftPlaceContextType, Place } from '../types/Place'
@@ -13,6 +13,7 @@ import { MapPin } from './MapPin'
 
 type BeaconProps = {
   currentUserPubkey: string | undefined
+  ownerProfile: (Event & {content: IdentityType }) | undefined
   relays: RelayObject
   beaconData: Place
   modal: ModalType
@@ -24,30 +25,11 @@ type BeaconProps = {
   editHandler: () => void
   draft: DraftPlaceContextType
 }
-export const Beacon = ({ currentUserPubkey, relays, beaconData, modal, toggleHandler, clickHandler, editHandler, draft }: BeaconProps) => {
+export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, modal, toggleHandler, clickHandler, editHandler, draft }: BeaconProps) => {
   const [show, setShow] = useState<boolean>(false)
-  const [author, setAuthor] = useState<IdentityType>()
-  const [beaconProfilePicture, setBeaconProfilePicture] = useState<string>('')
   const { setDraftPlace } = draft
   const { setCursorPosition } = useGeolocationData()
   const relayList: RelayList = getRelayList(relays, ['read'])
-
-  useEffect(() => {
-    // get profile for beacon owner (pubkey) by querying for most recent kind 0 (profile)
-    const filter: Filter = { kinds: [0], authors: [beaconData.pubkey] }
-    const profileSub = pool.sub(relayList, [filter])
-    profileSub.on('event', (event) => {
-      // this will return the most recent profile event for the beacon owner; only the most recent is stored as specified in NIP-01
-      try {
-        const profile = JSON.parse(event.content)
-        setAuthor(profile)
-        setBeaconProfilePicture(profile.picture)
-      } catch (e) {
-        console.log('Failed to parse event content:', e)
-      }
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const toggle = () => {
     if (!modal?.placeForm) {
@@ -86,7 +68,7 @@ export const Beacon = ({ currentUserPubkey, relays, beaconData, modal, toggleHan
     modal?.setPlaceForm('edit')
   }
 
-  const mapMarker = <div className="beacon__marker" onClick={toggle}>{<MapPin color={`#${beaconData.pubkey.substring(0, 6)}`} image={beaconProfilePicture} />}</div>
+  const mapMarker = <div className="beacon__marker" onClick={toggle}>{<MapPin color={`#${beaconData.pubkey.substring(0, 6)}`} image={ownerProfile?.content?.picture || ''} />}</div>
 
   const showBeaconInfo = () => {
 
@@ -135,7 +117,7 @@ export const Beacon = ({ currentUserPubkey, relays, beaconData, modal, toggleHan
 
     let authorInfo = null
     const authorLink = nip19.npubEncode(beaconData.pubkey)
-    authorInfo = <p onClick={e => e.stopPropagation()}><a href={`https://nostr.com/${authorLink}`} target="_blank" rel="noopener noreferrer"><small className="ellipses">Created by {author?.displayName || author?.display_name || author?.username || beaconData.pubkey}</small></a></p>
+    authorInfo = <p onClick={e => e.stopPropagation()}><a href={`https://nostr.com/${authorLink}`} target="_blank" rel="noopener noreferrer"><small className="ellipses">Created by {ownerProfile?.content?.displayName || ownerProfile?.content?.display_name || ownerProfile?.content?.username || beaconData.pubkey}</small></a></p>
 
     let edit = null
     try {

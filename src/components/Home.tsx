@@ -3,6 +3,7 @@ import { SignUpButton } from './SignUpButton'
 import '../scss/Home.scss'
 import logo from '../assets/yondar-logo-full-beta.svg'
 import { FAQ } from './FAQ'
+import { Footer } from './Footer'
 
 export const Home = () => {
   return (
@@ -16,6 +17,7 @@ export const Home = () => {
         <div className="faq">
           <FAQ/>
         </div>
+        <Footer/>
       </div>
     </div>
   )

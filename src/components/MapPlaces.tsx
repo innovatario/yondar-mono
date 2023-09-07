@@ -1,9 +1,9 @@
-import { useEffect, useReducer, useContext } from 'react'
-import { IdentityContextType } from '../types/IdentityType'
+import { useEffect, useReducer, useContext, useState } from 'react'
+import { IdentityContextType, IdentityType } from '../types/IdentityType'
 import { IdentityContext } from '../providers/IdentityProvider'
 import { ModalContextType } from '../types/ModalType'
 import { ModalContext } from '../providers/ModalProvider'
-import { Filter } from 'nostr-tools'
+import { Event, Filter } from 'nostr-tools'
 import { getRelayList, pool } from "../libraries/Nostr"
 import { useGeolocationData } from "../hooks/useGeolocationData"
 import { useMap } from 'react-map-gl'
@@ -16,16 +16,16 @@ import { Beacon } from './Beacon'
 import '../scss//MapPlaces.scss'
 import { ContactList } from '../types/NostrContact'
 
-type beaconsReducerType = {
-  [key: string]: Place
-}
-
 const getUniqueBeaconID = (beacon: Place) => {
   const dtag = beacon.tags.find(getTag("d"))
   const dtagValue = dtag?.[1]
   const pubkey = beacon.pubkey
   const kind = beacon.kind
   return `${dtagValue}-${pubkey}-${kind}`
+}
+
+type beaconsReducerType = {
+  [key: string]: Place
 }
 
 const beaconsReducer = (state: beaconsReducerType, action: { type: string; beacon?: Place }) => {
@@ -40,6 +40,31 @@ const beaconsReducer = (state: beaconsReducerType, action: { type: string; beaco
       return {
         ...state,
         [unique]: action.beacon  
+      }
+    }
+  }
+
+  // proceed with save
+  switch(action.type) {
+    case 'clear':
+      return {}
+    default:
+      return state
+  }
+}
+
+type Owner = Event & { content: IdentityType }
+type beaconOwnersReducerType = {
+  [key: string]: Owner
+} 
+
+const beaconOwnersReducer = (state: beaconOwnersReducerType, action: { type: string; owner?: Owner}) => {
+  if (action.owner && action.owner.pubkey) {
+    const unique = action.owner.pubkey
+    if (action.type === 'add') {
+      return {
+        ...state,
+        [unique]: action.owner
       }
     }
   }
@@ -76,6 +101,8 @@ const beaconsStateReducer = (state: beaconsStateReducerType, action: { type: str
 
 export const MapPlaces = ({global}: {global: boolean}) => {
   const [beacons, beaconsDispatch] = useReducer(beaconsReducer, {})
+  const [gotAllBeacons, setGotAllBeacons] = useState(false)
+  const [beaconOwners, beaconOwnersDispatch] = useReducer(beaconOwnersReducer, {})
   const [beaconsToggleState, setBeaconsToggleState] = useReducer(beaconsStateReducer, [])
   const {position} = useGeolocationData()
   const {current: map} = useMap()
@@ -83,10 +110,9 @@ export const MapPlaces = ({global}: {global: boolean}) => {
   const {modal} = useContext<ModalContextType>(ModalContext)
   const {draftPlace, setDraftPlace} = useContext<DraftPlaceContextType>(DraftPlaceContext)
 
+  // get all beacons
   useEffect( () => {
-    beaconsDispatch({
-      type: 'clear'
-    })
+    beaconsDispatch({type: 'clear'})
     const contactList: ContactList = [identity.pubkey, ...Object.keys(contacts || {}) ]
     const filter: Filter<37515> = global ? {kinds: [37515]} : {kinds: [37515], authors: contactList}
     const relayList: RelayList = getRelayList(relays, ['read'])
@@ -117,13 +143,50 @@ export const MapPlaces = ({global}: {global: boolean}) => {
           beacon: place 
         })
       } catch (e) {
-        // console.log('Failed to parse event content:', e)
+        console.log('Failed to parse event content:', e)
       }
+    })
+    sub.on('eose', () => {
+      setGotAllBeacons(true)
+      sub.unsub()
     })
     return () => {
       sub.unsub()
     }
-  }, [relays, global,contacts,identity])
+  }, [relays,global,contacts,identity])
+
+  // get all beacon owner profiles
+  // NOTE: some beacon owners won't have profiles! They simply haven't published one yet!
+  useEffect( () => {
+    const beaconPubkeys: {[key: string]: boolean} = {} 
+    Object.values(beacons).forEach( beacon => {
+      beaconPubkeys[beacon.pubkey] = true
+    })
+    const beaconOwnerList = Object.keys(beaconPubkeys)
+    const profileFilter: Filter = { kinds: [0], authors: beaconOwnerList }
+    const relayList: RelayList = getRelayList(relays, ['read'])
+    const sub = pool.sub(relayList, [profileFilter])
+    sub.on('event', (event) => {
+      try {
+        beaconOwnersDispatch({
+          type: 'add',
+          owner: {
+            ...event,
+            content: JSON.parse(event.content)
+          }
+        })
+      } catch(e) {
+        console.log('Failed to parse event content:', e)
+      }
+    })
+    sub.on('eose', () => {
+      setGotAllBeacons(true)
+      sub.unsub()
+    })
+    return () => {
+      sub.unsub()
+    }
+  }, [gotAllBeacons])
 
   const beaconsArray = Object.values(beacons)
 
@@ -177,6 +240,7 @@ export const MapPlaces = ({global}: {global: boolean}) => {
         <Marker clickTolerance={5} key={beacon.id} longitude={beacon.content.geometry.coordinates[0]} latitude={beacon.content.geometry.coordinates[1]} offset={[-20,-52]} anchor={'center'}>
           <Beacon
             currentUserPubkey={identity?.pubkey}
+            ownerProfile={beaconOwners[beacon.pubkey]}
             relays={relays}
             modal={modal}
             beaconData={beacon}

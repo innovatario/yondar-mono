@@ -5,7 +5,7 @@ import { IdentityContext } from "../providers/IdentityProvider"
 import { localStorageKey } from '../libraries/EncryptAndStoreLocal'
 
 export const WipeIdentityButton = () => {
-  const { identity, setIdentity } = useContext<IdentityContextType>(IdentityContext)
+  const { identity } = useContext<IdentityContextType>(IdentityContext)
   const navigate = useNavigate()
 
   const wipe = () => {
