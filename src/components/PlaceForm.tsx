@@ -24,6 +24,7 @@ import { signEvent } from "../libraries/NIP-07"
 import { createDraftPlace, createNaddr } from "../libraries/draftPlace"
 import { Event, getEventHash, getSignature } from "nostr-tools"
 import { decryptPrivateKey } from "../libraries/EncryptAndStoreLocal"
+import { getUniqueBeaconID, getUniqueDraftBeaconID } from "../libraries/NIP-33"
 /* create a tsx form to handle input for a new place based on the examplePlace: 
 const examplePlace = `
 {
@@ -90,8 +91,12 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
   const statusRef = useRef<HTMLSelectElement>(null)
   const websiteRef = useRef<HTMLInputElement>(null)
   const phoneRef = useRef<HTMLInputElement>(null)
-  // get naddr
   const relayList = getRelayList(relays, ['write'])
+
+  // get geohash from coordinates from latlong-geohash library
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const geohash = Geohash.encode(cursorPosition!.lat, cursorPosition!.lng, 5)
+
   useEffect(() => {
     const naddr = createNaddr(
       identity.pubkey,
@@ -100,10 +105,6 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
     )
     setNaddr(naddr)
   }, [identity.pubkey, draftPlace, relayList])
-
-  // get geohash from coordinates from latlong-geohash library
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const geohash = Geohash.encode(cursorPosition!.lat, cursorPosition!.lng, 5)
 
   const prepareFormData = (): DraftPlace => {
     const dtag = draftPlace.tags.find(getTag("d"))
@@ -144,6 +145,17 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
     modal?.setPlaceForm(false)
   }
 
+  const publishDeletion = () => {
+    const atag = getUniqueDraftBeaconID(draftPlace, identity.pubkey)
+    const deletion = {
+      kind: 5,
+      pubkey: identity.pubkey,
+      tags: [
+        ["a", draftPlace.content.properties.unique],
+      ]
+    }
+    pool.publish
+  }
 
   const publish = async () => {
     // create an event from the form data conforming to the type DraftPlace
@@ -355,6 +367,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
       <FancyButton size={"sm"} onClick={publish}>
         {edit ? "Edit" : "Publish"} Place
       </FancyButton>
+      { edit ? <FancyButton size={"sm"} onClick={publishDeletion} style={{float: 'right'}}>Delete Place</FancyButton> : null }
       <br />
       <br />
     </div>

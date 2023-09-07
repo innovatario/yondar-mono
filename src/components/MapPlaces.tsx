@@ -1,4 +1,3 @@
-import { useEffect, useReducer, useContext, useState } from 'react'
 import { IdentityContextType, IdentityType } from '../types/IdentityType'
 import { IdentityContext } from '../providers/IdentityProvider'
 import { ModalContextType } from '../types/ModalType'
@@ -10,24 +9,16 @@ import { useMap, Marker } from 'react-map-gl'
 import { DraftPlaceContext } from '../providers/DraftPlaceProvider'
 import { DraftPlaceContextType, EventWithoutContent, Place, PlaceProperties } from '../types/Place'
 import { RelayList } from '../types/NostrRelay'
-import { getTag } from "../libraries/Nostr"
+import { getUniqueBeaconID } from '../libraries/NIP-33'
 import { Beacon } from './Beacon'
 import '../scss//MapPlaces.scss'
 import { ContactList } from '../types/NostrContact'
-
-const getUniqueBeaconID = (beacon: Place) => {
-  const dtag = beacon.tags.find(getTag("d"))
-  const dtagValue = dtag?.[1]
-  const pubkey = beacon.pubkey
-  const kind = beacon.kind
-  return `${dtagValue}-${pubkey}-${kind}`
-}
 
 type beaconsReducerType = {
   [key: string]: Place
 }
 
-const beaconsReducer = (state: beaconsReducerType, action: { type: string; beacon?: Place }) => {
+const beaconsReducer = (state: beaconsReducerType, action: { type: string; beacon?: Place, beaconUniqueID?: string }) => {
 
   if (action.beacon) {
     const unique = getUniqueBeaconID(action?.beacon)
@@ -41,9 +32,16 @@ const beaconsReducer = (state: beaconsReducerType, action: { type: string; beaco
         [unique]: action.beacon  
       }
     }
+  } else {
+    // probably trying to remove 
+    if (action.type === 'remove' && action.beaconUniqueID) {
+      const newState = {...state}
+      delete newState[action.beaconUniqueID]
+      return newState
+    }
   }
 
-  // proceed with save
+  // proceed with clear or return state without action
   switch(action.type) {
     case 'clear':
       return {}
@@ -141,24 +139,38 @@ export const MapPlaces = ({global}: {global: boolean}) => {
       beaconPubkeys[beacon.pubkey] = true
     })
     const beaconOwnerList = Object.keys(beaconPubkeys)
-    const profileFilter: Filter = { kinds: [0], authors: beaconOwnerList }
+    const profileFilter: Filter = { kinds: [0,5], authors: beaconOwnerList }
     const relayList: RelayList = getRelayList(relays, ['read'])
     const sub = pool.sub(relayList, [profileFilter])
     sub.on('event', (event) => {
-      try {
-        beaconOwnersDispatch({
-          type: 'add',
-          owner: {
-            ...event,
-            content: JSON.parse(event.content)
+      if (event.kind === 0) {
+        // handle new beacon owner profile
+        try {
+          beaconOwnersDispatch({
+            type: 'add',
+            owner: {
+              ...event,
+              content: JSON.parse(event.content)
+            }
+          })
+        } catch(e) {
+          console.log('Failed to parse event content:', e)
+        }
+      } else if (event.kind === 5) {
+        // handle deleted beacons
+        // iterate through event's e tags to find uniqueid's (NIP-33).
+        event.tags.forEach( tag => {
+          if (tag[0] === 'e') {
+            const uniqueID = tag[1]
+            beaconsDispatch({
+              type: 'remove',
+              beaconUniqueID: uniqueID
+            })
           }
         })
-      } catch(e) {
-        console.log('Failed to parse event content:', e)
       }
     })
     sub.on('eose', () => {
-      setGotAllBeacons(true)
       sub.unsub()
     })
     return () => {
