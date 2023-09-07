@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { ModalType } from '../types/ModalType'
 import { Event, nip19 } from 'nostr-tools'
 import { getRelayList } from "../libraries/Nostr"
@@ -17,39 +16,29 @@ type BeaconProps = {
   relays: RelayObject
   beaconData: Place
   modal: ModalType
-  toggleHandler: React.Dispatch<{
-    type: string;
-    beacon: Place;
-  }>
+  // toggleHandler: React.Dispatch<{
+  //   type: string;
+  //   beacon: Place;
+  // }>
+  open: boolean,
   clickHandler: () => void
   editHandler: () => void
   draft: DraftPlaceContextType
 }
-export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, modal, toggleHandler, clickHandler, editHandler, draft }: BeaconProps) => {
-  const [show, setShow] = useState<boolean>(false)
+export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, modal, open, clickHandler, editHandler, draft }: BeaconProps) => {
   const { setDraftPlace } = draft
   const { setCursorPosition } = useGeolocationData()
   const relayList: RelayList = getRelayList(relays, ['read'])
 
   const toggle = () => {
     if (!modal?.placeForm) {
-      if (!show) {
+      clickHandler()
+      if (!open) {
         // we are opening the beacon details
-        clickHandler()
         setCursorPosition(null)
-        toggleHandler({
-          type: 'add',
-          beacon: beaconData
-        })
       } else {
         // we are closing the beacon details
-        toggleHandler({
-          type: 'remove',
-          beacon: beaconData
-        })
       }
-      // do toggle
-      setShow(!show)
     }
   }
 
@@ -122,7 +111,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
         // don't render OPERATIONAL because it is implied
         const currentStatusColor = currentStatus === 'CLOSED_TEMPORARILY' ? 'gray' : 'red'
         const currentStatusEmoji = currentStatus === 'CLOSED_TEMPORARILY' ? '⛔' : '⛔'
-        statusInfo = <p className="status" style={{ color: currentStatusColor }}>{currentStatus ? currentStatus.replace('_',' ') : null}{currentStatusEmoji}</p>
+        statusInfo = <p className="status" style={{ color: currentStatusColor }}>{currentStatus ? currentStatus.replace('_',' ') : null} {currentStatusEmoji}</p>
       }
     } catch (e) {
       console.log('failed to parse status', e)
@@ -154,12 +143,12 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
     )
   }
 
-  const beaconClasses = `beacon ${show ? 'beacon--show' : ''}`
+  const beaconClasses = `beacon ${open ? 'beacon--show' : ''}`
 
   return (
     <div className={beaconClasses}>
       {mapMarker}
-      {show ? showBeaconInfo() : null}
+      {open ? showBeaconInfo() : null}
     </div>
   )
 }
