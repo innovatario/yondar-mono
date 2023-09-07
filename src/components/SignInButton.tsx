@@ -6,7 +6,7 @@ import { getPublicKey } from "../libraries/NIP-07"
 import { WavyText } from './WavyText'
 
 export const SignInButton = () => {
-  const { setIdentity, isIdentityFresh } = useContext<IdentityContextType>(IdentityContext)
+  const { identity, setIdentity } = useContext<IdentityContextType>(IdentityContext)
   const navigate = useNavigate()
 
   const signIn = async () => {
@@ -21,13 +21,13 @@ export const SignInButton = () => {
       // trigger "key not set up yet" dialog
     }
   }
-  if (isIdentityFresh()) {
+  if (identity) {
     return (
       <div className="column">
       You are already signed in!
       <br/>
       <br/>
-      <button className="fancybutton lg" type='button' onClick={() => navigate('/login')}><WavyText text="Go Yondar"/></button>
+      <button className="fancybutton sm" type='button' onClick={() => navigate('/login')}><WavyText text="Go Yondar"/></button>
       </div>
     )
   } else {

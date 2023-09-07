@@ -219,8 +219,9 @@ export const MapPlaces = ({global}: {global: boolean}) => {
       // move map so the beacon is left of the details box
       const handleFollow = () => {
         if (map && position) {
+          const width = window.innerWidth / 135 / 10000
           map.flyTo({
-            center: [beacon.content.geometry.coordinates[0] + 0.00135, beacon.content.geometry.coordinates[1]],
+            center: [beacon.content.geometry.coordinates[0] + 0.00130 + width, beacon.content.geometry.coordinates[1] - 0.0005],
             zoom: 16,
             duration: 1000,
           })
@@ -230,7 +231,7 @@ export const MapPlaces = ({global}: {global: boolean}) => {
       const handleEdit = () => {
         if (map && position) {
           map.flyTo({
-            center: [beacon.content.geometry.coordinates[0], beacon.content.geometry.coordinates[1] - 0.0010],
+            center: [beacon.content.geometry.coordinates[0], beacon.content.geometry.coordinates[1] - 0.0005],
             zoom: 16,
             duration: 1000,
           })

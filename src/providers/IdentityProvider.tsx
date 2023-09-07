@@ -6,7 +6,7 @@ import { RelayObject } from '../types/NostrRelay'
 import { defaultRelays } from '../libraries/Nostr.ts'
 import { ContactObject } from '../types/NostrContact.ts'
 
-const STALE_PROFILE = 1000 * 60 * 60 * 24 * 7
+const STALE_PROFILE = 1000//1000 * 60 * 60 * 24 * 7
 
 const defaultIdentityContext: IdentityContextType = {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

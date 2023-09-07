@@ -10,7 +10,7 @@
   }
   &__info {
     background: #141414cc;
-    border-radius: 1rem;
+    border-radius: 8px;
     padding: 1rem;
     font-size: 14px;
     position: relative;
@@ -29,6 +29,9 @@
         top: 4px;
       }
     }
+    hr {
+      border-color: #fff3;
+    }
     p .ellipses {
       display: block;
       overflow-x: hidden;
@@ -46,6 +49,9 @@
       padding-left: 1.5rem;
     }
     .type {
+      // color: #fff;
+      font-size: smaller;
+      font-weight: 300;
       margin: 0 0 14px 0;
       text-transform: capitalize;
     }
@@ -53,6 +59,7 @@
       margin: 0 0 7px 0;
     }
     p {
+      font-weight: 300;
       margin-bottom: 0;
     }
   }
