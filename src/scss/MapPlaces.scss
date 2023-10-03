@@ -70,3 +70,14 @@
     }
   }
 }
+
+#loading-message {
+  font-size: 20px;
+  text-align: center;
+  // text-shadow: 0 0 10px #000, 0 0 10px #000, 0 0 10px #000;
+  position: absolute;
+  // center exactly on screen
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

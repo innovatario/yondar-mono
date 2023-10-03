@@ -26,12 +26,21 @@ $steps: 30;
 @keyframes wave {
   0% {
     bottom: 0px;
+    // color: #4285F4;
+  }
+  25% {
+    // color: #DE3E35;
   }
   50% {
     bottom: 5px;
+    // color: #F7C223;
+  }
+  75% {
+    // color: #1B9A59;
   }
   100% {
     bottom: 0px;
+    // color: #4285F4;
   }
 }
   

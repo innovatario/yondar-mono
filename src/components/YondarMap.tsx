@@ -65,9 +65,10 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       mapStyle='mapbox://styles/innovatar/ckg6zpegq44ym19pen438iclf'
     >
       {/* { !triggerGeo ? <MapClickHint longitude={longitude} latitude={latitude} /> : null } */}
-      <Me setFollow={setFollow}/>
       <Cursor edit={modal?.placeForm === 'edit'}/>
-      { modal?.placeForm ? null : <MapPlaces global={globalFeed}/> }
+      <Me setFollow={setFollow}/>
+      <MapPlaces global={globalFeed}/>
+      {/* { modal?.placeForm ? null : <MapPlaces global={globalFeed}/> } */}
       <FeedToggle globalFeed={globalFeed} toggleFeed={toggleFeed}/>
       { children }
     </Map>

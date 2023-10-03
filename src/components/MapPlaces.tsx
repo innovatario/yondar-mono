@@ -14,6 +14,7 @@ import { getUniqueBeaconID } from '../libraries/NIP-33'
 import { Beacon } from './Beacon'
 import '../scss//MapPlaces.scss'
 import { ContactList } from '../types/NostrContact'
+import { WavyText } from './WavyText'
 
 type beaconsReducerType = {
   [key: string]: Place
@@ -79,6 +80,7 @@ const beaconOwnersReducer = (state: beaconOwnersReducerType, action: { type: str
 export const MapPlaces = ({global}: {global: boolean}) => {
   const [beacons, beaconsDispatch] = useReducer(beaconsReducer, {})
   const [gotAllBeacons, setGotAllBeacons] = useState(false)
+  const [gotAllProfiles, setGotAllProfiles] = useState(false)
   const [beaconOwners, beaconOwnersDispatch] = useReducer(beaconOwnersReducer, {})
   const [showBeacon, setShowBeacon] = useState<string>('')
   const {position} = useGeolocationData()
@@ -90,8 +92,7 @@ export const MapPlaces = ({global}: {global: boolean}) => {
   // get all beacons
   useEffect( () => {
     beaconsDispatch({type: 'clear'})
-    const contactList: ContactList = [identity.pubkey, ...Object.keys(contacts || {}) ]
-    const filter: Filter<37515> = global ? {kinds: [37515]} : {kinds: [37515], authors: contactList}
+    const filter: Filter<37515> = {kinds: [37515]}
     const relayList: RelayList = getRelayList(relays, ['read'])
     const sub = pool.sub(relayList, [filter])
     // get places from your relays
@@ -125,12 +126,11 @@ export const MapPlaces = ({global}: {global: boolean}) => {
     })
     sub.on('eose', () => {
       setGotAllBeacons(true)
-      sub.unsub()
     })
     return () => {
       sub.unsub()
     }
-  }, [relays,global,contacts,identity])
+  }, [])
 
   // get all beacon owner profiles
   // NOTE: some beacon owners won't have profiles! They simply haven't published one yet!
@@ -144,9 +144,11 @@ export const MapPlaces = ({global}: {global: boolean}) => {
     const beaconOwnerList = Object.keys(beaconPubkeys)
     const profileFilter: Filter = { kinds: [0], authors: beaconOwnerList }
     const deletionFilter: Filter = { kinds: [5], authors: beaconOwnerList }
-    const relayList: RelayList = getRelayList(relays, ['read'])
+    const relayList: RelayList = getRelayList(relays, ['write'])
+    // it makes sense to do these at the same time since we can narrow deletions by author
     const sub = pool.sub(relayList, [profileFilter, deletionFilter])
     sub.on('event', (event) => {
+      // process profiles received
       if (event.kind === 0) {
         // handle new beacon owner profile
         try {
@@ -160,6 +162,7 @@ export const MapPlaces = ({global}: {global: boolean}) => {
         } catch(e) {
           console.log('Failed to parse event content:', e)
         }
+      // process deletions received
       } else if (event.kind === 5) {
         // handle deleted beacons
         // iterate through event's e tags to find uniqueid's (NIP-33).
@@ -176,7 +179,7 @@ export const MapPlaces = ({global}: {global: boolean}) => {
       }
     })
     sub.on('eose', () => {
-      sub.unsub()
+      setGotAllProfiles(true)
     })
     return () => {
       sub.unsub()
@@ -192,12 +195,21 @@ export const MapPlaces = ({global}: {global: boolean}) => {
       return a.content.geometry.coordinates[1] - b.content.geometry.coordinates[1]
     }).reverse()
 
-  // console.log(beaconsArray.map( b => getUniqueBeaconID(b).split('-')[0]))
 
+  const contactList: ContactList = [identity.pubkey, ...Object.keys(contacts || {}) ]
+
+  if (!gotAllBeacons) return <div id="loading-message"><WavyText text="Loading Places..." /></div>
   // iterate through beacon data and prepare it for map display. 
-  return beaconsArray 
+  else return beaconsArray 
     // convert each beacon into a JSX Beacon Component
     .map( (beacon: Place, index ) => {
+      // do not display beacon until the owner's profile has been received
+      // NOTE: this excludes all beacons from the map if the profile doesn't exist, which is probably ok
+      // if (!beaconOwners[beacon.pubkey] && !gotAllProfiles) return null
+
+      // if the map feed is Friends, only display beacons from friends
+      if (!global && !contactList.includes(beacon.pubkey)) return null
+
       // move map so the beacon is left of the details box
       const handleFollow = () => {
         // toggle the beacon's open state

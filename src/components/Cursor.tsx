@@ -56,7 +56,7 @@ export const Cursor = ({edit}: CursorProps) => {
   // this will fire on each navigator watch position update
   if (cursorPosition) {
     return (
-      <Marker longitude={cursorPosition.lng} latitude={cursorPosition.lat} anchor={'center'} offset={[0,0]}>
+      <Marker key={-1} longitude={cursorPosition.lng} latitude={cursorPosition.lat} anchor={'center'} offset={[0,0]}>
         <div id="cursor" className="component-cursor" onClick={handleClickCursor}>
           { edit ? null : <AddPlace drop={pinDrop}/> }
           <svg className="spinner" width={`${size}px`} height={`${size}px`} viewBox={`0 0 ${size+1} ${size+1}`} xmlns="http://www.w3.org/2000/svg">
