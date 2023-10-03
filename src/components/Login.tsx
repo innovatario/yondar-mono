@@ -14,6 +14,14 @@ const publishNewProfile = async (newProfile: IdentityType, skipConf = false) => 
     if (!confirm('Would you like to populate your profile so it isn\'t empty? You can edit it later on any nostr app.')) return
   }
 
+  const relaysEvent: UnsignedEvent = {
+    kind: 3,
+    created_at: Math.floor(Date.now() / 1000),
+    tags: [],
+    content: JSON.stringify(defaultRelays),
+    pubkey: newProfile.pubkey
+  }
+
   const profileEvent: UnsignedEvent = {
     kind: 0,
     created_at: Math.floor(Date.now() / 1000),
@@ -34,8 +42,10 @@ const publishNewProfile = async (newProfile: IdentityType, skipConf = false) => 
     pubkey: newProfile.pubkey
   }
 
+  const relayId = getEventHash(relaysEvent)
   const profileId = getEventHash(profileEvent)
   const noteId = getEventHash(helloWorldNote)
+  let relaySig
   let profileSig
   let noteSig
   try {
@@ -44,11 +54,17 @@ const publishNewProfile = async (newProfile: IdentityType, skipConf = false) => 
       // publishNewProfile(newProfile, true)
       throw "Failed to decrypt private key"
     }
+    relaySig = getSignature(relaysEvent, sec)
     profileSig = getSignature(profileEvent, sec)
     noteSig = getSignature(helloWorldNote, sec)
   } catch (e) {
     console.log(e)
     return
+  }
+  const signedRelays: Event = {
+    ...relaysEvent,
+    id: relayId,
+    sig: relaySig
   }
   const signedEvent: Event = {
     ...profileEvent,
@@ -60,11 +76,12 @@ const publishNewProfile = async (newProfile: IdentityType, skipConf = false) => 
     id: noteId,
     sig: noteSig
   }
-  const relayList: RelayList = getRelayList(defaultRelays, ['read'])
-  console.log('publishing', signedEvent, signedNote)
+  const relayList: RelayList = getRelayList(defaultRelays, ['write'])
+  console.log('publishing', signedRelays, signedEvent, signedNote)
+  const signedRelaysPub = pool.publish(relayList, signedRelays)
   const signedEventPub = pool.publish(relayList, signedEvent)
   const signedNotePub = pool.publish(relayList, signedNote)
-  console.log(signedEventPub, signedNotePub)
+  console.log(signedRelaysPub, signedEventPub, signedNotePub)
 }
 
 export const Login = () => {
