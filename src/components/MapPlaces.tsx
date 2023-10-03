@@ -1,3 +1,4 @@
+import { useEffect, useReducer, useContext, useState } from 'react'
 import { IdentityContextType, IdentityType } from '../types/IdentityType'
 import { IdentityContext } from '../providers/IdentityProvider'
 import { ModalContextType } from '../types/ModalType'
@@ -18,7 +19,7 @@ type beaconsReducerType = {
   [key: string]: Place
 }
 
-const beaconsReducer = (state: beaconsReducerType, action: { type: string; beacon?: Place, beaconUniqueID?: string }) => {
+const beaconsReducer = (state: beaconsReducerType, action: { type: string; beacon?: Place, beaconUniqueID?: string, deletionPubkey?: string }) => {
 
   if (action.beacon) {
     const unique = getUniqueBeaconID(action?.beacon)
@@ -32,9 +33,9 @@ const beaconsReducer = (state: beaconsReducerType, action: { type: string; beaco
         [unique]: action.beacon  
       }
     }
-  } else {
-    // probably trying to remove 
-    if (action.type === 'remove' && action.beaconUniqueID) {
+  } else if (action.type === "remove") {
+    // trying to remove because of kind 5 deletion
+    if (action.beaconUniqueID && action.deletionPubkey && state[action.beaconUniqueID]?.pubkey === action.deletionPubkey) {
       const newState = {...state}
       delete newState[action.beaconUniqueID]
       return newState
@@ -135,13 +136,16 @@ export const MapPlaces = ({global}: {global: boolean}) => {
   // NOTE: some beacon owners won't have profiles! They simply haven't published one yet!
   useEffect( () => {
     const beaconPubkeys: {[key: string]: boolean} = {} 
+    const beaconEventIDs: string[] = []
     Object.values(beacons).forEach( beacon => {
       beaconPubkeys[beacon.pubkey] = true
+      beaconEventIDs.push(beacon.id)
     })
     const beaconOwnerList = Object.keys(beaconPubkeys)
-    const profileFilter: Filter = { kinds: [0,5], authors: beaconOwnerList }
+    const profileFilter: Filter = { kinds: [0], authors: beaconOwnerList }
+    const deletionFilter: Filter = { kinds: [5], authors: beaconOwnerList }
     const relayList: RelayList = getRelayList(relays, ['read'])
-    const sub = pool.sub(relayList, [profileFilter])
+    const sub = pool.sub(relayList, [profileFilter, deletionFilter])
     sub.on('event', (event) => {
       if (event.kind === 0) {
         // handle new beacon owner profile
@@ -160,11 +164,12 @@ export const MapPlaces = ({global}: {global: boolean}) => {
         // handle deleted beacons
         // iterate through event's e tags to find uniqueid's (NIP-33).
         event.tags.forEach( tag => {
-          if (tag[0] === 'e') {
+          if (tag[0] === 'a') {
             const uniqueID = tag[1]
             beaconsDispatch({
               type: 'remove',
-              beaconUniqueID: uniqueID
+              beaconUniqueID: uniqueID,
+              deletionPubkey: event.pubkey
             })
           }
         })
@@ -203,7 +208,7 @@ export const MapPlaces = ({global}: {global: boolean}) => {
           if (map && position) {
             const width = window.innerWidth / 135 / 10000
             map.flyTo({
-              center: [beacon.content.geometry.coordinates[0] + 0.00130 + width, beacon.content.geometry.coordinates[1] - 0.0005],
+              center: [beacon.content.geometry.coordinates[0] + 0.00110 + width, beacon.content.geometry.coordinates[1] - 0.0010],
               zoom: 16,
               duration: 1000,
             })
@@ -214,7 +219,7 @@ export const MapPlaces = ({global}: {global: boolean}) => {
       const handleEdit = () => {
         if (map && position) {
           map.flyTo({
-            center: [beacon.content.geometry.coordinates[0], beacon.content.geometry.coordinates[1] - 0.0005],
+            center: [beacon.content.geometry.coordinates[0], beacon.content.geometry.coordinates[1] - 0.0015],
             zoom: 16,
             duration: 1000,
           })

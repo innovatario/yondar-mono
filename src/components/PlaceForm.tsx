@@ -22,7 +22,7 @@ import { getRelayList, getTag, pool } from "../libraries/Nostr"
 import Geohash from "latlon-geohash"
 import { signEvent } from "../libraries/NIP-07"
 import { createDraftPlace, createNaddr } from "../libraries/draftPlace"
-import { Event, getEventHash, getSignature } from "nostr-tools"
+import { Event, UnsignedEvent, getEventHash, getSignature } from "nostr-tools"
 import { decryptPrivateKey } from "../libraries/EncryptAndStoreLocal"
 import { getUniqueBeaconID, getUniqueDraftBeaconID } from "../libraries/NIP-33"
 /* create a tsx form to handle input for a new place based on the examplePlace: 
@@ -145,16 +145,61 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
     modal?.setPlaceForm(false)
   }
 
-  const publishDeletion = () => {
+  const publishDeletion = async () => {
     const atag = getUniqueDraftBeaconID(draftPlace, identity.pubkey)
+    console.log('Let\'s delete beacon ', atag)
     const deletion = {
+      content: prompt("Please enter a reason for deleting this place.") || "",
+      created_at: Math.floor(Date.now() / 1000),
       kind: 5,
       pubkey: identity.pubkey,
       tags: [
-        ["a", draftPlace.content.properties.unique],
+        ["a", atag],
       ]
+    } as UnsignedEvent<5>
+    // publish the event deletion
+    let signedEvent
+    if (localStorage.getItem("storens")){
+      // sign via nostr-tools
+      let sk
+      const tryToSign = async () => {
+        try {
+          sk = await decryptPrivateKey('signing') 
+        } catch (e) {
+          alert("Wrong password! Could not decrypt local signing key. Please try publishing again.")
+        }
+      }
+      await tryToSign()
+      if (!sk) signedEvent = null
+      else {
+        const eventHash = await getEventHash(deletion)
+        const eventSig = await getSignature(deletion, sk)
+        signedEvent = deletion as Event<5>
+        signedEvent.id = eventHash
+        signedEvent.sig = eventSig
+      }
+    } else {
+      signedEvent = await signEvent(deletion)
     }
-    pool.publish
+
+    if (signedEvent === null) {
+      // TODO: notify user
+      console.error("Failed to sign event.")
+      return
+    }
+    console.log('signedEvent',signedEvent)
+    const relayList = getRelayList(relays, ['write'])
+    const pub = pool.publish(relayList, signedEvent)
+    pub.on("ok", () => {
+      console.log("Event published successfully!")
+      // TODO: clear form, show success message, close modal, happy animation, zoom in on new place?
+      modal?.setPlaceForm(false)
+      resetForm()
+      setCursorPosition(null)
+    })
+    pub.on("failed", (reason: string) => {
+      console.error(`Failed to publish event. ${reason}`)
+    })
   }
 
   const publish = async () => {
@@ -367,7 +412,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
       <FancyButton size={"sm"} onClick={publish}>
         {edit ? "Edit" : "Publish"} Place
       </FancyButton>
-      { edit ? <FancyButton size={"sm"} onClick={publishDeletion} style={{float: 'right'}}>Delete Place</FancyButton> : null }
+      { edit ? <FancyButton size={"sm"} status={"warning"} onClick={publishDeletion} style={{float: 'right'}}>Delete Place</FancyButton> : null }
       <br />
       <br />
     </div>
