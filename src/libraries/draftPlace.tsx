@@ -74,7 +74,7 @@ export const beaconToDraftPlace = (beacon: Place, relayList: RelayList) => {
   let alt
   if (!previousAlt) {
     // no previous alt tag with naddr, create a new one
-    const naddr = createNaddr(beacon.pubkey, beacon.content.properties.name, relayList)
+    const naddr = createNaddr(beacon.pubkey, beacon.content.properties.name, relayList.slice(0, 3))
     alt = `This event represents a place. View it on https://go.yondar.me/place/${naddr}`
   } else {
     // use the previous alt tag
