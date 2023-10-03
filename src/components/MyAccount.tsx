@@ -8,7 +8,7 @@ export const MyAccount = () => {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault()
     const npub = nip19.npubEncode(identity.pubkey)
-    window.open(`https://nostr.com/${npub}`, '_blank', 'noopener noreferrer')
+    window.open(`https://njump.me/${npub}`, '_blank', 'noopener noreferrer')
   }
   return (
     <>
