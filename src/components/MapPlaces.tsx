@@ -80,7 +80,8 @@ const beaconOwnersReducer = (state: beaconOwnersReducerType, action: { type: str
 export const MapPlaces = ({global}: {global: boolean}) => {
   const [beacons, beaconsDispatch] = useReducer(beaconsReducer, {})
   const [gotAllBeacons, setGotAllBeacons] = useState(false)
-  const [gotAllProfiles, setGotAllProfiles] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [, setGotAllProfiles] = useState(false)
   const [beaconOwners, beaconOwnersDispatch] = useReducer(beaconOwnersReducer, {})
   const [showBeacon, setShowBeacon] = useState<string>('')
   const {position} = useGeolocationData()
@@ -130,6 +131,7 @@ export const MapPlaces = ({global}: {global: boolean}) => {
     return () => {
       sub.unsub()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // get all beacon owner profiles
@@ -184,6 +186,7 @@ export const MapPlaces = ({global}: {global: boolean}) => {
     return () => {
       sub.unsub()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gotAllBeacons])
 
   const beaconsArray = Object.values(beacons)

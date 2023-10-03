@@ -24,7 +24,7 @@ import { signEvent } from "../libraries/NIP-07"
 import { createDraftPlace, createNaddr } from "../libraries/draftPlace"
 import { Event, UnsignedEvent, getEventHash, getSignature } from "nostr-tools"
 import { decryptPrivateKey } from "../libraries/EncryptAndStoreLocal"
-import { getUniqueBeaconID, getUniqueDraftBeaconID } from "../libraries/NIP-33"
+import { getUniqueDraftBeaconID } from "../libraries/NIP-33"
 /* create a tsx form to handle input for a new place based on the examplePlace: 
 const examplePlace = `
 {
@@ -116,6 +116,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       descriptionRef.current?.value || "",
       typeRef.current?.value as GooglePlaceType || "point_of_interest" as GooglePlaceType, 
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       [cursorPosition!.lng, cursorPosition!.lat],
       unique ? unique : nameRef.current?.value || "",
       abbrevRef.current?.value || "",
