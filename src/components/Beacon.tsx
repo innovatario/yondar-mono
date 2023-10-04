@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { ModalType } from '../types/ModalType'
 import { Event, nip19 } from 'nostr-tools'
 import { getRelayList } from "../libraries/Nostr"
@@ -16,23 +17,20 @@ type BeaconProps = {
   relays: RelayObject
   beaconData: Place
   modal: ModalType
-  // toggleHandler: React.Dispatch<{
-  //   type: string;
-  //   beacon: Place;
-  // }>
   open: boolean,
-  clickHandler: () => void
+  focusHandler: () => void
   editHandler: () => void
   draft: DraftPlaceContextType
 }
-export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, modal, open, clickHandler, editHandler, draft }: BeaconProps) => {
+export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, modal, open, focusHandler, editHandler, draft }: BeaconProps) => {
   const { setDraftPlace } = draft
   const { setCursorPosition } = useGeolocationData()
   const relayList: RelayList = getRelayList(relays, ['read'])
+  const picture = ownerProfile?.content?.picture
 
   const toggle = () => {
     if (!modal?.placeForm) {
-      clickHandler()
+      focusHandler()
       if (!open) {
         // we are opening the beacon details
         setCursorPosition(null)
@@ -57,7 +55,12 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
     modal?.setPlaceForm('edit')
   }
 
-  const mapMarker = <div className="beacon__marker" onClick={toggle}>{<MapPin color={`#${beaconData.pubkey.substring(0, 6)}`} image={ownerProfile?.content?.picture || ''} />}</div>
+  const mapMarker = useMemo( () => {
+    return (
+      <div className="beacon__marker" onClick={toggle}><MapPin color={`#${beaconData.pubkey.substring(0, 6)}`} image={picture || ''} /></div>
+    )
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [picture, toggle])
 
   const showBeaconInfo = () => {
 

@@ -1,86 +1,25 @@
-import { useEffect, useReducer, useContext, useState } from 'react'
-import { IdentityContextType, IdentityType } from '../types/IdentityType'
+import { useEffect, useReducer, useContext, useState, useMemo } from 'react'
+import { IdentityContextType } from '../types/IdentityType'
 import { IdentityContext } from '../providers/IdentityProvider'
 import { ModalContextType } from '../types/ModalType'
 import { ModalContext } from '../providers/ModalProvider'
-import { Event, Filter } from 'nostr-tools'
+import { Filter } from 'nostr-tools'
 import { getRelayList, pool } from "../libraries/Nostr"
 import { useGeolocationData } from "../hooks/useGeolocationData"
-import { useMap, Marker } from 'react-map-gl'
+import { useMap, Marker, MapRef } from 'react-map-gl'
 import { DraftPlaceContext } from '../providers/DraftPlaceProvider'
 import { DraftPlaceContextType, EventWithoutContent, Place, PlaceProperties } from '../types/Place'
 import { RelayList } from '../types/NostrRelay'
-import { getUniqueBeaconID } from '../libraries/NIP-33'
 import { Beacon } from './Beacon'
 import '../scss//MapPlaces.scss'
 import { ContactList } from '../types/NostrContact'
+import { beaconsReducer } from '../reducers/MapPlacesBeaconsReducer'
+import { beaconOwnersReducer } from '../reducers/MapPlacesBeaconOwnersReducer'
 import { WavyText } from './WavyText'
-
-type beaconsReducerType = {
-  [key: string]: Place
-}
-
-const beaconsReducer = (state: beaconsReducerType, action: { type: string; beacon?: Place, beaconUniqueID?: string, deletionPubkey?: string }) => {
-
-  if (action.beacon) {
-    const unique = getUniqueBeaconID(action?.beacon)
-    const existing = state[unique]
-    // only save the newest beacon by created_at timestamp; if this incoming beacon s older, don't save it.
-    if (existing && existing.created_at > action.beacon.created_at) return state
-
-    if (action.type === 'add') {
-      return {
-        ...state,
-        [unique]: action.beacon  
-      }
-    }
-  } else if (action.type === "remove") {
-    // trying to remove because of kind 5 deletion
-    if (action.beaconUniqueID && action.deletionPubkey && state[action.beaconUniqueID]?.pubkey === action.deletionPubkey) {
-      const newState = {...state}
-      delete newState[action.beaconUniqueID]
-      return newState
-    }
-  }
-
-  // proceed with clear or return state without action
-  switch(action.type) {
-    case 'clear':
-      return {}
-    default:
-      return state
-  }
-}
-
-type Owner = Event & { content: IdentityType }
-type beaconOwnersReducerType = {
-  [key: string]: Owner
-} 
-
-const beaconOwnersReducer = (state: beaconOwnersReducerType, action: { type: string; owner?: Owner}) => {
-  if (action.owner && action.owner.pubkey) {
-    const unique = action.owner.pubkey
-    if (action.type === 'add') {
-      return {
-        ...state,
-        [unique]: action.owner
-      }
-    }
-  }
-
-  // proceed with save
-  switch(action.type) {
-    case 'clear':
-      return {}
-    default:
-      return state
-  }
-}
 
 export const MapPlaces = ({global}: {global: boolean}) => {
   const [beacons, beaconsDispatch] = useReducer(beaconsReducer, {})
   const [gotAllBeacons, setGotAllBeacons] = useState(false)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [, setGotAllProfiles] = useState(false)
   const [beaconOwners, beaconOwnersDispatch] = useReducer(beaconOwnersReducer, {})
   const [showBeacon, setShowBeacon] = useState<string>('')
@@ -135,9 +74,10 @@ export const MapPlaces = ({global}: {global: boolean}) => {
   }, [])
 
   // get all beacon owner profiles
+  // get all deleted beacons
   // NOTE: some beacon owners won't have profiles! They simply haven't published one yet!
   useEffect( () => {
-    const beaconPubkeys: {[key: string]: boolean} = {} 
+    const beaconPubkeys: {[key: string]: boolean} = {} // use an object to deduplicate pubkeys
     const beaconEventIDs: string[] = []
     Object.values(beacons).forEach( beacon => {
       beaconPubkeys[beacon.pubkey] = true
@@ -146,7 +86,7 @@ export const MapPlaces = ({global}: {global: boolean}) => {
     const beaconOwnerList = Object.keys(beaconPubkeys)
     const profileFilter: Filter = { kinds: [0], authors: beaconOwnerList }
     const deletionFilter: Filter = { kinds: [5], authors: beaconOwnerList }
-    const relayList: RelayList = getRelayList(relays, ['write'])
+    const relayList: RelayList = getRelayList(relays, ['read'])
     // it makes sense to do these at the same time since we can narrow deletions by author
     const sub = pool.sub(relayList, [profileFilter, deletionFilter])
     sub.on('event', (event) => {
@@ -189,74 +129,64 @@ export const MapPlaces = ({global}: {global: boolean}) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gotAllBeacons])
 
-  const beaconsArray = Object.values(beacons)
+  const contactList: ContactList = useMemo( () => {
+    return [identity.pubkey, ...Object.keys(contacts || {}) ]
+  }, [contacts, identity.pubkey])
 
-  beaconsArray
-    // Sort first by the first elements in beaconToggleState, then by oldest to newest.
-    .sort( (a, b) => {
-      if (showBeacon === a.id) return -1
-      return a.content.geometry.coordinates[1] - b.content.geometry.coordinates[1]
-    }).reverse()
+  // iterate through beacon data and prepare it for map display. 
+  const displayBeacons = useMemo( () => {
+    return Object.values(beacons)
+      .sort( (a, b) => {
+        if (showBeacon === a.id) return -1 // if this is the expanded beacon, show it first
+        return a.content.geometry.coordinates[1] - b.content.geometry.coordinates[1] // otherwise, show beacons by smallest latitude (nearest) first
+      })
+      .reverse()
+      .map( (beacon: Place) => {
+        // if the map feed is Friends, only display beacons from friends
+        if (!global && !contactList.includes(beacon.pubkey)) return null
 
+        const output = (
+          <Marker clickTolerance={5} key={beacon.id} longitude={beacon.content.geometry.coordinates[0]} latitude={beacon.content.geometry.coordinates[1]} offset={[-20,-52]} anchor={'center'}>
+            <Beacon currentUserPubkey={identity?.pubkey} ownerProfile={beaconOwners[beacon.pubkey]} relays={relays} beaconData={beacon} modal={modal} open={showBeacon === beacon.id} focusHandler={getFocusBeaconHandler(beacon, showBeacon, setShowBeacon, map, position)} editHandler={getEditBeaconHandler(beacon, map, position)} draft={{draftPlace, setDraftPlace}} />
+          </Marker>
+        )
 
-  const contactList: ContactList = [identity.pubkey, ...Object.keys(contacts || {}) ]
+        return output
+      })
+  }, [beacons, showBeacon, setShowBeacon, global, contactList, identity?.pubkey, beaconOwners, relays, modal, map, position, draftPlace, setDraftPlace])
 
   if (!gotAllBeacons) return <div id="loading-message"><WavyText text="Loading Places..." /></div>
-  // iterate through beacon data and prepare it for map display. 
-  else return beaconsArray 
-    // convert each beacon into a JSX Beacon Component
-    .map( (beacon: Place, index ) => {
-      // do not display beacon until the owner's profile has been received
-      // NOTE: this excludes all beacons from the map if the profile doesn't exist, which is probably ok
-      // if (!beaconOwners[beacon.pubkey] && !gotAllProfiles) return null
+  else return displayBeacons
+}
 
-      // if the map feed is Friends, only display beacons from friends
-      if (!global && !contactList.includes(beacon.pubkey)) return null
-
-      // move map so the beacon is left of the details box
-      const handleFollow = () => {
-        // toggle the beacon's open state
-        if (showBeacon === beacon.id) {
-          setShowBeacon('')
-        } else {
-          setShowBeacon(beacon.id)
-          if (map && position) {
-            const width = window.innerWidth / 135 / 10000
-            map.flyTo({
-              center: [beacon.content.geometry.coordinates[0] + 0.00110 + width, beacon.content.geometry.coordinates[1] - 0.0010],
-              zoom: 16,
-              duration: 1000,
-            })
-          }
-        }
+const getFocusBeaconHandler = (beacon: Place , showBeacon: string, setShowBeacon: React.Dispatch<React.SetStateAction<string>>, map: MapRef | undefined, position: GeolocationPosition | null) => {
+  // move map so the beacon is left of the details box
+  return () => {
+    // toggle the beacon's open state
+    if (showBeacon === beacon.id) {
+      setShowBeacon('')
+    } else {
+      setShowBeacon(beacon.id)
+      if (map && position) {
+        const width = window.innerWidth / 135 / 10000
+        map.flyTo({
+          center: [beacon.content.geometry.coordinates[0] + 0.00110 + width, beacon.content.geometry.coordinates[1] - 0.0010],
+          zoom: 16,
+          duration: 1000,
+        })
       }
-      // move map so the beacon is above the edit form
-      const handleEdit = () => {
-        if (map && position) {
-          map.flyTo({
-            center: [beacon.content.geometry.coordinates[0], beacon.content.geometry.coordinates[1] - 0.0015],
-            zoom: 16,
-            duration: 1000,
-          })
-        }
-      }
-      return (
-        <Marker clickTolerance={5} key={index} longitude={beacon.content.geometry.coordinates[0]} latitude={beacon.content.geometry.coordinates[1]} offset={[-20,-52]} anchor={'center'}>
-          <Beacon
-            currentUserPubkey={identity?.pubkey}
-            ownerProfile={beaconOwners[beacon.pubkey]}
-            relays={relays}
-            modal={modal}
-            beaconData={beacon}
-            open={showBeacon === beacon.id}
-            clickHandler={handleFollow}
-            editHandler={handleEdit}
-            draft={{
-              draftPlace,
-              setDraftPlace
-            }} 
-            />
-        </Marker>
-      )
-    })
+    }
+  }
+}
+const getEditBeaconHandler = (beacon: Place , map: MapRef | undefined, position: GeolocationPosition | null) => {
+  // move map so the beacon is above the edit form
+  return () => {
+    if (map && position) {
+      map.flyTo({
+        center: [beacon.content.geometry.coordinates[0], beacon.content.geometry.coordinates[1] - 0.0015],
+        zoom: 16,
+        duration: 1000,
+      })
+    }
+  }
 }
