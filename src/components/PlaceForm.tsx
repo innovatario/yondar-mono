@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from "react"
+import React, { useContext, useState, useRef } from "react"
 import { useGeolocationData } from "../hooks/useGeolocationData"
 import {
   typeDropdown,
