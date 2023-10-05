@@ -4,7 +4,7 @@ import { IdentityContext } from '../providers/IdentityProvider'
 import { ModalContextType } from '../types/ModalType'
 import { ModalContext } from '../providers/ModalProvider'
 import { Filter, nip19 } from 'nostr-tools'
-import { getRelayList, pool } from "../libraries/Nostr"
+import { getRelayList, getTag, pool } from "../libraries/Nostr"
 import { useGeolocationData } from "../hooks/useGeolocationData"
 import { useMap, Marker, MapRef } from 'react-map-gl'
 import { DraftPlaceContext } from '../providers/DraftPlaceProvider'
@@ -17,6 +17,8 @@ import { beaconsReducer } from '../reducers/MapPlacesBeaconsReducer'
 import { beaconOwnersReducer } from '../reducers/MapPlacesBeaconOwnersReducer'
 import { WavyText } from './WavyText'
 import { useNaddr } from '../hooks/useNaddr'
+import { useLocation, useNavigate } from 'react-router-dom';
+import { createNaddr } from '../libraries/draftPlace'
 
 export const MapPlaces = ({global}: {global: boolean}) => {
   const [beacons, beaconsDispatch] = useReducer(beaconsReducer, {})
@@ -29,40 +31,45 @@ export const MapPlaces = ({global}: {global: boolean}) => {
   const {identity, relays, contacts} = useContext<IdentityContextType>(IdentityContext)
   const {modal} = useContext<ModalContextType>(ModalContext)
   const {draftPlace, setDraftPlace} = useContext<DraftPlaceContextType>(DraftPlaceContext)
-  const { naddr } = useNaddr()
+  const { naddr, setNaddr } = useNaddr()
+  const navigate = useNavigate()
+  const [naddrZoom, setNaddrZoom] = useState<boolean>(false) // tells whether we are currently zooming on a beacon from a /place/:naddr URL
+  const location = useLocation()
+
+  const clearNaddr = () => {
+    setNaddr('')
+    if (location.pathname !== '/dashboard') {
+      navigate('/dashboard')
+    }
+  }
 
   // validate naddr, find corresponding place, and focus the map on it.
   // set up effect so when the map leaves the place, the URL is changed back to /dashboard
   useEffect(() => {
-    if (gotAllBeacons && naddr && map) {
+    if (gotAllBeacons && naddr && map && !naddrZoom) {
+      setNaddrZoom(true)
       const dtag = nip19.decode(naddr)
       const unique = `${dtag.data.kind}:${dtag.data.pubkey}:${dtag.data.identifier}`
       const beacon = beacons[unique]
 
       if (beacon) {
-        const ZOOM_TIME = 3000
         const CENTER_TIME = 1000
-        const { coordinates } = beacon.content.geometry
+        // const { coordinates } = beacon.content.geometry
         const width = window.innerWidth / 135 / 10000
-        // zoom in with beacon centered
-        map.flyTo({
-          center: coordinates,
-          zoom: 16,
-          duration: ZOOM_TIME,
-        })
         // wait for zoom to finish, then open beacon and center map on description
+        setShowBeacon(beacon.id)
+        map.flyTo({
+          center: [
+            beacon.content.geometry.coordinates[0] + 0.00110 + width,
+            beacon.content.geometry.coordinates[1] - 0.0010],
+          zoom: 16, 
+          duration: CENTER_TIME
+        })
+        // set up function to clear naddr from URL when map leaves the beacon
         setTimeout( () => {
-          map.once('moveend', () => {
-            setShowBeacon(beacon.id)
-            map.flyTo({
-              center: [
-                beacon.content.geometry.coordinates[0] + 0.00110 + width,
-                beacon.content.geometry.coordinates[1] - 0.0010],
-              zoom: 16, 
-              duration: CENTER_TIME
-            })
-          })
-        }, ZOOM_TIME)
+          map.once('movestart', clearNaddr)
+          setNaddrZoom(false)
+        }, CENTER_TIME + 1)
       }
     }
   }, [gotAllBeacons, naddr, beacons, map])
@@ -182,9 +189,13 @@ export const MapPlaces = ({global}: {global: boolean}) => {
         // if the map feed is Friends, only display beacons from friends
         if (!global && !contactList.includes(beacon.pubkey)) return null
 
+
+        const relayList: RelayList = getRelayList(relays, ['read'])
+        const naddr = createNaddr(beacon.pubkey, beacon.tags.find(getTag('d'))?.[1] || "", relayList)
+
         const output = (
           <Marker clickTolerance={5} key={beacon.id} longitude={beacon.content.geometry.coordinates[0]} latitude={beacon.content.geometry.coordinates[1]} offset={[-20,-52]} anchor={'center'}>
-            <Beacon currentUserPubkey={identity?.pubkey} ownerProfile={beaconOwners[beacon.pubkey]} relays={relays} beaconData={beacon} modal={modal} open={showBeacon === beacon.id} focusHandler={getFocusBeaconHandler(beacon, showBeacon, setShowBeacon, map, position)} editHandler={getEditBeaconHandler(beacon, map )} draft={{draftPlace, setDraftPlace}} />
+            <Beacon currentUserPubkey={identity?.pubkey} ownerProfile={beaconOwners[beacon.pubkey]} relays={relays} beaconData={beacon} modal={modal} open={showBeacon === beacon.id} focusHandler={getFocusBeaconHandler(beacon, showBeacon, setShowBeacon, map, position, naddr, navigate, clearNaddr)} editHandler={getEditBeaconHandler(beacon, map )} draft={{draftPlace, setDraftPlace}} />
           </Marker>
         )
 
@@ -196,7 +207,7 @@ export const MapPlaces = ({global}: {global: boolean}) => {
   else return displayBeacons
 }
 
-const getFocusBeaconHandler = (beacon: Place , showBeacon: string, setShowBeacon: React.Dispatch<React.SetStateAction<string>>, map: MapRef | undefined, position: GeolocationPosition | null) => {
+const getFocusBeaconHandler = (beacon: Place , showBeacon: string, setShowBeacon: React.Dispatch<React.SetStateAction<string>>, map: MapRef | undefined, position: GeolocationPosition | null, naddr: string, navigate: (naddr: string) => void, clearNaddr: () => void) => {
   // move map so the beacon is left of the details box
   return () => {
     // toggle the beacon's open state
@@ -204,6 +215,7 @@ const getFocusBeaconHandler = (beacon: Place , showBeacon: string, setShowBeacon
       setShowBeacon('')
     } else {
       setShowBeacon(beacon.id)
+      navigate(`/place/${naddr}`)
       if (map && position) {
         const width = window.innerWidth / 135 / 10000
         map.flyTo({

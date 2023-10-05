@@ -30,12 +30,6 @@
     "modified": "2023-08-31 16:58:46.8671476 -0500 CDT"
   },
   {
-    "id": 6,
-    "desc": "add navigate-to button on beacon; invoke mapbox navigation instructions from current location if available",
-    "status": "pending",
-    "modified": "2023-08-18 12:40:00.5001859 -0500 CDT"
-  },
-  {
     "id": 7,
     "desc": "when editing, the d tag must stay the same even if they change the Name of the beacon; add var to draft context for this",
     "status": "done",
@@ -56,19 +50,31 @@
   {
     "id": 10,
     "desc": "on visiting /place/:naddr, store naddr in context wrapping map so we can verify if it exists and then focus the camera on it. moving the map away from the beacon or closing it should return the URL to /dashboard",
-    "status": "pending",
-    "modified": "2023-10-05 11:58:28.6661623 -0500 CDT"
+    "status": "done",
+    "modified": "2023-10-05 17:09:00.3168667 -0500 CDT"
   },
   {
     "id": 11,
     "desc": "clickin on a place populates the URL with /place/:naddr",
-    "status": "pending",
-    "modified": "2023-10-05 11:58:44.949891 -0500 CDT"
+    "status": "done",
+    "modified": "2023-10-05 17:09:15.4879426 -0500 CDT"
   },
   {
     "id": 12,
     "desc": "add 'Navigate here' button to places, use https://github.com/mapbox/mapbox-gl-directions to draw path/directions",
     "status": "pending",
     "modified": "2023-10-05 14:18:27.3186514 -0500 CDT"
+  },
+  {
+    "id": 13,
+    "desc": "add a share button to the beacon details that copies the naddr link",
+    "status": "pending",
+    "modified": "2023-10-05 16:23:34.5408009 -0500 CDT"
+  },
+  {
+    "id": 14,
+    "desc": "bug: using back button should repopulate /place/:naddr links but it currently flickers and then turns into /dashboard",
+    "status": "pending",
+    "modified": "2023-10-05 17:12:04.560456 -0500 CDT"
   }
 ]
