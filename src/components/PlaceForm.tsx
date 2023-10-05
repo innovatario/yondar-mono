@@ -155,7 +155,6 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
 
   const publishDeletion = async () => {
     const atag = getUniqueDraftBeaconID(draftPlace, identity.pubkey)
-    console.log('Let\'s delete beacon ', atag)
     const deletion = {
       content: prompt("Please enter a reason for deleting this place.") || "",
       created_at: Math.floor(Date.now() / 1000),

@@ -129,7 +129,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
       if (currentUserPubkey === beaconData.pubkey)
         edit = <button onClick={editPlace} style={{ float: "right", marginTop: "22px", marginRight: "-1.0rem" }}>Edit</button>
     } catch (e) {
-      console.log('', e)
+      console.log(e)
     }
 
     return (

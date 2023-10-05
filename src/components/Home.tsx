@@ -3,6 +3,7 @@ import { SignUpButton } from './SignUpButton'
 import '../scss/Home.scss'
 import logo from '../assets/yondar-logo-full-beta.svg'
 import { FAQ } from './FAQ'
+import { Dataspace } from './Dataspace'
 import { Footer } from './Footer'
 
 export const Home = () => {
@@ -17,6 +18,7 @@ export const Home = () => {
         <div className="faq">
           <FAQ/>
         </div>
+        <Dataspace/>
         <Footer/>
       </div>
     </div>

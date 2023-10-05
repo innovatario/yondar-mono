@@ -17,14 +17,26 @@ import '../scss/Dashboard.scss'
 import { freshDefaultPlace } from "../libraries/defaultPlace.tsx"
 import { DraftPlaceContext } from "../providers/DraftPlaceProvider.tsx"
 import { DraftPlaceContextType } from "../types/Place.tsx"
+import { useParams } from "react-router-dom"
+import { useNaddr } from "../hooks/useNaddr.tsx"
 
 export const Dashboard = () => {
+  const { naddr }: { naddr?: string } = useParams<{ naddr?: string }>()
+  const { setNaddr } = useNaddr()
   const {identity} = useContext<IdentityContextType>(IdentityContext)
   const {setDraftPlace} = useContext<DraftPlaceContextType>(DraftPlaceContext)
   const {modal} = useContext<ModalContextType>(ModalContext)
   const [showProfile] = useState(false)
   const [userInteracted, setUserInteracted] = useState(false)
 
+  // if the URL is /place/:naddr, save it into the context
+  useEffect( () => {
+    if (naddr) {
+      setNaddr(naddr)
+    }
+  }, [naddr, setNaddr])
+
+  // only request geolocation after the user interacts with the page
   const initialInteraction = () => {
     setUserInteracted(true)
   }

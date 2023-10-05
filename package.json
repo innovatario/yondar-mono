@@ -19,7 +19,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-map-gl": "^7.0.25",
-    "react-router-dom": "^6.12.1",
+    "react-router-dom": "^6.16.0",
     "sass": "^1.63.3"
   },
   "devDependencies": {

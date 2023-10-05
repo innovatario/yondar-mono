@@ -8,8 +8,8 @@
   {
     "id": 2,
     "desc": "load beacons only from follows - add follows into initial 37515 filter",
-    "status": "pending",
-    "modified": "2023-08-17 14:33:15.9455916 -0500 CDT"
+    "status": "done",
+    "modified": "2023-10-05 11:56:56.5836357 -0500 CDT"
   },
   {
     "id": 3,
@@ -38,8 +38,8 @@
   {
     "id": 7,
     "desc": "when editing, the d tag must stay the same even if they change the Name of the beacon; add var to draft context for this",
-    "status": "pending",
-    "modified": "2023-08-18 12:41:20.8769629 -0500 CDT"
+    "status": "done",
+    "modified": "2023-10-05 11:57:05.4366761 -0500 CDT"
   },
   {
     "id": 8,
@@ -52,5 +52,23 @@
     "desc": "do not fail silently when you enter the wrong decryption password for your local key",
     "status": "done",
     "modified": "2023-08-31 16:58:37.7007119 -0500 CDT"
+  },
+  {
+    "id": 10,
+    "desc": "on visiting /place/:naddr, store naddr in context wrapping map so we can verify if it exists and then focus the camera on it. moving the map away from the beacon or closing it should return the URL to /dashboard",
+    "status": "pending",
+    "modified": "2023-10-05 11:58:28.6661623 -0500 CDT"
+  },
+  {
+    "id": 11,
+    "desc": "clickin on a place populates the URL with /place/:naddr",
+    "status": "pending",
+    "modified": "2023-10-05 11:58:44.949891 -0500 CDT"
+  },
+  {
+    "id": 12,
+    "desc": "add 'Navigate here' button to places, use https://github.com/mapbox/mapbox-gl-directions to draw path/directions",
+    "status": "pending",
+    "modified": "2023-10-05 14:18:27.3186514 -0500 CDT"
   }
 ]

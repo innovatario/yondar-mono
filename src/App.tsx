@@ -6,6 +6,7 @@ import { Dashboard } from './components/Dashboard.tsx'
 import './scss/App.scss'
 import { DraftPlaceProvider } from './providers/DraftPlaceProvider.tsx'
 import { ModalProvider } from './providers/ModalProvider.tsx'
+import { NaddrProvider } from './providers/NaddrProvider.tsx'
 import { Logout } from './components/Logout.tsx'
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
   return (
     <div id="app">
         <IdentityProvider>
+          <NaddrProvider>
             <DraftPlaceProvider>
               <ModalProvider>
                 <Routes>
@@ -20,9 +22,11 @@ function App() {
                   <Route path="/login" element={<Login/>}/>
                   <Route path="/dashboard" element={<Dashboard/>}/>
                   <Route path="/logout" element={<Logout/>}/>
+                  <Route path="/place/:naddr" element={<Dashboard/>}/>
                 </Routes>
               </ModalProvider>
             </DraftPlaceProvider>
+          </NaddrProvider>
         </IdentityProvider>
     </div>
   )

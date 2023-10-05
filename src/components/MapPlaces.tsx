@@ -3,7 +3,7 @@ import { IdentityContextType } from '../types/IdentityType'
 import { IdentityContext } from '../providers/IdentityProvider'
 import { ModalContextType } from '../types/ModalType'
 import { ModalContext } from '../providers/ModalProvider'
-import { Filter } from 'nostr-tools'
+import { Filter, nip19 } from 'nostr-tools'
 import { getRelayList, pool } from "../libraries/Nostr"
 import { useGeolocationData } from "../hooks/useGeolocationData"
 import { useMap, Marker, MapRef } from 'react-map-gl'
@@ -16,6 +16,7 @@ import { ContactList } from '../types/NostrContact'
 import { beaconsReducer } from '../reducers/MapPlacesBeaconsReducer'
 import { beaconOwnersReducer } from '../reducers/MapPlacesBeaconOwnersReducer'
 import { WavyText } from './WavyText'
+import { useNaddr } from '../hooks/useNaddr'
 
 export const MapPlaces = ({global}: {global: boolean}) => {
   const [beacons, beaconsDispatch] = useReducer(beaconsReducer, {})
@@ -28,6 +29,43 @@ export const MapPlaces = ({global}: {global: boolean}) => {
   const {identity, relays, contacts} = useContext<IdentityContextType>(IdentityContext)
   const {modal} = useContext<ModalContextType>(ModalContext)
   const {draftPlace, setDraftPlace} = useContext<DraftPlaceContextType>(DraftPlaceContext)
+  const { naddr } = useNaddr()
+
+  // validate naddr, find corresponding place, and focus the map on it.
+  // set up effect so when the map leaves the place, the URL is changed back to /dashboard
+  useEffect(() => {
+    if (gotAllBeacons && naddr && map) {
+      const dtag = nip19.decode(naddr)
+      const unique = `${dtag.data.kind}:${dtag.data.pubkey}:${dtag.data.identifier}`
+      const beacon = beacons[unique]
+
+      if (beacon) {
+        const ZOOM_TIME = 3000
+        const CENTER_TIME = 1000
+        const { coordinates } = beacon.content.geometry
+        const width = window.innerWidth / 135 / 10000
+        // zoom in with beacon centered
+        map.flyTo({
+          center: coordinates,
+          zoom: 16,
+          duration: ZOOM_TIME,
+        })
+        // wait for zoom to finish, then open beacon and center map on description
+        setTimeout( () => {
+          map.once('moveend', () => {
+            setShowBeacon(beacon.id)
+            map.flyTo({
+              center: [
+                beacon.content.geometry.coordinates[0] + 0.00110 + width,
+                beacon.content.geometry.coordinates[1] - 0.0010],
+              zoom: 16, 
+              duration: CENTER_TIME
+            })
+          })
+        }, ZOOM_TIME)
+      }
+    }
+  }, [gotAllBeacons, naddr, beacons, map])
 
   // get all beacons
   useEffect( () => {
@@ -140,7 +178,6 @@ export const MapPlaces = ({global}: {global: boolean}) => {
         if (showBeacon === a.id) return -1 // if this is the expanded beacon, show it first
         return a.content.geometry.coordinates[1] - b.content.geometry.coordinates[1] // otherwise, show beacons by smallest latitude (nearest) first
       })
-      .reverse()
       .map( (beacon: Place) => {
         // if the map feed is Friends, only display beacons from friends
         if (!global && !contactList.includes(beacon.pubkey)) return null
