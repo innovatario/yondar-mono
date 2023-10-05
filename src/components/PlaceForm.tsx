@@ -101,7 +101,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
     const naddr = createNaddr(
       identity.pubkey,
       nameRef.current?.value || "",
-      relayList
+      relayList.slice(0, 3),
     )
     setNaddr(naddr)
   }
