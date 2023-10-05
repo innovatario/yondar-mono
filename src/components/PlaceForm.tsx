@@ -72,7 +72,6 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
   const { draftPlace, setDraftPlace } = useContext<DraftPlaceContextType>(DraftPlaceContext)
   const { cursorPosition, setCursorPosition } = useGeolocationData()
   const { modal } = useContext<ModalContextType>(ModalContext)
-  const [ refreshedDraftPlace, setRefreshedDraftPlace ] = useState<boolean>(false)
 
   // state for name field value so we can get an updated naddr
   const [naddr, setNaddr] = useState<string>("")
@@ -141,7 +140,6 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
   // then set the DraftPlace in storage/state
   const updateDraft = () => {
     const newPlace = prepareFormData()
-    console.log(newPlace)
     setDraftPlace(newPlace)
   }
 
@@ -293,12 +291,6 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
     pub.on("failed", (reason: string) => {
       console.error(`Failed to publish event. ${reason}`)
     })
-  }
-
-  if (!edit && !refreshedDraftPlace) {
-    // we need a fresh form since we are creating a new place and not editing an existing place
-    resetForm()
-    setRefreshedDraftPlace(true)
   }
 
   const editClass = edit ? 'edit' : ''

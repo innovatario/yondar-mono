@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { HomeButton } from "./HomeButton"
 import { IdentityContext } from "../providers/IdentityProvider"
 import { IdentityContextType } from "../types/IdentityType"
@@ -14,9 +14,13 @@ import { PlaceForm } from "./PlaceForm"
 import { GeolocationProvider } from '../providers/GeolocationProvider.tsx'
 import { MyAccount } from "./MyAccount"
 import '../scss/Dashboard.scss'
+import { freshDefaultPlace } from "../libraries/defaultPlace.tsx"
+import { DraftPlaceContext } from "../providers/DraftPlaceProvider.tsx"
+import { DraftPlaceContextType } from "../types/Place.tsx"
 
 export const Dashboard = () => {
   const {identity} = useContext<IdentityContextType>(IdentityContext)
+  const {setDraftPlace} = useContext<DraftPlaceContextType>(DraftPlaceContext)
   const {modal} = useContext<ModalContextType>(ModalContext)
   const [showProfile] = useState(false)
   const [userInteracted, setUserInteracted] = useState(false)
@@ -24,6 +28,12 @@ export const Dashboard = () => {
   const initialInteraction = () => {
     setUserInteracted(true)
   }
+
+  useEffect( () => {
+    if (modal?.placeForm === true) {
+      setDraftPlace(freshDefaultPlace())
+    }
+  },[modal?.placeForm, setDraftPlace])
 
   const displayImage = identity?.picture && identity.picture !== 'unknown' ? identity.picture : defaultDisplayImage
 
