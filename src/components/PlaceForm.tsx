@@ -65,13 +65,14 @@ const examplePlace = `
 */
 
 type PlaceFormProps = {
-  edit: boolean // the modal may be set to false to hide, true to show, or 'edit' to show and allow editing. But edit can only be true or false, and is only true when modal is set to 'edit'.
+  edit: boolean // if true, we are editing; if false, we are creting a new place. You may recall that the modal can have a third value of 'edit' but this is abstracted away in the Dashboard.tsx component on line 63. https://github.com/innovatario/yondar-mono/blob/8d7d10fdd83b2deb0238768dbcfb8b60e2f1b305/src/components/Dashboard.tsx#L63
 }
 export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
   const { identity, relays } = useContext<IdentityContextType>(IdentityContext)
   const { draftPlace, setDraftPlace } = useContext<DraftPlaceContextType>(DraftPlaceContext)
   const { cursorPosition, setCursorPosition } = useGeolocationData()
   const { modal } = useContext<ModalContextType>(ModalContext)
+  const [ refreshedDraftPlace, setRefreshedDraftPlace ] = useState<boolean>(false)
 
   // state for name field value so we can get an updated naddr
   const [naddr, setNaddr] = useState<string>("")
@@ -97,18 +98,22 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const geohash = Geohash.encode(cursorPosition!.lat, cursorPosition!.lng, 5)
 
-  useEffect(() => {
+  const updateNaddr = () => {
     const naddr = createNaddr(
       identity.pubkey,
       nameRef.current?.value || "",
       relayList
     )
     setNaddr(naddr)
-  }, [identity.pubkey, draftPlace, relayList])
+  }
 
+  // get data from form
+  // compile it into a new DraftPlace
+  // return the DraftPlace for saving to storage
   const prepareFormData = (): DraftPlace => {
+    updateNaddr()
     const dtag = draftPlace.tags.find(getTag("d"))
-    const unique = dtag ? dtag[1] : null
+    const unique = edit && dtag ? dtag[1] : null
     return createDraftPlace(
       nameRef.current?.value || "",
       geohash,
@@ -131,8 +136,12 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
     )
   }
 
+  // called when a fied changes
+  // take all current form values and construct a new DraftPlace
+  // then set the DraftPlace in storage/state
   const updateDraft = () => {
     const newPlace = prepareFormData()
+    console.log(newPlace)
     setDraftPlace(newPlace)
   }
 
@@ -286,6 +295,12 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
     })
   }
 
+  if (!edit && !refreshedDraftPlace) {
+    // we need a fresh form since we are creating a new place and not editing an existing place
+    resetForm()
+    setRefreshedDraftPlace(true)
+  }
+
   const editClass = edit ? 'edit' : ''
 
   return (
@@ -303,7 +318,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
         defaultValue={draftPlace.content.properties.name || ""}
         type="text"
         placeholder="Name of this Place"
-        onChange={() => updateDraft()}
+        onKeyUp={() => updateDraft()}
       />
       <label htmlFor="abbrev">Abbreviation</label>
       <input
@@ -312,7 +327,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
         defaultValue={draftPlace.content.properties.abbrev || ""}
         type="text"
         placeholder="Abbreviated (short) name"
-        onChange={() => updateDraft()}
+        onKeyUp={() => updateDraft()}
       />
       <label htmlFor="description">Description</label>
       <textarea
@@ -320,7 +335,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
         ref={descriptionRef}
         defaultValue={draftPlace.content.properties.description || ""}
         placeholder="A couple sentences to decribe the Place"
-        onChange={() => updateDraft()}
+        onKeyUp={() => updateDraft()}
       ></textarea>
       <label htmlFor="type">Type</label>
       {typeDropdown(typeRef, draftPlace.content.properties.type || "", updateDraft)}
@@ -342,7 +357,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
         defaultValue={draftPlace.content.properties.website || ""}
         type="text"
         placeholder="https://yondar.me"
-        onChange={() => updateDraft()}
+        onKeyUp={() => updateDraft()}
       />
       <label htmlFor="phone">Phone</label>
       <input
@@ -351,7 +366,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
         defaultValue={draftPlace.content.properties.phone || ""}
         type="text"
         placeholder="+1 123 456 7890"
-        onChange={() => updateDraft()}
+        onKeyUp={() => updateDraft()}
       />
       <label htmlFor="address">
         <h2>
@@ -370,7 +385,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
           }
           type="text"
           placeholder="Street Address"
-          onChange={() => updateDraft()}
+          onKeyUp={() => updateDraft()}
         />
         <label htmlFor="locality">City</label>
         <input
@@ -379,7 +394,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
           defaultValue={draftPlace.content.properties.address?.locality || ""}
           type="text"
           placeholder="City"
-          onChange={() => updateDraft()}
+          onKeyUp={() => updateDraft()}
         />
         <label htmlFor="region">State</label>
         <input
@@ -388,7 +403,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
           defaultValue={draftPlace.content.properties.address?.region || ""}
           type="text"
           placeholder="State"
-          onChange={() => updateDraft()}
+          onKeyUp={() => updateDraft()}
         />
         <label htmlFor="country-name">Country</label>
         <input
@@ -397,7 +412,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
           defaultValue={draftPlace.content.properties.address?.["country-name"] || ""}
           type="text"
           placeholder="Country"
-          onChange={() => updateDraft()}
+          onKeyUp={() => updateDraft()}
         />
         <label htmlFor="postal-code">Postal Code</label>
         <input
@@ -406,7 +421,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
           defaultValue={draftPlace.content.properties.address?.["postal-code"] || ""}
           type="text"
           placeholder="Postal Code"
-          onChange={() => updateDraft()}
+          onKeyUp={() => updateDraft()}
         />
       </fieldset>
       <br />

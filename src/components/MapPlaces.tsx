@@ -178,10 +178,10 @@ const getFocusBeaconHandler = (beacon: Place , showBeacon: string, setShowBeacon
     }
   }
 }
-const getEditBeaconHandler = (beacon: Place , map: MapRef | undefined, position: GeolocationPosition | null) => {
+const getEditBeaconHandler = (beacon: Place , map: MapRef | undefined ) => {
   // move map so the beacon is above the edit form
   return () => {
-    if (map && position) {
+    if (map) {
       map.flyTo({
         center: [beacon.content.geometry.coordinates[0], beacon.content.geometry.coordinates[1] - 0.0015],
         zoom: 16,

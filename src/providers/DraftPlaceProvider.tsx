@@ -6,7 +6,7 @@ import {
   DraftPlaceProviderProps
 } from '../types/Place'
 import usePersistedState from '../hooks/usePersistedState'
-import { defaultPlace } from '../libraries/defaultPlace'
+import { defaultPlace, freshDefaultPlace } from '../libraries/defaultPlace'
 
 const defaultDraftPlaceContext: DraftPlaceContextType = {
   draftPlace: defaultPlace,
@@ -16,7 +16,7 @@ const defaultDraftPlaceContext: DraftPlaceContextType = {
 export const DraftPlaceContext = createContext<DraftPlaceContextType>(defaultDraftPlaceContext)
 
 export const DraftPlaceProvider: React.FC<DraftPlaceProviderProps> = ({children})=> {
-  const [draftPlace, setDraftPlace] = usePersistedState<DraftPlace>('draftPlace', defaultPlace)
+  const [draftPlace, setDraftPlace] = usePersistedState<DraftPlace>('draftPlace', freshDefaultPlace())
 
   return (
     <DraftPlaceContext.Provider value={{draftPlace, setDraftPlace}}>
