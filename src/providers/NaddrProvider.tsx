@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useState } from 'react'
 
 interface NaddrContextType {
   naddr: string
