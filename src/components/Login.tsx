@@ -7,6 +7,7 @@ import { Spinner } from './Spinner'
 import { Event, UnsignedEvent, getEventHash, getSignature } from "nostr-tools"
 import { decryptPrivateKey } from "../libraries/EncryptAndStoreLocal"
 import { RelayList } from "../types/NostrRelay"
+import { NaddrContext } from "../providers/NaddrProvider"
 
 const publishNewProfile = async (newProfile: IdentityType, skipConf = false) => {
 
@@ -88,6 +89,7 @@ export const Login = () => {
   const [loading, setLoading] = useState(false)
   const {identity, setIdentity, isIdentityFresh, setRelays, setContacts} = useContext<IdentityContextType>(IdentityContext)
   const [isNewProfile, setIsNewProfile] = useState(false)
+  const { naddr } = useContext(NaddrContext)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -122,7 +124,11 @@ export const Login = () => {
         publishNewProfile(identity)
         setIsNewProfile(false)
       }
-      navigate('/dashboard')
+      if (naddr) {
+        navigate(`/place/${naddr}`)
+      } else {
+        navigate('/dashboard')
+      }
     } else {
       // proceed with loading profile
       setLoading(true)
