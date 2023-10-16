@@ -8,6 +8,9 @@
 .wrapper {
   padding: 2rem;
   max-width: 100%;
+  & + .wrapper, &.subsequent {
+    padding-top: 0;
+  }
 }
 
 .logo {

@@ -4,6 +4,7 @@ import { IdentityContextType } from "../types/IdentityType"
 import { IdentityContext } from "../providers/IdentityProvider"
 import { generatePrivateKey, getPublicKey } from 'nostr-tools'
 import { encryptAndStorePrivateKey } from '../libraries/EncryptAndStoreLocal'
+import { FancyButton } from './FancyButton'
 
 export const SignUpButton = () => {
   const { identity, setIdentity } = useContext<IdentityContextType>(IdentityContext)
@@ -22,7 +23,7 @@ export const SignUpButton = () => {
     return null
   } else {
     return (
-      <button type='button' onClick={newIdentity}>Create new identity</button>
+      <FancyButton onClick={newIdentity}>Quick Signup</FancyButton>
     )
   }
 }

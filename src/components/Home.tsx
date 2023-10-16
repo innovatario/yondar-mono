@@ -22,13 +22,13 @@ export const Home = () => {
       <div className="wrapper">
         <img className="logo" src={ logo } alt="Yondar Logo" />
         <br/>
-        {showPreview}
+      </div>
+      {showPreview ? showPreview : 
         <div className="button-row">
           <SignInButton/><SignUpButton/>
-        </div>
-        <div className="faq">
-          <FAQ/>
-        </div>
+        </div> }
+      <div className="wrapper subsequent">
+        <FAQ/>
         <Dataspace/>
         <Footer/>
       </div>

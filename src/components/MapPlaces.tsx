@@ -19,6 +19,7 @@ import { WavyText } from './WavyText'
 import { useNaddr } from '../hooks/useNaddr'
 import { useNavigate } from 'react-router-dom'
 import { createNaddr } from '../libraries/draftPlace'
+import { getLatitudeOffset, getLongitudeOffset } from '../libraries/mapUtils'
 
 export const MapPlaces = ({global}: {global: boolean}) => {
   const [beacons, beaconsDispatch] = useReducer(beaconsReducer, {})
@@ -53,8 +54,8 @@ export const MapPlaces = ({global}: {global: boolean}) => {
         setShowBeacon(beacon.id)
         map.flyTo({
           center: [
-            beacon.content.geometry.coordinates[0] + 0.00110 + width,
-            beacon.content.geometry.coordinates[1] - 0.0010],
+            beacon.content.geometry.coordinates[0] + getLongitudeOffset(),
+            beacon.content.geometry.coordinates[1] + getLatitudeOffset()],
           zoom: 16, 
           duration: CENTER_TIME
         })

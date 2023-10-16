@@ -14,7 +14,7 @@ const Goolag = () => (
 
 export const FAQ = () => {
   return (
-    <div className="faq">
+    <div className="faq mt-0">
       <p className="send">
         What can I do with Yondar?{" "}
         <span role="img" aria-label="smile">
@@ -44,7 +44,7 @@ export const FAQ = () => {
       </p>
 
       <p className="receive">
-        To create a Place, you need to have a <a href="https://heynostr.com" target="_blank" rel="noopener noreferrer">nostr</a> identity, which is just a really long unguessable number.
+        Yondar is a social map experience, but to interact you need to have a <a href="https://heynostr.com" target="_blank" rel="noopener noreferrer">nostr</a> identity, which is just a really long unguessable number.
         <br/>
         <br/>
         Using magical mathematics ✨🧙‍♂️ you can create Places that you have provable ownership of, and nobody can fake it or take it away from you!
