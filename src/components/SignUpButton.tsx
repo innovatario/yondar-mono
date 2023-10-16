@@ -24,7 +24,7 @@ export const SignUpButton = () => {
     return null
   } else {
     return (
-      <FancyButton onClick={newIdentity}><WavyText text="Quick Signup"/></FancyButton>
+      <FancyButton size="sm" onClick={newIdentity}><WavyText text="Quick Signup"/></FancyButton>
     )
   }
 }

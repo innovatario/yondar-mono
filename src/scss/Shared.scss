@@ -1,0 +1,19 @@
+// animation to slowly float the component upward and fade it out over 3 seconds:
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateX(-45%) translateY(1rem);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-45%) translateY(-4rem);
+  }
+}
+
+.component-shared {
+  animation: floatUp 3s ease-in-out;
+  position: absolute;
+  // ensure the text does not wrap
+  white-space: nowrap;
+}

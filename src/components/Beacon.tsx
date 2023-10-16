@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { ModalType } from '../types/ModalType'
 import { Event, nip19 } from 'nostr-tools'
 import { getRelayList } from "../libraries/Nostr"
@@ -10,6 +10,8 @@ import { CursorPositionType } from '../providers/GeolocationProvider'
 import { IdentityType } from '../types/IdentityType'
 import { RelayList, RelayObject } from '../types/NostrRelay'
 import { MapPin } from './MapPin'
+import { FancyButton } from './FancyButton'
+import { Shared } from './Shared'
 
 type BeaconProps = {
   currentUserPubkey: string | undefined
@@ -23,6 +25,7 @@ type BeaconProps = {
   draft: DraftPlaceContextType
 }
 export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, modal, open, focusHandler, editHandler, draft }: BeaconProps) => {
+  const [shared, setShared] = useState(false)
   const { setDraftPlace } = draft
   const { setCursorPosition } = useGeolocationData()
   const relayList: RelayList = getRelayList(relays, ['read'])
@@ -54,6 +57,24 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
     setDraftPlace(newPlace)
     modal?.setPlaceForm('edit')
   }
+
+  // e is a click event
+  const sharePlace = (e: React.MouseEvent<HTMLElement> ) => {
+    e.stopPropagation()
+    // copy URL to clipboard
+    const url = window.location.href
+    navigator.clipboard.writeText(url)
+    // show toast
+    setShared(true)
+  }
+
+  useEffect(() => {
+    if (shared) {
+      setTimeout(() => {
+        setShared(false)
+      }, 3000)
+    }
+  }, [shared])
 
   const mapMarker = useMemo( () => {
     return (
@@ -127,7 +148,17 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
     let edit = null
     try {
       if (currentUserPubkey === beaconData.pubkey)
-        edit = <button onClick={editPlace} style={{ float: "right", marginTop: "22px", marginRight: "-1.0rem" }}>Edit</button>
+        edit = <FancyButton size="sm" className="chill" onClick={editPlace} style={{ float: "right", marginTop: "22px", marginRight: "-1.0rem" }}>Edit</FancyButton>
+    } catch (e) {
+      console.log(e)
+    }
+
+    let share = null
+    try {
+      share = <button onClick={sharePlace} style={{ float: "right", marginTop: "22px", marginLeft: "1.5rem", marginRight: edit ? "0.5rem" : "-1.0rem", position: "relative" }}>
+        Share
+        {shared ? <Shared/> : null}
+      </button>
     } catch (e) {
       console.log(e)
     }
@@ -142,6 +173,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
         {hours}
         {authorInfo}
         {edit}
+        {share}
       </div>
     )
   }

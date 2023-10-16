@@ -27,7 +27,8 @@ export const SignInButton = () => {
       You are already signed in!
       <br/>
       <br/>
-      <button className="fancybutton sm" type='button' onClick={() => navigate('/login')}><WavyText text="Go Yondar"/></button>
+      <button className="fancybutton md" type='button' onClick={() => navigate('/login')}><WavyText text="Go Yondar"/></button>
+      <br/>
       </div>
     )
   } else {
