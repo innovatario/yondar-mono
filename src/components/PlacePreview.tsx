@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useState, useEffect, useContext } from 'react'
-import { getRelayList, getTag, pool } from "../libraries/Nostr"
+import { getRelayList, pool } from "../libraries/Nostr"
 import { NaddrContext } from '../providers/NaddrProvider'
 import { Filter, nip19 } from 'nostr-tools'
 import { RelayList } from '../types/NostrRelay'

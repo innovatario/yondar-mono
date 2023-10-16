@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { useMap } from 'react-map-gl'
-import { Event, nip19 } from 'nostr-tools'
+import { nip19 } from 'nostr-tools'
 import { isOpenNow } from '../libraries/decodeDay'
 import { IdentityType } from '../types/IdentityType'
 import { MapPin } from './MapPin'

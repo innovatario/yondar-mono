@@ -49,7 +49,6 @@ export const MapPlaces = ({global}: {global: boolean}) => {
       if (beacon) {
         const CENTER_TIME = 1000
         // const { coordinates } = beacon.content.geometry
-        const width = window.innerWidth / 135 / 10000
         // wait for zoom to finish, then open beacon and center map on description
         setShowBeacon(beacon.id)
         map.flyTo({
