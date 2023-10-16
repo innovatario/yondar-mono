@@ -1,4 +1,5 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
+import { useMap } from 'react-map-gl'
 import { Event, nip19 } from 'nostr-tools'
 import { isOpenNow } from '../libraries/decodeDay'
 import { IdentityType } from '../types/IdentityType'
@@ -6,11 +7,24 @@ import { MapPin } from './MapPin'
 import { Place } from '../types/Place'
 
 type PreviewBeaconProps = {
-  ownerProfile: (Event & {content: IdentityType }) | undefined
+  ownerProfile: IdentityType | null
   beaconData: Place
+  coords: [number, number]
 }
-export const PreviewBeacon = ({ ownerProfile, beaconData}: PreviewBeaconProps) => {
-  const picture = ownerProfile?.content?.picture
+export const PreviewBeacon = ({coords, ownerProfile, beaconData}: PreviewBeaconProps) => {
+  const {current: map} = useMap()
+  const picture = ownerProfile?.picture
+
+  console.log(ownerProfile)
+
+  // center on the beacon + description on load.
+  useEffect(() => {
+    console.log('fly',map)
+    map?.flyTo({
+      center: [coords[0] + 0.0032, coords[1] - 0.0008],
+      zoom: 15,
+    })
+  }, [map])
 
   const mapMarker = useMemo( () => {
     return (
@@ -79,7 +93,7 @@ export const PreviewBeacon = ({ ownerProfile, beaconData}: PreviewBeaconProps) =
 
     let authorInfo = null
     const authorLink = nip19.npubEncode(beaconData.pubkey)
-    authorInfo = <p onClick={e => e.stopPropagation()}><a href={`https://njump.me/${authorLink}`} target="_blank" rel="noopener noreferrer"><small className="ellipses">Created by {ownerProfile?.content?.displayName || ownerProfile?.content?.display_name || ownerProfile?.content?.username || beaconData.pubkey}</small></a></p>
+    authorInfo = <p onClick={e => e.stopPropagation()}><a href={`https://njump.me/${authorLink}`} target="_blank" rel="noopener noreferrer"><small className="ellipses">Created by {ownerProfile?.displayName || ownerProfile?.display_name || ownerProfile?.username || beaconData.pubkey}</small></a></p>
 
     return (
       <div className="beacon__info">

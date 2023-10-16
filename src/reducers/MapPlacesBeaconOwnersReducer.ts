@@ -1,7 +1,7 @@
 import { IdentityType } from '../types/IdentityType'
 import { Event } from 'nostr-tools'
 
-type Owner = Event & { content: IdentityType }
+export type Owner = Event & { content: IdentityType }
 type beaconOwnersReducerType = {
   [key: string]: Owner
 } 

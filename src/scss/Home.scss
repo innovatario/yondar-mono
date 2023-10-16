@@ -11,6 +11,12 @@
   & + .wrapper, &.subsequent {
     padding-top: 0;
   }
+  &.mt-0 {
+    padding-top: 0;
+  }
+  &.mb-0 {
+    padding-bottom: 0;
+  }
 }
 
 .logo {

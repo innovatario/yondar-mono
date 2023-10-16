@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useState, useEffect, useContext } from 'react'
 import { getRelayList, getTag, pool } from "../libraries/Nostr"
 import { NaddrContext } from '../providers/NaddrProvider'
@@ -8,10 +9,11 @@ import { IdentityContext } from '../providers/IdentityProvider'
 import { Place } from '../types/Place'
 import { Map, Marker, ViewState } from 'react-map-gl'
 import { PreviewBeacon } from './PreviewBeacon'
-import '../scss/PlacePreview.scss'
 import { WavyText } from './WavyText'
 import { SignInButton } from './SignInButton'
 import { SignUpButton } from './SignUpButton'
+import { Owner } from '../reducers/MapPlacesBeaconOwnersReducer'
+import '../scss/PlacePreview.scss'
 
 export const PlacePreview = () => {
   const { naddr } = useContext(NaddrContext)
@@ -19,7 +21,7 @@ export const PlacePreview = () => {
   const [place, setPlace] = useState<Place | null>(null)
   const [longitude, setLongitude] = useState<number>(-80)
   const [latitude, setLatitude] = useState<number>(0)
-  const [zoom, setZoom] = useState<number>(10)
+  const [zoom, setZoom] = useState<number>(15)
   const [deleted, setDeleted] = useState<boolean>(false)
   const [display, setDisplay] = useState<boolean>(false)
   const [owner, setOwner] = useState<Owner | null>(null)
@@ -119,7 +121,6 @@ export const PlacePreview = () => {
   }, [place])
 
   if (display) {
-    console.log(place?.content?.geometry?.coordinates[0])
     return (
       <>
       <div className="faq mt-0">
@@ -131,12 +132,13 @@ export const PlacePreview = () => {
           longitude={longitude}
           latitude={latitude}
           zoom={zoom}
-          style={{ maxWidth: '100%', height: '25vh', cursor: 'crosshair!important' }}
+          style={{ maxWidth: '100%', cursor: 'crosshair!important' }}
           onMove={e => setViewState(e.viewState)}
           mapStyle='mapbox://styles/innovatar/ckg6zpegq44ym19pen438iclf'
+          scrollZoom={false}
         >
-          <Marker longitude={place!.content?.geometry?.coordinates[0] - 0.11} latitude={place!.content?.geometry?.coordinates[1] + 0.04}>
-            <PreviewBeacon ownerProfile={owner} beaconData={place!}/>
+          <Marker longitude={place!.content?.geometry?.coordinates[0]} latitude={place!.content?.geometry?.coordinates[1]} offset={[-20,-52]} anchor={'center'}>
+            <PreviewBeacon coords={[longitude, latitude]} ownerProfile={owner} beaconData={place!}/>
           </Marker>
         </Map>
       </div>
@@ -146,12 +148,12 @@ export const PlacePreview = () => {
       </div>
       <div className="faq mb-0">
         <p className="receive fullwidth">
-          Log in to start interacting &amp; creating places!<br/>
+          👆 Log in to start interacting &amp; creating places!<br/>
         </p>
       </div>
       </>
     )
   }
 
-  return <><WavyText text="Loading..."/></>
+  return <><WavyText text="Loading Place..."/></>
 }

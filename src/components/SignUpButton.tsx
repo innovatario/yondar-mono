@@ -5,6 +5,7 @@ import { IdentityContext } from "../providers/IdentityProvider"
 import { generatePrivateKey, getPublicKey } from 'nostr-tools'
 import { encryptAndStorePrivateKey } from '../libraries/EncryptAndStoreLocal'
 import { FancyButton } from './FancyButton'
+import { WavyText } from './WavyText'
 
 export const SignUpButton = () => {
   const { identity, setIdentity } = useContext<IdentityContextType>(IdentityContext)
@@ -23,7 +24,7 @@ export const SignUpButton = () => {
     return null
   } else {
     return (
-      <FancyButton onClick={newIdentity}>Quick Signup</FancyButton>
+      <FancyButton onClick={newIdentity}><WavyText text="Quick Signup"/></FancyButton>
     )
   }
 }

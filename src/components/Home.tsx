@@ -19,7 +19,7 @@ export const Home = () => {
 
   return (
     <div id="home">
-      <div className="wrapper">
+      <div className="wrapper mb-0">
         <img className="logo" src={ logo } alt="Yondar Logo" />
         <br/>
       </div>
