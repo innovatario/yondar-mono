@@ -19,12 +19,13 @@ export const GeoChat = ({ show, mapLngLat}: {show: boolean, mapLngLat: number[]}
 
   useEffect(() => {
     // get kind1 notes tagged with the current geohash
-    const filters: Filter[] = []
+    const hashfilter: string[] = []
     for( let i = 0; i < hash.length; i++ ) {
-      filters.push({kinds: [1], "#g": [hash.slice(0, i + 1)]})
+      hashfilter.push(hash.slice(0, i + 1))
     }
+    const filter: Filter = { kinds: [1], "#g": [hash]}
     const relayList: RelayList = getRelayList(relays, ['read'])
-    const sub = pool.sub(relayList, [filters[4]])
+    const sub = pool.sub(relayList, [filter])
     sub.on('event', (event) => {
       chatsDispatch({type: 'add', payload: event})
     })
@@ -45,6 +46,8 @@ export const GeoChat = ({ show, mapLngLat}: {show: boolean, mapLngLat: number[]}
       </div>
     )
   })
+
+  chatList.unshift(<h2 className="title">GeoChat: {hash}</h2>)
 
   return (
     <div className={`component-geochat ${show ? 'show' : 'hide'}`}>

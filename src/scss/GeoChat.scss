@@ -16,6 +16,10 @@
   &.hide {
     left: 100vw;
   }
+  .title {
+    margin-left: 0.5rem;
+    // font-weight: 300;
+  }
 }
 
 .component-geochatbutton {
@@ -41,5 +45,30 @@
   }
   &.hide {
 
+  }
+}
+
+.show .chat {
+  // fade in and swoop up animation on load
+  animation: fadein 1s, swoopup 1s;
+  background: #4707b133;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+  font-weight: 300;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  position: relative;
+  // width: 90%;
+  white-space: pre-wrap;
+  word-break: break-all;
+  // fade in animation
+  @keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  // swoop up animation
+  @keyframes swoopup {
+    from { transform: translateY(100px); }
+    to   { transform: translateY(0); }
   }
 }

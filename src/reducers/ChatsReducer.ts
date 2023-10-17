@@ -19,16 +19,24 @@ export const chatsReducer = (state: ChatsState = initialState, action: ChatsActi
       return b.created_at - a.created_at;
     })
   }
+  
+  //deduplicate chats by id
+  const dedupeChats = (chats: Chat[]) => {
+    return chats.filter((chat, index, self) =>
+      index === self.findIndex((t) => (
+        t.id === chat.id
+      ))
+    )
+  }
 
   switch (action.type) {
     case 'add':
-      return sortChats([...state, action.payload])
+      return dedupeChats(sortChats([...state, action.payload]));
     case 'remove':
-      return sortChats(state.filter(chat => chat.id !== action.payload.id))
+      return dedupeChats(sortChats(state.filter(chat => chat.id !== action.payload.id)));
     case 'clearall':
-      return []
+      return [];
     default:
-      return state
+      return dedupeChats(sortChats(state));
   }
-
 }
