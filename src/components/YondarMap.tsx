@@ -54,8 +54,6 @@ export const YondarMap = ({ children }: YondarMapProps) => {
   const mapLongitude = position && follow === "USER" ? position?.coords.longitude : longitude
   const mapLatitude = position && follow === "USER" ? position?.coords.latitude : latitude
 
-  console.log(zoom)
-
   return (
     <>
     <Map
