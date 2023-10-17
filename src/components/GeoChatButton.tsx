@@ -2,31 +2,16 @@ import React from 'react'
 import { FaComments } from 'react-icons/fa'
 
 interface ChatButtonProps {
-  onClick: () => void
+  onClick: () => void,
+  show: boolean,
 }
 
-export const GeoChatButton: React.FC<ChatButtonProps> = ({ onClick }) => {
+/* TODO: add notification number in red to show how many chats are available in this area */
+export const GeoChatButton: React.FC<ChatButtonProps> = ({ onClick, show }: {onClick: () => void, show: boolean}) => {
   return (
     <button
+      className={`component-geochatbutton ${show ? 'show' : 'hide'}`}
       onClick={onClick}
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '50px',
-        height: '50px',
-        borderRadius: '50%',
-        backgroundColor: '#7200ff',
-        color: '#ffffff',
-        border: '2px solid #4707b1',
-        outline: 'none',
-        cursor: 'pointer',
-        padding: '7px',
-        boxShadow: '5px 5px 5px 0px rgba(0,0,0,0.5)',
-        position: 'absolute',
-        right: '0.25rem',
-        bottom: '2rem',
-      }}
     >
       <FaComments size={44} />
     </button>

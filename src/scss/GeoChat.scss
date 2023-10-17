@@ -1,0 +1,45 @@
+.component-geochat {
+  background: #1f1523aa;
+  // blur filter on background
+  backdrop-filter: blur(10px);
+  border-left: 1px solid #4707b1;
+  width: 75vw;
+  height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: absolute;
+  top: 0;
+  transition: all 250ms ease-out;
+  &.show {
+    left: 25vw;
+  }
+  &.hide {
+    left: 100vw;
+  }
+}
+
+.component-geochatbutton {
+  align-items: center;
+  background-color: #7200ff;
+  border-radius: 50%;
+  border: 2px solid #4707b1;
+  bottom: 2rem;
+  box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.5);
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  height: 50px;
+  justify-content: center;
+  outline: none;
+  padding: 7px;
+  position: absolute;
+  right: 0.25rem;
+  width: 50px;
+  transition: all 250ms ease-out;
+  &.show {
+    right: calc(75vw + 0.25rem);
+  }
+  &.hide {
+
+  }
+}
