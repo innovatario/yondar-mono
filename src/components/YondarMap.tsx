@@ -2,7 +2,7 @@ import { useState, useContext } from 'react'
 import { Me } from './Me'
 import { MapPlaces } from './MapPlaces'
 import { Cursor } from './Cursor'
-import Map, { ViewState } from 'react-map-gl'
+import Map, { Layer, Source, ViewState } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { useGeolocationData } from '../hooks/useGeolocationData'
 import { FollowTarget } from '../types/Follow'
@@ -10,6 +10,7 @@ import { ModalContextType } from "../types/ModalType"
 import { ModalContext } from "../providers/ModalProvider"
 import { FeedToggle } from './FeedToggle'
 import usePersistedState from '../hooks/usePersistedState'
+import Geohash from 'latlon-geohash'
 
 type YondarMapProps = {
   children?: React.ReactNode
@@ -52,6 +53,64 @@ export const YondarMap = ({ children }: YondarMapProps) => {
   const mapLongitude = position && follow === "USER" ? position?.coords.longitude : longitude
   const mapLatitude = position && follow === "USER" ? position?.coords.latitude : latitude
 
+  const geohash = () => {
+    const hash = Geohash.encode(mapLatitude, mapLongitude, 5)
+    const bounds = Geohash.bounds(hash)
+    const boundsArray = [
+      [bounds.sw.lon, bounds.sw.lat],
+      [bounds.ne.lon, bounds.sw.lat],
+      [bounds.ne.lon, bounds.ne.lat],
+      [bounds.sw.lon, bounds.ne.lat],
+      [bounds.sw.lon, bounds.sw.lat]
+    ]
+    const boundsGeoJSON = {
+      type: 'Feature',
+      geometry: {
+        type: 'Polygon',
+        coordinates: [boundsArray]
+      },
+      properties: {
+        name: hash
+      }
+    }
+
+    return (
+      <Source id="geohash" type="geojson" data={boundsGeoJSON}>
+        <Layer
+          id="geohash-fill"
+          type="fill"
+          source="geohash"
+          paint={{
+            'fill-color': '#7200ff',
+            'fill-opacity': 0.1
+          }}
+        />
+        <Layer
+          id="geohash-line"
+          type="line"
+          source="geohash"
+          paint={{
+            'line-color': '#4707b1',
+            'line-opacity': 0.8,
+            'line-width': 2,
+          }}
+        />
+        <Layer
+          id="geohash-text"
+          type="symbol"
+          source="geohash"
+          layout={{
+            'text-field': '{name}',
+          }}
+          paint={{
+            'text-color': '#c6acf3'
+          }}
+        />
+      </Source>
+    )
+
+  }
+
   return (
     <>
     <Map
@@ -71,6 +130,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       {/* { modal?.placeForm ? null : <MapPlaces global={globalFeed}/> } */}
       <FeedToggle globalFeed={globalFeed} toggleFeed={toggleFeed}/>
       { children }
+      { geohash() }
     </Map>
     </>
   )
