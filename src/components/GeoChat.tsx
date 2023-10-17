@@ -23,12 +23,15 @@ export const GeoChat = ({ show, mapLngLat}: {show: boolean, mapLngLat: number[]}
     for( let i = 0; i < hash.length; i++ ) {
       hashfilter.push(hash.slice(0, i + 1))
     }
-    const filter: Filter = { kinds: [1], "#g": [hash]}
+    const filter: Filter = { kinds: [1], "#g": [hash.substring(0,3)]}
     const relayList: RelayList = getRelayList(relays, ['read'])
     const sub = pool.sub(relayList, [filter])
     sub.on('event', (event) => {
       chatsDispatch({type: 'add', payload: event})
     })
+    return () => {
+      sub.unsub()
+    }
   }, [mapLngLat])
 
   const chatList = chats.map((chat, index) => {
