@@ -17,6 +17,7 @@ import '../scss/Dashboard.scss'
 import { freshDefaultPlace } from "../libraries/defaultPlace.tsx"
 import { DraftPlaceContext } from "../providers/DraftPlaceProvider.tsx"
 import { DraftPlaceContextType } from "../types/Place.tsx"
+import { GeoChatButton } from "./GeoChatButton.tsx"
 
 export const Dashboard = () => {
   const {identity} = useContext<IdentityContextType>(IdentityContext)
@@ -71,6 +72,7 @@ export const Dashboard = () => {
           </LogoButton>
           { showProfile ? $profile : null }
         </YondarMap>
+        <GeoChatButton onClick={() => {}}/>
         { modal?.placeForm ? modal.placeForm === 'edit' ? <PlaceForm edit={true}/> : <PlaceForm edit={false}/> : null }
       </GeolocationProvider>
     </div>
