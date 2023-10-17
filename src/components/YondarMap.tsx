@@ -107,6 +107,7 @@ const MapGeoChat = ({zoom, mapLngLat}: {zoom: number, mapLngLat: number[]}) => {
   const geohashHeight = pixelDistance(map, bounds.ne.lon, bounds.ne.lat, bounds.ne.lon, bounds.sw.lat)
   // const offset = pixelsToEms(geohashHeight / 2)
   // console.log(geohashHeight, offset)
+  console.log(zoom)
 
   return (
     <Source id="geohash" type="geojson" data={boundsGeoJSON}>
@@ -129,19 +130,23 @@ const MapGeoChat = ({zoom, mapLngLat}: {zoom: number, mapLngLat: number[]}) => {
           'line-width': 2,
         }}
       />
-      <Layer
-        id="geohash-text"
-        type="symbol"
-        source="geohash"
-        layout={{
-          'text-field': '{name}',
-          'text-size': 18,
-        }}
-        paint={{
-          'text-color': '#c6acf3',
-          'text-translate': zoom < 13 ? [0, geohashHeight/2] : [0, 0]
-        }}
-      />
+      {zoom > 10 ?
+        <Layer
+          id="geohash-text"
+          type="symbol"
+          source="geohash"
+          layout={{
+            'text-field': '{name}',
+            'text-size': 18,
+          }}
+          paint={{
+            'text-color': '#c6acf3',
+            'text-translate': zoom < 13 ? [0, geohashHeight/2] : [0, 0]
+          }}
+        />
+        :
+        null
+      }
     </Source>
   )
 }
