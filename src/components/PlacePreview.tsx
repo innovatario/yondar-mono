@@ -7,7 +7,7 @@ import { RelayList } from '../types/NostrRelay'
 import { IdentityContextType } from '../types/IdentityType'
 import { IdentityContext } from '../providers/IdentityProvider'
 import { Place } from '../types/Place'
-import { Map, Marker, ViewState } from 'react-map-gl'
+import { Map, Marker, ViewState, useMap } from 'react-map-gl'
 import { PreviewBeacon } from './PreviewBeacon'
 import { WavyText } from './WavyText'
 import { SignInButton } from './SignInButton'
@@ -21,13 +21,14 @@ export const PlacePreview = () => {
   const [place, setPlace] = useState<Place | null>(null)
   const [longitude, setLongitude] = useState<number>(-80)
   const [latitude, setLatitude] = useState<number>(0)
-  const [zoom, setZoom] = useState<number>(15)
+  const [zoom, setZoom] = useState<number>(1)
   const [deleted, setDeleted] = useState<boolean>(false)
   const [display, setDisplay] = useState<boolean>(false)
   const [owner, setOwner] = useState<Owner | null>(null)
   const [kind, setKind] = useState<number>(0)
   const [pubkey, setPubkey] = useState<string>('')
   const [identifier, setIdentifier] = useState<string>('')
+  const {current: map} = useMap()
 
 
   function setViewState(viewState: ViewState) {
@@ -76,6 +77,11 @@ export const PlacePreview = () => {
     if (place) {
       setLongitude(place?.content?.geometry?.coordinates[0])
       setLatitude(place?.content?.geometry?.coordinates[1])
+      if (map) {
+        map.flyTo({
+          zoom: 16
+        })
+      }
     }
   },[place])
 
@@ -128,13 +134,14 @@ export const PlacePreview = () => {
       </div>
       <div className="component-placepreview">
         <Map
+          projection={'globe'}
           mapboxAccessToken={import.meta.env.VITE_MAPBOX_API}
           longitude={longitude}
           latitude={latitude}
           zoom={zoom}
           style={{ maxWidth: '100%', cursor: 'crosshair!important' }}
           onMove={e => setViewState(e.viewState)}
-          mapStyle='mapbox://styles/innovatar/ckg6zpegq44ym19pen438iclf'
+          mapStyle='mapbox://styles/innovatar/clnw247z1001f01ri43tacxbg'
           scrollZoom={false}
         >
           <Marker longitude={place!.content?.geometry?.coordinates[0]} latitude={place!.content?.geometry?.coordinates[1]} offset={[-20,-52]} anchor={'center'}>
