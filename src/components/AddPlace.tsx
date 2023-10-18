@@ -1,14 +1,14 @@
-import { useContext, useEffect, useState } from 'react';
-import { WavyText } from './WavyText';
-import { ModalContextType } from '../types/ModalType';
-import { ModalContext } from '../providers/ModalProvider';
-import { useMap } from 'react-map-gl';
-import { useGeolocationData } from '../hooks/useGeolocationData';
+import { useContext, useEffect, useState } from 'react'
+import { WavyText } from './WavyText'
+import { ModalContextType } from '../types/ModalType'
+import { ModalContext } from '../providers/ModalProvider'
+import { useMap } from 'react-map-gl'
+import { useGeolocationData } from '../hooks/useGeolocationData'
 
 export const AddPlace = () => {
   const {modal} = useContext<ModalContextType>(ModalContext)
   const {current: map} = useMap()
-  const {cursorPosition, setCursorPosition} = useGeolocationData()
+  const {cursorPosition} = useGeolocationData()
   const [drop, setDrop] = useState<boolean>(false)
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export const AddPlace = () => {
     map && map.once('moveend', callback)
   }
 
-  const handleClick = (e) => {
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
     if (modal?.placeForm === false) {
       center(500)

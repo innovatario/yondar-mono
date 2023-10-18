@@ -1,12 +1,10 @@
-import { useMap, Layer, Source } from 'react-map-gl'
+import { Layer, Source } from 'react-map-gl'
 import { Position } from 'geojson'
 import { useGeolocationData } from '../hooks/useGeolocationData'
 import Geohash from 'latlon-geohash'
-import { pixelDistance } from '../libraries/mapUtils'
 
 export const MapGeoChat = ({ zoom, mapLngLat }: { zoom: number; mapLngLat: number[]; }) => {
   const { cursorPosition } = useGeolocationData()
-  const { current: map } = useMap()
 
   const lnglat = cursorPosition ? [cursorPosition.lng, cursorPosition.lat] : mapLngLat
   const zoomFactor = Math.ceil((zoom * 0.8)/5*3)
@@ -31,7 +29,6 @@ export const MapGeoChat = ({ zoom, mapLngLat }: { zoom: number; mapLngLat: numbe
     }
   }
 
-  const geohashHeight = pixelDistance(map, bounds.ne.lon, bounds.ne.lat, bounds.ne.lon, bounds.sw.lat)
   // const offset = pixelsToEms(geohashHeight / 2)
   // console.log(geohashHeight, offset)
   // console.log(zoom,zoomFactor)

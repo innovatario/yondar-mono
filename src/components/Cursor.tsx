@@ -1,8 +1,6 @@
-import { useContext, useState, useEffect } from 'react'
-import { Marker, useMap } from 'react-map-gl'
+import { useState, useEffect } from 'react'
+import { Marker } from 'react-map-gl'
 import '../scss/Cursor.scss'
-import { ModalContextType } from "../types/ModalType"
-import { ModalContext } from "../providers/ModalProvider"
 import { useGeolocationData } from '../hooks/useGeolocationData'
 
 type CursorProps = {
@@ -11,46 +9,14 @@ type CursorProps = {
 
 export const Cursor = ({children}: CursorProps) => {
 
-  const [pinDrop, setPinDrop] = useState(false) // this is used to trigger the pin drop animation
-  const {modal} = useContext<ModalContextType>(ModalContext)
+  const [,setPinDrop] = useState(false) // this is used to trigger the pin drop animation
   const {cursorPosition, setCursorPosition} = useGeolocationData()
-
-
-  const {current: map} = useMap()
 
   const size = 30
 
   useEffect(() => {
     setPinDrop(false)
   }, [cursorPosition])
-
-  const center = (duration = 0) => {
-    map && cursorPosition && map.flyTo({
-      center: [cursorPosition.lng, cursorPosition.lat],
-      duration
-    })
-  }
-  const moveCallbackOnce = (callback: () => void) => {
-    map && map.once('moveend', callback)
-  }
-
-  const handleClickCursor = () => {
-    if (edit) return
-
-    if (map && cursorPosition) {
-
-      if (pinDrop) {
-        modal?.setPlaceForm(true)
-      } else {
-        // center, drop pin
-        center(500)
-        moveCallbackOnce( () => {
-          setPinDrop(true)
-          setTimeout(() => modal?.setPlaceForm(true), 500)
-        })
-      }
-    }
-  }
 
   const hideCursor = () => {
     setCursorPosition(null)
