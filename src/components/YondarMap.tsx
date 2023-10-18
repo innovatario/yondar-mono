@@ -107,7 +107,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
     >
       {/* { !triggerGeo ? <MapClickHint longitude={longitude} latitude={latitude} /> : null } */}
       <Cursor>
-        {/* { modal?.placeForm === 'edit' ? null : <AddPlace drop={pinDrop}/> } */}
+        { mode === 'add' ? <AddPlace drop={false}/> : null }
       </Cursor>
       <Me setFollow={setFollow}/>
       <MapPlaces global={globalFeed}/>
