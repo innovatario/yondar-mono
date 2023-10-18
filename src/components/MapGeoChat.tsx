@@ -34,7 +34,7 @@ export const MapGeoChat = ({ zoom, mapLngLat }: { zoom: number; mapLngLat: numbe
   const geohashHeight = pixelDistance(map, bounds.ne.lon, bounds.ne.lat, bounds.ne.lon, bounds.sw.lat)
   // const offset = pixelsToEms(geohashHeight / 2)
   // console.log(geohashHeight, offset)
-  console.log(zoom,zoomFactor)
+  // console.log(zoom,zoomFactor)
 
   return (
     <Source id="geohash" type="geojson" data={{ type: 'Feature', geometry: { type: 'Polygon', coordinates: [boundsArray] }, properties: boundsGeoJSON.properties }}>
