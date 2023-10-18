@@ -1,4 +1,4 @@
-import { useEffect, useContext, useReducer } from 'react'
+import { useState, useEffect, useContext, useReducer } from 'react'
 import '../scss/GeoChat.scss'
 import { useGeolocationData } from '../hooks/useGeolocationData'
 import Geohash from 'latlon-geohash'
@@ -9,15 +9,21 @@ import { IdentityContextType } from '../types/IdentityType'
 import { IdentityContext } from '../providers/IdentityProvider'
 import { chatsReducer } from '../reducers/ChatsReducer'
 
-export const GeoChat = ({ show, mapLngLat}: {show: boolean, mapLngLat: number[]}) => {
+export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: number[], zoom: number}) => {
   const {cursorPosition} = useGeolocationData()
   const { relays } = useContext<IdentityContextType>(IdentityContext)
   const [chats, chatsDispatch] = useReducer(chatsReducer, [])
-
-  const lnglat = cursorPosition ? [cursorPosition.lng, cursorPosition.lat] : mapLngLat 
-  const hash = Geohash.encode(lnglat[1], lnglat[0], 5)
+  const [hash, setHash] = useState<string>('')
 
   useEffect(() => {
+    const lnglat = cursorPosition ? [cursorPosition.lng, cursorPosition.lat] : mapLngLat 
+    const zoomFactor = Math.ceil((zoom * 0.8)/5*3)
+    const hashLength = Math.max(1, Math.min(5, zoomFactor))
+    setHash(Geohash.encode(lnglat[1], lnglat[0], hashLength))
+  }, [cursorPosition, mapLngLat, zoom])
+
+  useEffect(() => {
+    chatsDispatch({type: 'clearall'})
     // get kind1 notes tagged with the current geohash
     const hashfilter: string[] = []
     for( let i = 0; i < hash.length; i++ ) {
@@ -32,7 +38,7 @@ export const GeoChat = ({ show, mapLngLat}: {show: boolean, mapLngLat: number[]}
     return () => {
       sub.unsub()
     }
-  }, [mapLngLat])
+  }, [hash])
 
   const chatList = chats.map((chat, index) => {
     let geohash
@@ -44,13 +50,13 @@ export const GeoChat = ({ show, mapLngLat}: {show: boolean, mapLngLat: number[]}
     return (
       <div key={index} className="chat">
         <p className="chat-text">{chat.content}</p>
-        <p className="chat-author">{chat.pubkey}</p>
-        { geohash && <p className="chat-geohash">{geohash}</p> }
+        {/* <small className="chat-author">author: {chat.pubkey}</small> */}
+        { geohash && <p className="chat-geohash">geo#{geohash}</p> }
       </div>
     )
   })
 
-  chatList.unshift(<h2 className="title">GeoChat: {hash}</h2>)
+  chatList.unshift(<h2 className="title">GeoChat: #{hash}</h2>)
 
   return (
     <div className={`component-geochat ${show ? 'show' : 'hide'}`}>

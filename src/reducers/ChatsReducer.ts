@@ -6,7 +6,7 @@ export type ChatsState = Chat[]
 
 export type ChatsAction = {
     type: 'add' | 'remove' | 'clearall'
-    payload: Chat
+    payload?: Chat
 }
 
 export const initialState: ChatsState = []
@@ -31,9 +31,9 @@ export const chatsReducer = (state: ChatsState = initialState, action: ChatsActi
 
   switch (action.type) {
     case 'add':
-      return dedupeChats(sortChats([...state, action.payload]));
+      return dedupeChats(sortChats([...state, action.payload!]));
     case 'remove':
-      return dedupeChats(sortChats(state.filter(chat => chat.id !== action.payload.id)));
+      return dedupeChats(sortChats(state.filter(chat => chat.id !== action.payload!.id)));
     case 'clearall':
       return [];
     default:

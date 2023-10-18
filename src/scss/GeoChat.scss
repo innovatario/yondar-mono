@@ -51,16 +51,18 @@
 .show .chat {
   // fade in and swoop up animation on load
   animation: fadein 1s, swoopup 1s;
-  background: #4707b133;
+  background: #51239b33;
+  border: 1px solid #4707b1;
   border-radius: 5px;
   box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+  color: #b68ee4;
   font-weight: 300;
   margin: 0.5rem;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   position: relative;
   // width: 90%;
-  white-space: pre-wrap;
-  word-break: break-all;
+  // white-space: pre-wrap;
+  word-break: break-word;
   // fade in animation
   @keyframes fadein {
     from { opacity: 0; }
@@ -70,5 +72,8 @@
   @keyframes swoopup {
     from { transform: translateY(100px); }
     to   { transform: translateY(0); }
+  }
+  .chat-author {
+    font-size: 12px;
   }
 }

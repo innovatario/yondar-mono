@@ -1,4 +1,5 @@
 import { useMap, Layer, Source } from 'react-map-gl'
+import { Position } from 'geojson'
 import { useGeolocationData } from '../hooks/useGeolocationData'
 import Geohash from 'latlon-geohash'
 import { pixelDistance } from '../libraries/mapUtils'
@@ -8,7 +9,9 @@ export const MapGeoChat = ({ zoom, mapLngLat }: { zoom: number; mapLngLat: numbe
   const { current: map } = useMap()
 
   const lnglat = cursorPosition ? [cursorPosition.lng, cursorPosition.lat] : mapLngLat
-  const hash = Geohash.encode(lnglat[1], lnglat[0], 5)
+  const zoomFactor = Math.ceil((zoom * 0.8)/5*3)
+  const hashLength = Math.max(1, Math.min(5, zoomFactor))
+  const hash = Geohash.encode(lnglat[1], lnglat[0], hashLength)
   const bounds = Geohash.bounds(hash)
   const boundsArray = [
     [bounds.sw.lon, bounds.sw.lat],
@@ -16,7 +19,7 @@ export const MapGeoChat = ({ zoom, mapLngLat }: { zoom: number; mapLngLat: numbe
     [bounds.ne.lon, bounds.ne.lat],
     [bounds.sw.lon, bounds.ne.lat],
     [bounds.sw.lon, bounds.sw.lat]
-  ]
+  ] as Position[]
   const boundsGeoJSON = {
     type: 'Feature',
     geometry: {
@@ -31,10 +34,10 @@ export const MapGeoChat = ({ zoom, mapLngLat }: { zoom: number; mapLngLat: numbe
   const geohashHeight = pixelDistance(map, bounds.ne.lon, bounds.ne.lat, bounds.ne.lon, bounds.sw.lat)
   // const offset = pixelsToEms(geohashHeight / 2)
   // console.log(geohashHeight, offset)
-  console.log(zoom)
+  console.log(zoom,zoomFactor)
 
   return (
-    <Source id="geohash" type="geojson" data={boundsGeoJSON}>
+    <Source id="geohash" type="geojson" data={{ type: 'Feature', geometry: { type: 'Polygon', coordinates: [boundsArray] }, properties: boundsGeoJSON.properties }}>
       <Layer
         id="geohash-fill"
         type="fill"
@@ -63,7 +66,7 @@ export const MapGeoChat = ({ zoom, mapLngLat }: { zoom: number; mapLngLat: numbe
           }}
           paint={{
             'text-color': '#c6acf3',
-            'text-translate': zoom < 13 ? [0, geohashHeight / 2] : [0, 0]
+            'text-translate': [0, geohashHeight / 2 + 12] 
           }} />
         :
         null}

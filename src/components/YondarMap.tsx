@@ -83,7 +83,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       <MapGeoChat zoom={zoom} mapLngLat={[mapLongitude, mapLatitude]}/>
     </Map>
     <GeoChatButton show={geoChat} onClick={toggleGeoChat}/>
-    <GeoChat show={geoChat} mapLngLat={[mapLongitude, mapLatitude]}/>
+    <GeoChat show={geoChat} mapLngLat={[mapLongitude, mapLatitude]} zoom={zoom}/>
     </>
   )
 }
