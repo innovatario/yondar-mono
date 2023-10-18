@@ -4,7 +4,6 @@
   background-color: #ff0037;
   border-radius: 50%;
   border: 2px solid #b10732;
-  bottom: calc(50px + 3rem);
   box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.5);
   color: #ffffff;
   cursor: pointer;
@@ -20,6 +19,7 @@
 
   // mobile
   @media screen and (max-width: 640px) {
+    bottom: calc(60px + 0.5rem);
     &.show {
       right: 1rem;
     }
@@ -29,11 +29,11 @@
 
   // desktop
   @media screen and (min-width: 641px) {
+    bottom: calc(60px + 2rem);
     &.show {
       right: 1rem;
     }
     &.hide {
-
     }
   }
 }
