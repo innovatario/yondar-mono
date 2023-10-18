@@ -7,7 +7,7 @@ type ModeProviderProps = {
 
 type Mode = 'add' | 'chat' | null
 
-type ModeContextType = {
+export type ModeContextType = {
   mode: Mode,
   setMode: (mode: Mode) => void
 }
