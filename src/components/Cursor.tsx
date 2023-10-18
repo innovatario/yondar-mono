@@ -10,7 +10,7 @@ type CursorProps = {
 
 export const Cursor = ({children}: CursorProps) => {
 
-  const {setMode} = useContext<ModeContextType>(ModeContext)
+  const {mode, setMode} = useContext<ModeContextType>(ModeContext)
   const [,setPinDrop] = useState(false) // this is used to trigger the pin drop animation
   const {cursorPosition, setCursorPosition} = useGeolocationData()
 
@@ -22,7 +22,7 @@ export const Cursor = ({children}: CursorProps) => {
 
   const hideCursor = () => {
     setCursorPosition(null)
-    setMode(null)
+    if (mode === 'add') setMode(null)
   }
 
   // this will fire on each navigator watch position update
