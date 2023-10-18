@@ -96,6 +96,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
   return (
     <>
     <Map
+      projection={'globe'}
       mapboxAccessToken={import.meta.env.VITE_MAPBOX_API}
       longitude={mapLongitude}
       latitude={mapLatitude}
@@ -103,7 +104,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       style={{ maxWidth: '100%', height: '100vh', cursor: 'crosshair!important' }}
       onMove={e => setViewState(e.viewState)}
       onClick={handleClick}
-      mapStyle='mapbox://styles/innovatar/ckg6zpegq44ym19pen438iclf'
+      mapStyle='mapbox://styles/innovatar/clnw247z1001f01ri43tacxbg'
     >
       {/* { !triggerGeo ? <MapClickHint longitude={longitude} latitude={latitude} /> : null } */}
       <Cursor>
