@@ -48,7 +48,7 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
       // console.log('Couldn\'t find geohash tag')
     }
     return (
-      <div key={index} className="chat">
+      <div key={index+chat.id} className="chat">
         <p className="chat-date">{new Date(chat.created_at * 1000).toDateString()}</p>
         <p className="chat-text">{chat.content}</p>
         <p className="chat-author">author: {chat.pubkey.substring(0,6)}</p>
@@ -57,7 +57,7 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
     )
   })
 
-  chatList.unshift(<h2 className="title">GeoChat: #{hash}</h2>)
+  chatList.unshift(<h2 key={hash} className="title">GeoChat: #{hash}</h2>)
 
   return (
     <div className={`component-geochat ${show ? 'show' : 'hide'}`}>
