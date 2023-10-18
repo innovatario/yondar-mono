@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { IdentityProvider } from './providers/IdentityProvider.tsx'
 import { Home } from './components/Home'
@@ -12,6 +13,10 @@ import { Logout } from './components/Logout.tsx'
 import { ModeProvider } from './providers/ModeProvider.tsx'
 
 function App() {
+
+  useEffect(() => {
+    window.scrollTo(0, 1)
+  }, [])
 
   return (
     <div id="app">
