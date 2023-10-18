@@ -14,6 +14,7 @@ import { GeoChat } from './GeoChat'
 import { MapGeoChat } from './MapGeoChat'
 import { GeoChatButton } from './GeoChatButton'
 import { ModeContext } from '../providers/ModeProvider'
+import { AddPlace } from './AddPlace'
 
 type YondarMapProps = {
   children?: React.ReactNode
@@ -81,7 +82,9 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       mapStyle='mapbox://styles/innovatar/ckg6zpegq44ym19pen438iclf'
     >
       {/* { !triggerGeo ? <MapClickHint longitude={longitude} latitude={latitude} /> : null } */}
-      <Cursor edit={modal?.placeForm === 'edit'}/>
+      <Cursor>
+        {/* { modal?.placeForm === 'edit' ? null : <AddPlace drop={pinDrop}/> } */}
+      </Cursor>
       <Me setFollow={setFollow}/>
       <MapPlaces global={globalFeed}/>
       {/* { modal?.placeForm ? null : <MapPlaces global={globalFeed}/> } */}

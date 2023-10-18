@@ -11,10 +11,10 @@
   // mobile
   @media screen and (max-width: 640px) {
     border-top: 1px solid #4707b1;
-    height: 50vh;
+    height: 40vh;
     width: 100vw;
     &.show {
-      top: 50vh;
+      top: 60vh;
     }
     &.hide {
       top: 100vh;
@@ -62,7 +62,7 @@
   // mobile
   @media screen and (max-width: 640px) {
     &.show {
-      bottom: calc(50vh + 1rem);
+      bottom: calc(40vh + 1rem);
     }
     &.hide {
       bottom: 0.5rem;
