@@ -101,7 +101,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       longitude={mapLongitude}
       latitude={mapLatitude}
       zoom={zoom}
-      style={{ maxWidth: '100%', height: '100vh', cursor: 'crosshair!important' }}
+      style={{ maxWidth: '100%', height: '100svh', cursor: 'crosshair!important' }}
       onMove={e => setViewState(e.viewState)}
       onClick={handleClick}
       mapStyle='mapbox://styles/innovatar/clnw247z1001f01ri43tacxbg'
