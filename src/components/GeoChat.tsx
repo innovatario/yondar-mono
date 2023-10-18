@@ -38,7 +38,7 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
     return () => {
       sub.unsub()
     }
-  }, [hash])
+  }, [hash, relays])
 
   const chatList = chats.map((chat, index) => {
     let geohash

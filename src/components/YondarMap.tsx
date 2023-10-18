@@ -10,7 +10,6 @@ import { ModalContextType } from "../types/ModalType"
 import { ModalContext } from "../providers/ModalProvider"
 import { FeedToggle } from './FeedToggle'
 import usePersistedState from '../hooks/usePersistedState'
-import { pixelsToEms } from '../libraries/mapUtils'
 import { GeoChat } from './GeoChat'
 import { MapGeoChat } from './MapGeoChat'
 import { GeoChatButton } from './GeoChatButton'

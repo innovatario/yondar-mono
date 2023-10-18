@@ -1,3 +1,5 @@
+import { MapRef } from "react-map-gl"
+
 // offsets for when the beacon is expanded
 export const getLongitudeOffset = () => {
   const width = window.innerWidth / 135 / 10000
@@ -9,7 +11,9 @@ export const getLatitudeOffset = () => {
 }
 
 
-export function pixelDistance(map, lng1, lat1, lng2, lat2) {
+export function pixelDistance(map: MapRef | undefined, lng1: number, lat1: number, lng2: number, lat2: number) {
+
+  if (!map) return 0
 
   // Calculate the distance between the two points in pixels
   const { x: x1, y: y1 } = map.project([lng1, lat1])
