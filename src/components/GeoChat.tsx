@@ -49,8 +49,9 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
     }
     return (
       <div key={index} className="chat">
+        <p className="chat-date">{new Date(chat.created_at * 1000).toDateString()}</p>
         <p className="chat-text">{chat.content}</p>
-        {/* <small className="chat-author">author: {chat.pubkey}</small> */}
+        <p className="chat-author">author: {chat.pubkey.substring(0,6)}</p>
         { geohash && <p className="chat-geohash">geo#{geohash}</p> }
       </div>
     )

@@ -74,7 +74,7 @@
     from { transform: translateY(100px); }
     to   { transform: translateY(0); }
   }
-  .chat-author {
-    font-size: 12px;
+  .chat-date {
+    border-bottom: 1px solid #b68ee466;
   }
 }
