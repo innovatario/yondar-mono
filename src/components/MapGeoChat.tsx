@@ -55,7 +55,6 @@ export const MapGeoChat = ({ zoom, mapLngLat }: { zoom: number; mapLngLat: numbe
           'line-opacity': 0.8,
           'line-width': 2,
         }} />
-      {zoom > 10 ?
         <Layer
           id="geohash-text"
           type="symbol"
@@ -66,10 +65,8 @@ export const MapGeoChat = ({ zoom, mapLngLat }: { zoom: number; mapLngLat: numbe
           }}
           paint={{
             'text-color': '#c6acf3',
-            'text-translate': [0, geohashHeight / 2 + 12] 
+            // 'text-translate': [0, geohashHeight / 2 + 12],
           }} />
-        :
-        null}
     </Source>
   )
 }

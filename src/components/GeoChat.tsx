@@ -19,23 +19,26 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
     const lnglat = cursorPosition ? [cursorPosition.lng, cursorPosition.lat] : mapLngLat 
     const zoomFactor = Math.ceil((zoom * 0.8)/5*3)
     const hashLength = Math.max(1, Math.min(5, zoomFactor))
-    setHash(Geohash.encode(lnglat[1], lnglat[0], hashLength))
+    const newHash = Geohash.encode(lnglat[1], lnglat[0], hashLength)
+    if (newHash !== hash) {
+      setHash(newHash)
+    }
   }, [cursorPosition, mapLngLat, zoom])
 
   useEffect(() => {
+    if (!hash) return
     chatsDispatch({type: 'clearall'})
     // get kind1 notes tagged with the current geohash
-    const hashfilter: string[] = []
-    for( let i = 0; i < hash.length; i++ ) {
-      hashfilter.push(hash.slice(0, i + 1))
-    }
-    const filter: Filter = { kinds: [1], "#g": [hash.substring(0,3)]}
+    const filter: Filter = { kinds: [1], "#g": [hash]}
+    console.log('hash',hash)
     const relayList: RelayList = getRelayList(relays, ['read'])
     const sub = pool.sub(relayList, [filter])
     sub.on('event', (event) => {
       chatsDispatch({type: 'add', payload: event})
+      // console.log('added', event)
     })
     return () => {
+      chatsDispatch({type: 'clearall'})
       sub.unsub()
     }
   }, [hash, relays])

@@ -9,6 +9,7 @@ import { DraftPlaceProvider } from './providers/DraftPlaceProvider.tsx'
 import { ModalProvider } from './providers/ModalProvider.tsx'
 import { NaddrProvider } from './providers/NaddrProvider.tsx'
 import { Logout } from './components/Logout.tsx'
+import { ModeProvider } from './providers/ModeProvider.tsx'
 
 function App() {
 
@@ -18,13 +19,15 @@ function App() {
           <NaddrProvider>
             <DraftPlaceProvider>
               <ModalProvider>
-                <Routes>
-                  <Route path="/" element={<Home/>}/>
-                  <Route path="/login" element={<Login/>}/>
-                  <Route path="/dashboard" element={<DashboardGuard/>}/>
-                  <Route path="/logout" element={<Logout/>}/>
-                  <Route path="/place/:naddr" element={<DashboardGuard/>}/>
-                </Routes>
+                <ModeProvider>
+                  <Routes>
+                    <Route path="/" element={<Home/>}/>
+                    <Route path="/login" element={<Login/>}/>
+                    <Route path="/dashboard" element={<DashboardGuard/>}/>
+                    <Route path="/logout" element={<Logout/>}/>
+                    <Route path="/place/:naddr" element={<DashboardGuard/>}/>
+                  </Routes>
+                </ModeProvider>
               </ModalProvider>
             </DraftPlaceProvider>
           </NaddrProvider>

@@ -13,6 +13,7 @@ import usePersistedState from '../hooks/usePersistedState'
 import { GeoChat } from './GeoChat'
 import { MapGeoChat } from './MapGeoChat'
 import { GeoChatButton } from './GeoChatButton'
+import { ModeContext } from '../providers/ModeProvider'
 
 type YondarMapProps = {
   children?: React.ReactNode
@@ -21,12 +22,13 @@ type YondarMapProps = {
 export const YondarMap = ({ children }: YondarMapProps) => {
   const [longitude, setLongitude] = useState<number>(-80)
   const [latitude, setLatitude] = useState<number>(0)
-  const {position, setCursorPosition} = useGeolocationData()
+  const {position, cursorPosition, setCursorPosition} = useGeolocationData()
   const [zoom, setZoom] = useState<number>(1)
   const [follow, setFollow] = useState<FollowTarget>(null)
   const {modal} = useContext<ModalContextType>(ModalContext)
   const [globalFeed, setGlobalFeed] = usePersistedState<boolean>('feed', true)
   const [geoChat, setGeoChat] = useState<boolean>(false)
+  const {mode, setMode} = useContext(ModeContext)
 
   function setViewState(viewState: ViewState) {
     // unlock map, we moved the map by interaction
@@ -54,7 +56,13 @@ export const YondarMap = ({ children }: YondarMapProps) => {
   }
 
   const toggleGeoChat = () => {
-    setGeoChat(!geoChat)
+    if (mode === 'chat') {
+      setMode(null)
+      setGeoChat(false)
+    } else {
+      setMode('chat')
+      setGeoChat(true)
+    }
   }
 
   const mapLongitude = position && follow === "USER" ? position?.coords.longitude : longitude
@@ -79,10 +87,10 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       {/* { modal?.placeForm ? null : <MapPlaces global={globalFeed}/> } */}
       <FeedToggle globalFeed={globalFeed} toggleFeed={toggleFeed}/>
       { children }
-      <MapGeoChat zoom={zoom} mapLngLat={[mapLongitude, mapLatitude]}/>
+      { mode === 'chat' ? <MapGeoChat zoom={zoom} mapLngLat={[mapLongitude, mapLatitude]}/> : null}
     </Map>
-    <GeoChatButton show={geoChat} onClick={toggleGeoChat}/>
-    <GeoChat show={geoChat} mapLngLat={[mapLongitude, mapLatitude]} zoom={zoom}/>
+    {cursorPosition || mode === 'chat' ? <GeoChatButton show={geoChat} onClick={toggleGeoChat}/> : null }
+    {mode === 'chat' ? <GeoChat show={geoChat} mapLngLat={[mapLongitude, mapLatitude]} zoom={zoom}/> : null }
     </>
   )
 }
