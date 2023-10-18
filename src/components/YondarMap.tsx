@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { Me } from './Me'
 import { MapPlaces } from './MapPlaces'
 import { Cursor } from './Cursor'
@@ -15,6 +15,7 @@ import { MapGeoChat } from './MapGeoChat'
 import { GeoChatButton } from './GeoChatButton'
 import { ModeContext } from '../providers/ModeProvider'
 import { AddPlace } from './AddPlace'
+import { AddButton } from './AddButton'
 
 type YondarMapProps = {
   children?: React.ReactNode
@@ -29,6 +30,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
   const {modal} = useContext<ModalContextType>(ModalContext)
   const [globalFeed, setGlobalFeed] = usePersistedState<boolean>('feed', true)
   const [geoChat, setGeoChat] = useState<boolean>(false)
+  const [addPlace, setAddPlace] = useState<boolean>(false)
   const {mode, setMode} = useContext(ModeContext)
 
   function setViewState(viewState: ViewState) {
@@ -56,13 +58,35 @@ export const YondarMap = ({ children }: YondarMapProps) => {
     setGlobalFeed(!globalFeed)
   }
 
+  useEffect(() => {
+    if (mode === 'add') {
+      setAddPlace(true)
+      setGeoChat(false)
+    }
+    if (mode === 'chat') {
+      setGeoChat(true)
+      setAddPlace(false)
+    }
+    if (mode === null){
+      setGeoChat(false)
+      setAddPlace(false)
+    }
+
+  }, [mode])
+
+  const toggleAddPlace = () => {
+    if (mode === 'add') {
+      setMode(null)
+    } else {
+      setMode('add')
+    }
+  }
+
   const toggleGeoChat = () => {
     if (mode === 'chat') {
       setMode(null)
-      setGeoChat(false)
     } else {
       setMode('chat')
-      setGeoChat(true)
     }
   }
 
@@ -93,6 +117,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       { mode === 'chat' ? <MapGeoChat zoom={zoom} mapLngLat={[mapLongitude, mapLatitude]}/> : null}
     </Map>
     {cursorPosition || mode === 'chat' ? <GeoChatButton show={geoChat} onClick={toggleGeoChat}/> : null }
+    {cursorPosition || mode === 'add' ? <AddButton show={addPlace} onClick={toggleAddPlace}/> : null }
     {mode === 'chat' ? <GeoChat show={geoChat} mapLngLat={[mapLongitude, mapLatitude]} zoom={zoom}/> : null }
     </>
   )

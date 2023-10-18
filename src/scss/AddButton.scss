@@ -1,0 +1,39 @@
+.component-addbutton {
+  animation: fadein 1s, swoopup 1s;
+  align-items: center;
+  background-color: #ff0037;
+  border-radius: 50%;
+  border: 2px solid #b10732;
+  bottom: calc(50px + 3rem);
+  box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.5);
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  height: 50px;
+  justify-content: center;
+  outline: none;
+  padding: 7px;
+  position: absolute;
+  right: 0.25rem;
+  transition: all 250ms ease-out;
+  width: 50px;
+
+  // mobile
+  @media screen and (max-width: 640px) {
+    &.show {
+      right: 1rem;
+    }
+    &.hide {
+    }
+  }
+
+  // desktop
+  @media screen and (min-width: 641px) {
+    &.show {
+      right: 1rem;
+    }
+    &.hide {
+
+    }
+  }
+}
