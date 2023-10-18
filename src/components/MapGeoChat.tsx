@@ -25,7 +25,7 @@ export const MapGeoChat = ({ zoom, mapLngLat }: { zoom: number; mapLngLat: numbe
       coordinates: [boundsArray]
     },
     properties: {
-      name: `Geochat ${hash}`
+      name: `Geochat #${hash}`
     }
   }
 
