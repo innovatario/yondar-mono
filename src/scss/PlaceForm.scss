@@ -6,20 +6,20 @@
   border-radius: 0.25rem;
   box-shadow: 0px 0px 10px #4a5968;
   box-sizing: border-box;
-  height: 74vh;
+  height: 74svh;
   left: 5vw;
   margin-bottom: 10rem;
   overflow-y: scroll;
   overflow-x: hidden;
   padding: 1rem;
   position: absolute;
-  top: 20vh;
+  top: 20svh;
   width: 90vw;
   z-index: 2;
 
   &.edit {
-    height: 50vh;
-    top: 44vh;
+    height: 50svh;
+    top: 44svh;
   }
 
   h1 {
@@ -62,10 +62,10 @@
   }
   @keyframes modal-swoop-up {
     0% {
-      transform: translateY(20vh);
+      transform: translateY(20svh);
     }
     100% {
-      transform: translateY(0vh);
+      transform: translateY(0svh);
     }
   }
 }

@@ -3,6 +3,8 @@ import { Marker } from 'react-map-gl'
 import '../scss/Cursor.scss'
 import { useGeolocationData } from '../hooks/useGeolocationData'
 import { ModeContext, ModeContextType } from '../providers/ModeProvider'
+import { ModalContextType } from '../types/ModalType'
+import { ModalContext } from '../providers/ModalProvider'
 
 type CursorProps = {
   children?: React.ReactNode
@@ -13,6 +15,7 @@ export const Cursor = ({children}: CursorProps) => {
   const {mode, setMode} = useContext<ModeContextType>(ModeContext)
   const [,setPinDrop] = useState(false) // this is used to trigger the pin drop animation
   const {cursorPosition, setCursorPosition} = useGeolocationData()
+  const {modal} = useContext<ModalContextType>(ModalContext)
 
   const size = 30
 
@@ -23,6 +26,7 @@ export const Cursor = ({children}: CursorProps) => {
   const hideCursor = () => {
     setCursorPosition(null)
     if (mode === 'add') setMode(null)
+    if (modal?.placeForm) modal.setPlaceForm(false)
   }
 
   // this will fire on each navigator watch position update

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useContext } from 'react'
 import { ModalType } from '../types/ModalType'
 import { Event, nip19 } from 'nostr-tools'
 import { getRelayList } from "../libraries/Nostr"
@@ -12,6 +12,7 @@ import { RelayList, RelayObject } from '../types/NostrRelay'
 import { MapPin } from './MapPin'
 import { FancyButton } from './FancyButton'
 import { Shared } from './Shared'
+import { ModeContext } from '../providers/ModeProvider'
 
 type BeaconProps = {
   currentUserPubkey: string | undefined
@@ -30,6 +31,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
   const { setCursorPosition } = useGeolocationData()
   const relayList: RelayList = getRelayList(relays, ['read'])
   const picture = ownerProfile?.content?.picture
+  const {setMode} = useContext(ModeContext)
 
   const toggle = () => {
     if (!modal?.placeForm) {
@@ -37,6 +39,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
       if (!open) {
         // we are opening the beacon details
         setCursorPosition(null)
+        setMode(null)
       } else {
         // we are closing the beacon details
       }
@@ -56,6 +59,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
     // set draft place
     setDraftPlace(newPlace)
     modal?.setPlaceForm('edit')
+    setMode(null)
   }
 
   // e is a click event

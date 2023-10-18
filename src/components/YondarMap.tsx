@@ -117,8 +117,8 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       { children }
       { mode === 'chat' ? <MapGeoChat zoom={zoom} mapLngLat={[mapLongitude, mapLatitude]}/> : null}
     </Map>
-    {cursorPosition || mode === 'chat' ? <GeoChatButton show={geoChat} onClick={toggleGeoChat}/> : null }
-    {cursorPosition || mode === 'add' ? <AddButton show={addPlace} onClick={toggleAddPlace}/> : null }
+    {!modal?.placeForm && (cursorPosition || mode === 'chat') ? <GeoChatButton show={geoChat} onClick={toggleGeoChat}/> : null }
+    {!modal?.placeForm && (cursorPosition || mode === 'add') ? <AddButton show={addPlace} onClick={toggleAddPlace}/> : null }
     {mode === 'chat' ? <GeoChat show={geoChat} mapLngLat={[mapLongitude, mapLatitude]} zoom={zoom}/> : null }
     </>
   )
