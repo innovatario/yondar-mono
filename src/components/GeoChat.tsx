@@ -60,7 +60,7 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
     )
   })
 
-  chatList.unshift(<h2 key={hash} className="title">GeoChat: #{hash}</h2>)
+  chatList.unshift(<h2 key={hash} className="title">Geochat #{hash}</h2>)
 
   return (
     <div className={`component-geochat ${show ? 'show' : 'hide'}`}>
