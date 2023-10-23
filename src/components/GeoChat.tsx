@@ -48,6 +48,7 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cursorPosition, mapLngLat, zoom])
 
+  // get notes for the currently selected geohash
   useEffect(() => {
     if (!hash) return
     chatsDispatch({type: 'clearall'})
@@ -57,8 +58,13 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
     const relayList: RelayList = getRelayList(relays, ['read'])
     const sub = pool.sub(relayList, [filter])
     sub.on('event', (event) => {
+      const expiry = event.tags.find(getTag('expiration'))
+      console.log('added', event)
+      if (expiry && parseInt(expiry[1]) < Math.floor(Date.now() / 1000) ) {
+        console.log('expired')
+        return
+      }
       chatsDispatch({type: 'add', payload: event})
-      // console.log('added', event)
     })
     return () => {
       chatsDispatch({type: 'clearall'})
@@ -75,13 +81,21 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
     const event: UnsignedEvent = {
       kind: 1,
       tags: [
-        ['g', hash],
         ['expiration', (created_at + ONE_WEEK).toString() ]
       ],
       content,
       created_at,
       pubkey: identity.pubkey,
     }
+
+    // apply all levels of geohash from current length to 1-char length to tags:
+    const hashLength = hash.length
+    for (let i = hashLength; i > 0; i--) {
+      const tag = ['g', hash.substring(0, i)]
+      event.tags.push(tag)
+    }
+
+    console.log('event',event)
 
     let signedEvent
 
