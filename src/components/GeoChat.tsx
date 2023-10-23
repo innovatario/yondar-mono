@@ -12,6 +12,15 @@ import { IoMdSend as Icon } from 'react-icons/io'
 import { decryptPrivateKey } from '../libraries/EncryptAndStoreLocal'
 import { signEvent } from '../libraries/NIP-07'
 
+// const [lat1, lng1] = [37.7749, -122.4194] // San Francisco
+// const [lat2, lng2] = [40.7128, -74.0060] // New York City
+// const [centerLat, centerLng] = getCenter(lat1, lng1, lat2, lng2)
+// const getCenter = (lat1, lng1, lat2, lng2) => {
+//   const centerLat = (lat1 + lat2) / 2
+//   const centerLng = (lng1 + lng2) / 2
+//   return [centerLat, centerLng]
+// }
+
 const ONE_WEEK = 60 * 60 * 24 * 7
 
 export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: number[], zoom: number}) => {
@@ -141,6 +150,7 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
 
   }
 
+  // display chats
   const chatList = chats.map((chat, index) => {
     let geohash
     try {
