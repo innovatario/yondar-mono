@@ -41,7 +41,7 @@ export const AddPlace = () => {
   return (
     <div className={classes} onClick={handleClick}>
       {drop ? null : <div className="add-a-place"><WavyText text="Add a Place" /></div>}
-      {drop ? <div className="dropped-pin">📍</div> : <WavyText text='📍' />}
+      {drop ? <div className="dropped-pin">📍</div> : <WavyText emoji='📍' />}
     </div>
   )
 }
