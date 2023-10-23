@@ -110,6 +110,10 @@
   .chat-date {
     border-bottom: 1px solid #b68ee466;
   }
+  .chat-author {
+    cursor: pointer;
+    text-decoration: underline;
+  }
 }
 
 .chat-container {

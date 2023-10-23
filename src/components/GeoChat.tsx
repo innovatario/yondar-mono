@@ -4,7 +4,7 @@ import { useGeolocationData } from '../hooks/useGeolocationData'
 import Geohash from 'latlon-geohash'
 import { getRelayList, getTag, pool } from '../libraries/Nostr'
 import { RelayList } from '../types/NostrRelay'
-import { Event, Filter, UnsignedEvent, getEventHash, getSignature } from 'nostr-tools'
+import { Event, Filter, UnsignedEvent, getEventHash, getSignature, nip19 } from 'nostr-tools'
 import { IdentityContextType } from '../types/IdentityType'
 import { IdentityContext } from '../providers/IdentityProvider'
 import { chatsReducer } from '../reducers/ChatsReducer'
@@ -163,7 +163,10 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
       <div key={index+chat.id} className="chat">
         <p className="chat-date">{new Date(chat.created_at * 1000).toDateString()}</p>
         <p className="chat-text">{chat.content}</p>
-        <p className="chat-author">author: {chat.pubkey.substring(0,6)}</p>
+        <p className="chat-author" onClick={() => {
+          const npub = nip19.npubEncode(chat.pubkey)
+          window.open(`https://njump.me/${npub}`, '_blank', 'noopener noreferrer')
+        }}>author: {chat.pubkey.substring(0,6)}</p>
         { geohash && <p className="chat-geohash">geo#{geohash}</p> }
       </div>
     )
