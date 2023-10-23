@@ -2,7 +2,6 @@ import { useContext, useEffect } from "react"
 import { useNavigate } from 'react-router-dom'
 import { IdentityContext } from "../providers/IdentityProvider"
 import { IdentityContextType } from "../types/IdentityType"
-import { defaultRelays, defaultContacts } from "../libraries/Nostr"
 import { Spinner } from './Spinner'
 import { localStorageKey } from '../libraries/EncryptAndStoreLocal'
 
