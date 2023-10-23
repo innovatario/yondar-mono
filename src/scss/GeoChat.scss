@@ -125,7 +125,7 @@
   height: 90%;
   overflow-y: scroll;
   @media screen and (max-width: 640px) {
-    height: 80%;
+    height: 70%;
   }
 
 }
@@ -141,7 +141,7 @@
   flex: 1;
   height: 10%;
   @media screen and (max-width: 640px) {
-    height: 20%;
+    height: 30%;
   }
   overflow: hidden;
   #compose {
