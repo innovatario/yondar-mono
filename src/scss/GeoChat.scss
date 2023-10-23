@@ -2,11 +2,12 @@
   background: #1f1523aa;
   // blur filter on background
   backdrop-filter: blur(10px);
-  overflow-y: scroll;
+  overflow-y: hidden;
   overflow-x: hidden;
   position: absolute;
   top: 0;
   transition: all 250ms ease-out;
+  z-index: 999;
 
   // mobile
   @media screen and (max-width: 640px) {
@@ -108,5 +109,44 @@
   }
   .chat-date {
     border-bottom: 1px solid #b68ee466;
+  }
+}
+
+.chat-container {
+  flex: 9;
+  height: 90svh;
+  overflow-y: scroll;
+}
+
+.chat-container.no-compose {
+  flex: 1;
+  height: 100svh;
+}
+
+.chat-compose {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  height: 10svh;
+  overflow: hidden;
+  #compose {
+    background-color: rgba(81, 35, 155, 0.2);
+    border: 1px solid #4707b1;
+    color: #d8b9fc;
+    font-family: inherit;
+    font-size: 16px;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    width: 95svh;
+    &::placeholder {
+      color: #8458b6;
+    }
+  }
+  #send {
+    background-color: #4707b1;
+    display: block;
+    padding: 0;
+    margin: 0.5rem 0.5rem 0.5rem 0;
+    width: 15svw;
   }
 }
