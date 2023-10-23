@@ -14,7 +14,7 @@ export const ZoomOutButton: React.FC<ZoomOutButtonProps> = ({ show }: {show: boo
   const zoomOut = () => {
     map && console.log('zoom out')
     map && map.flyTo({
-      zoom: 2,
+      zoom: 1,
       duration: 2000,
     })
   }
