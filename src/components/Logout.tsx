@@ -12,13 +12,14 @@ export const Logout = () => {
 
   useEffect(() => {
     const wipe = async () => {
-      navigate('/')
+      localStorage.removeItem('identity')
+      localStorage.removeItem('relays')
+      localStorage.removeItem('contacts')
+      localStorage.removeItem('draftPlace')
       localStorage.removeItem(localStorageKey)
       localStorage.removeItem(localStorageKey+'v')
       localStorage.removeItem(localStorageKey+'s')
-      setRelays(defaultRelays)
-      setContacts(defaultContacts)
-      setIdentity(null)
+      window.location.href='/'
     }
     wipe()
   }, [navigate, identity, setIdentity, setRelays, setContacts])

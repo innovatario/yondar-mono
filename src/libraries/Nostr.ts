@@ -8,6 +8,11 @@ const readWrite: RelayReadWrite = {read: true, write: true}
 export const defaultRelays: RelayObject = {
   'wss://yondar.nostr1.com': readWrite,
   'wss://relay.primal.net': readWrite,
+  'wss://relay.damus.io': readWrite,
+  'wss://relayable.org': readWrite,
+  'wss://relay.nostr.me': readWrite,
+  'wss://nos.lol': readWrite,
+  'wss://relay.nostr.band': readWrite,
 }
 
 export const defaultProfile: IdentityType = {

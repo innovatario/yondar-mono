@@ -97,6 +97,7 @@ export const Login = () => {
       // retrieve profile
       const loadedProfile = await getMyProfile(identity.pubkey)
       if (loadedProfile === defaultProfile) {
+        console.log('no profile found, using defaultProfile')
         // no profile found. use default as template but add pubkey
         const newProfile = {...defaultProfile, pubkey: identity.pubkey, last_updated: +new Date()}
         setIdentity(newProfile)
