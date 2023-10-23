@@ -20,9 +20,9 @@
 
   // mobile
   @media screen and (max-width: 640px) {
-    bottom: calc(0px + 0.5rem);
+    bottom: calc(0px + 2rem);
     &.show {
-      left: 0.25rem;
+      left: 0rem;
     }
     // &.hide {
     // }
@@ -32,7 +32,7 @@
   @media screen and (min-width: 641px) {
     bottom: calc(0px + 2rem);
     &.show {
-      left: 0.25rem;
+      left: 0rem;
     }
     // &.hide {
     // }
