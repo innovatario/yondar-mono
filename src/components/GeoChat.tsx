@@ -33,6 +33,7 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
       setMyHash(newHash)
       console.log('my hash',newHash)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [position, zoom])
 
   // update the currently selected geochat hash when the cursor or map position changes
@@ -44,6 +45,7 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
     if (newHash !== hash) {
       setHash(newHash)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cursorPosition, mapLngLat, zoom])
 
   useEffect(() => {
@@ -51,6 +53,7 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
     chatsDispatch({type: 'clearall'})
     // get kind1 notes tagged with the current geohash
     const filter: Filter = { kinds: [1], "#g": [hash]}
+    console.log('searching for messages:', filter, hash)
     const relayList: RelayList = getRelayList(relays, ['read'])
     const sub = pool.sub(relayList, [filter])
     sub.on('event', (event) => {
@@ -115,6 +118,7 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
     const pub = pool.publish(relayList, signedEvent)
     pub.on("ok", () => {
       console.log("Event published successfully!")
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       composeRef.current!.value = ''
     })
     pub.on("failed", (reason: string) => {
