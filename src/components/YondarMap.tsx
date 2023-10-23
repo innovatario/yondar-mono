@@ -16,6 +16,7 @@ import { GeoChatButton } from './GeoChatButton'
 import { ModeContext } from '../providers/ModeProvider'
 import { AddPlace } from './AddPlace'
 import { AddButton } from './AddButton'
+import { ZoomOutButton } from './ZoomOutButton'
 
 type YondarMapProps = {
   children?: React.ReactNode
@@ -116,6 +117,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       <FeedToggle globalFeed={globalFeed} toggleFeed={toggleFeed}/>
       { children }
       { mode === 'chat' ? <MapGeoChat zoom={zoom} mapLngLat={[mapLongitude, mapLatitude]}/> : null}
+      {!modal?.placeForm && zoom > 7 ? <ZoomOutButton show={true} /> : null }
     </Map>
     {!modal?.placeForm && (cursorPosition || mode === 'chat') ? <GeoChatButton show={geoChat} onClick={toggleGeoChat}/> : null }
     {!modal?.placeForm && (cursorPosition || mode === 'add') ? <AddButton show={addPlace} onClick={toggleAddPlace}/> : null }
