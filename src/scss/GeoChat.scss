@@ -9,6 +9,12 @@
   transition: all 250ms ease-out;
   z-index: 999;
 
+  .title {
+    color: #d3baf3;
+    margin: 0.3rem 0.5rem 0.5rem 0.5rem;
+    // font-weight: 300;
+  }
+
   // mobile
   @media screen and (max-width: 640px) {
     border-top: 1px solid #4707b1;
@@ -19,6 +25,9 @@
     }
     &.hide {
       top: 100svh;
+    }
+    .title {
+      font-size: 1rem;
     }
   }
 
@@ -33,11 +42,6 @@
     &.hide {
       left: 100vw;
     }
-  }
-  .title {
-    color: #d3baf3;
-    margin: 0.3rem 0.5rem 0.5rem 0.5rem;
-    // font-weight: 300;
   }
 }
 
@@ -118,20 +122,27 @@
 
 .chat-container {
   flex: 9;
-  height: 90svh;
+  height: 90%;
   overflow-y: scroll;
+  @media screen and (max-width: 640px) {
+    height: 80%;
+  }
+
 }
 
 .chat-container.no-compose {
   flex: 1;
-  height: 100svh;
+  height: 100%;
 }
 
 .chat-compose {
   display: flex;
   flex-direction: row;
   flex: 1;
-  height: 10svh;
+  height: 10%;
+  @media screen and (max-width: 640px) {
+    height: 20%;
+  }
   overflow: hidden;
   #compose {
     background-color: rgba(81, 35, 155, 0.2);
