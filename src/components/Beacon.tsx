@@ -180,7 +180,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
     let sms = null
     try {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      sms = beaconData.content?.properties?.phone ? <button onClick={() => sendSMS(beaconData.content.properties.phone!)} style={{ float: "right", margin: "22px 0.25rem", position: "relative" }}>{isMobile ? 'Text' : 'Call'}</button> : null
+      sms = beaconData.content?.properties?.phone ? <button onClick={() => sendSMS(beaconData.content.properties.phone!)} style={{ float: "right", margin: "22px 0.25rem", position: "relative" }}>{isMobile ? 'Text us' : 'Call us'}</button> : null
     } catch(e) {
       console.log(e)
     }
