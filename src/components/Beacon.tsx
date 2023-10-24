@@ -185,6 +185,9 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
       console.log(e)
     }
 
+    let tele = null
+    if (beaconData.content?.properties?.phone) tele = <a href={`tel:${beaconData.content.properties.phone}`}>{beaconData.content.properties.phone}</a>
+
     return (
       <div className="beacon__info" onClick={toggle}>
         {beaconName}
@@ -193,6 +196,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
         <hr/>
         {beaconDescription}
         {hours}
+        {tele}
         {authorInfo}
         {edit}
         {share}
