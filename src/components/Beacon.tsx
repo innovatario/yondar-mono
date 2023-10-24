@@ -25,6 +25,14 @@ type BeaconProps = {
   editHandler: () => void
   draft: DraftPlaceContextType
 }
+
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+
+function sendSMS(phoneNumber: string) {
+  const uri = isMobile ? `sms:${phoneNumber}` : `tel:${phoneNumber}`
+  window.open(uri, '_blank')
+}
+
 export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, modal, open, focusHandler, editHandler, draft }: BeaconProps) => {
   const [shared, setShared] = useState(false)
   const { setDraftPlace } = draft
@@ -153,18 +161,26 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
     let edit = null
     try {
       if (currentUserPubkey === beaconData.pubkey)
-        edit = <FancyButton size="sm" className="chill" onClick={editPlace} style={{ float: "right", marginTop: "22px", marginRight: "-1.0rem" }}>Edit</FancyButton>
+        edit = <FancyButton size="sm" className="chill" onClick={editPlace} style={{ float: "right", marginTop: "22px", marginRight: "-1.0rem", marginLeft: '0.25rem' }}>Edit</FancyButton>
     } catch (e) {
       console.log(e)
     }
 
     let share = null
     try {
-      share = <button onClick={sharePlace} style={{ float: "right", marginTop: "22px", marginLeft: "1.5rem", marginRight: edit ? "0.5rem" : "-1.0rem", position: "relative" }}>
+      share = <button onClick={sharePlace} style={{ float: "right", margin: "22px 0.25rem", position: "relative" }}>
         Share
         {shared ? <Shared/> : null}
       </button>
     } catch (e) {
+      console.log(e)
+    }
+
+    let sms = null
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      sms = beaconData.content?.properties?.phone ? <button onClick={() => sendSMS(beaconData.content.properties.phone!)} style={{ float: "right", margin: "22px 0.25rem", position: "relative" }}>{isMobile ? 'Text' : 'Call'}</button> : null
+    } catch(e) {
       console.log(e)
     }
 
@@ -179,6 +195,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
         {authorInfo}
         {edit}
         {share}
+        {sms}
       </div>
     )
   }
