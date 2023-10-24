@@ -89,6 +89,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
   const postalCodeRef = useRef<HTMLInputElement>(null)
   const typeRef = useRef<HTMLSelectElement>(null)
   const statusRef = useRef<HTMLSelectElement>(null)
+  const hoursRef = useRef<HTMLInputElement>(null)
   const websiteRef = useRef<HTMLInputElement>(null)
   const phoneRef = useRef<HTMLInputElement>(null)
   const relayList = getRelayList(relays, ['write'])
@@ -130,6 +131,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
       countryNameRef.current?.value || "",
       postalCodeRef.current?.value || "",
       statusRef.current?.value as GooglePlaceStatus || "OPERATIONAL" as GooglePlaceStatus,
+      hoursRef.current?.value || "",
       websiteRef.current?.value || "",
       phoneRef.current?.value || ""
     )
@@ -341,6 +343,15 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
         <option value="CLOSED_TEMPORARILY">Closed Temporarily</option>
         <option value="CLOSED_PERMANENTLY">Closed Permanently</option>
       </select>
+      <label htmlFor="hours">Hours</label>
+      <input
+        id="hours"
+        ref={hoursRef}
+        defaultValue={draftPlace.content.properties.hours || ""}
+        type="text"
+        placeholder="Mo-Fr 08:00-17:00; Sa-Su 10:00-17:00"
+        onChange={() => updateDraft()}
+      />
       <label htmlFor="website">Website</label>
       <input
         id="website"

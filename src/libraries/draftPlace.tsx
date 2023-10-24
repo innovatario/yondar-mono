@@ -22,6 +22,7 @@ export const createDraftPlace = (
   countryName?: string,
   postalCode?: string,
   status?: GooglePlaceStatus,
+  hours?: string,
   website?: string,
   phone?: string
 ) => {
@@ -54,6 +55,7 @@ export const createDraftPlace = (
         },
         type,
         status,
+        hours,
         website,
         phone,
       },
@@ -97,6 +99,7 @@ export const beaconToDraftPlace = (beacon: Place, relayList: RelayList) => {
     beacon.content?.properties?.address?.["country-name"],
     beacon.content?.properties?.address?.["postal-code"],
     beacon.content?.properties?.status,
+    beacon.content?.properties?.hours,
     beacon.content?.properties?.website,
     beacon.content?.properties?.phone
   )

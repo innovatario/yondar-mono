@@ -3,7 +3,7 @@ import { ModalType } from '../types/ModalType'
 import { Event, nip19 } from 'nostr-tools'
 import { getRelayList } from "../libraries/Nostr"
 import { useGeolocationData } from "../hooks/useGeolocationData"
-import { isOpenNow } from '../libraries/decodeDay'
+import { formatTimes, isOpenNow } from '../libraries/decodeDay'
 import { DraftPlaceContextType, Place } from '../types/Place'
 import { beaconToDraftPlace } from '../libraries/draftPlace'
 import { CursorPositionType } from '../providers/GeolocationProvider'
@@ -104,23 +104,24 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
     }
 
     let hours = null
-    try {
-      hours = <p className="hours">{
-        beaconData.content.properties.hours
-        ? 
-          isOpenNow(beaconData.content.properties.hours)
+    if (beaconData.content.properties.hours) {
+      try {
+        hours = <p className="hours">{
+          beaconData.content.properties.hours
           ? 
-            <>
-              "🟢 Open Now" : "💤 Not Open Right Now"
-              <br />
-              <small>{beaconData.content.properties.hours}</small>
-            </>
-          : null
-        : null
-      }</p>
-    } catch (e) {
-      // console.log('failed to parse hours', e)
-    }
+            isOpenNow(beaconData.content.properties.hours)
+            ? 
+              "🟢 Open Now" 
+            : "💤 Not Open Right Now"
+          : null }
+          <br />
+          <small>{formatTimes(beaconData.content.properties.hours)}</small>
+        </p>
+
+      } catch (e) {
+        // console.log('failed to parse hours', e)
+      }
+    } 
 
     let typeInfo = null
     try {

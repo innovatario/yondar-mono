@@ -43,9 +43,13 @@
       margin-top: 1rem;
       text-decoration: underline;
     }
+    .hours {
+      margin-top: 1rem;
+    }
     .hours small {
       // make color half transparent
       color: #fff6;
+      display: block;
       padding-left: 1.5rem;
     }
     .type {
