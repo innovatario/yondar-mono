@@ -168,7 +168,8 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
 
     let share = null
     try {
-      share = <button onClick={sharePlace} style={{ float: "right", margin: "22px 0.25rem", position: "relative" }}>
+      const margin = edit ? '22px 0.25rem' : '22px -1rem 0 0.25rem'
+      share = <button onClick={sharePlace} style={{ float: "right", margin: margin, position: "relative" }}>
         Share
         {shared ? <Shared/> : null}
       </button>
