@@ -1,7 +1,6 @@
 import { WavyText } from "./WavyText"
 import "../scss/FAQ.scss"
 import { GeoChatExampleButton } from "./GeoChatExampleButton"
-import { FaComments } from "react-icons/fa"
 import { SignUpButton } from "./SignUpButton"
 import { AddExampleButton } from "./AddExampleButton"
 
