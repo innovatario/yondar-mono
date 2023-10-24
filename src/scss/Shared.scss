@@ -7,7 +7,7 @@
   }
   100% {
     opacity: 0;
-    transform: translateX(-45%) translateY(-4rem);
+    transform: translateX(-45%) translateY(-2rem);
   }
 }
 
@@ -16,4 +16,5 @@
   position: absolute;
   // ensure the text does not wrap
   white-space: nowrap;
+  text-align: center;
 }
