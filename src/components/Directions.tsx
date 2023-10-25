@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import mapboxgl from 'mapbox-gl'
-import { Layer, LngLatBounds, LngLatBoundsLike, Source, useMap, LngLat } from 'react-map-gl'
+import { Layer, LngLatBoundsLike, Source, useMap } from 'react-map-gl'
 import { useNavigationTarget } from '../hooks/useNavigationTarget'
 import { useGeolocationData } from '../hooks/useGeolocationData'
 import { Geometry } from 'geojson'
