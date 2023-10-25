@@ -14,7 +14,7 @@ import { FancyButton } from './FancyButton'
 import { Shared } from './Shared'
 import { ModeContext } from '../providers/ModeProvider'
 import { useNavigationTarget } from '../hooks/useNavigationTarget'
-import { BiSolidNavigation as NavIcon } from 'react-icons/bi'
+import { TbNavigationFilled as NavIcon } from 'react-icons/tb'
 
 type BeaconProps = {
   currentUserPubkey: string | undefined
@@ -157,6 +157,9 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
       console.log('failed to parse status', e)
     }
 
+    let tele = null
+    if (beaconData.content?.properties?.phone) tele = <a href={`tel:${beaconData.content.properties.phone}`}>{beaconData.content.properties.phone}</a>
+
     let authorInfo = null
     const authorLink = nip19.npubEncode(beaconData.pubkey)
     authorInfo = <p onClick={e => e.stopPropagation()}><a href={`https://njump.me/${authorLink}`} target="_blank" rel="noopener noreferrer"><small className="ellipses">Created by {ownerProfile?.content?.displayName || ownerProfile?.content?.display_name || ownerProfile?.content?.username || beaconData.pubkey}</small></a></p>
@@ -164,15 +167,14 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
     let edit = null
     try {
       if (currentUserPubkey === beaconData.pubkey)
-        edit = <FancyButton size="sm" className="chill" onClick={editPlace} style={{ float: "right", marginTop: "22px", marginRight: "-1.0rem", marginLeft: '0.25rem' }}>Edit</FancyButton>
+        edit = <FancyButton size="sm" className="chill" onClick={editPlace}>Edit</FancyButton>
     } catch (e) {
       console.log(e)
     }
 
     let share = null
     try {
-      const margin = edit ? '22px 0.25rem' : '22px -1rem 0 0.25rem'
-      share = <button onClick={sharePlace} style={{ float: "right", margin: margin, position: "relative" }}>
+      share = <button className="normal-button" onClick={sharePlace}>
         Share
         {shared ? <Shared/> : null}
       </button>
@@ -183,22 +185,20 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
     let sms = null
     try {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      sms = beaconData.content?.properties?.phone ? <button onClick={() => sendSMS(beaconData.content.properties.phone!)} style={{ float: "right", margin: "22px 0.25rem", position: "relative" }}>{isMobile ? 'Text us' : 'Call us'}</button> : null
+      sms = beaconData.content?.properties?.phone ? <button className="normal-button" onClick={() => sendSMS(beaconData.content.properties.phone!)}>{isMobile ? 'Text us' : 'Call us'}</button> : null
     } catch(e) {
       console.log(e)
     }
 
     let nav = null
     try {
-      nav = <button onClick={() => setTarget(beaconData.content.geometry.coordinates)} style={{ float: "right", margin: "22px 0.25rem", position: "relative" }}><NavIcon/></button>
+      nav = <button className="normal-button" onClick={(e) => {e.stopPropagation(); setTarget(beaconData.content.geometry.coordinates)}}>Directions <NavIcon color=""/></button>
     } catch(e) {
       console.log(e)
     }
 
-    let tele = null
-    if (beaconData.content?.properties?.phone) tele = <a href={`tel:${beaconData.content.properties.phone}`}>{beaconData.content.properties.phone}</a>
-
     return (
+      <>
       <div className="beacon__info" onClick={toggle}>
         {beaconName}
         {typeInfo}
@@ -208,11 +208,14 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
         {hours}
         {tele}
         {authorInfo}
-        {edit}
-        {share}
-        {sms}
-        {nav}
+        <div className="beacon__actions">
+          {edit}
+          {share}
+          {sms}
+          {nav}
+        </div>
       </div>
+      </>
     )
   }
 

@@ -73,6 +73,32 @@
       margin-bottom: 0;
     }
   }
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    margin-left: -1rem;
+    margin-top: 0.25rem;
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    overflow: hidden;
+
+    button {
+      font-weight: 500!important;
+      white-space: nowrap;
+      padding: 0.6em 1.2em!important;
+      margin: 0.25rem;
+      font-size: 14px!important;
+      // flex-shrink: 3;
+      flex-grow: 3;
+      &.normal-button {
+        background: rgba(20, 20, 20, 0.8);
+      }
+    }
+  }
 }
 
 #loading-message {
