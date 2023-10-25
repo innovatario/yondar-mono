@@ -192,7 +192,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
 
     let nav = null
     try {
-      nav = <button className="normal-button" onClick={ () => setTarget(beaconData.content.geometry.coordinates)}>Directions <NavIcon color=""/></button>
+      nav = <button className="normal-button" onClick={ () => {setTarget(beaconData.content.geometry.coordinates); toggle()}}>Directions <NavIcon color=""/></button>
     } catch(e) {
       console.log(e)
     }
