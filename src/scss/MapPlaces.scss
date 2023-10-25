@@ -86,7 +86,7 @@
     top: 100%;
     width: calc(100% + 0.5rem);
     overflow: hidden;
-    animation: beacon-actions-fade-in 600ms ease-out both 100ms;
+    animation: beacon-actions-fade-in 400ms ease-out both 100ms;
     @keyframes beacon-actions-fade-in {
       0% {
         opacity: 0;
