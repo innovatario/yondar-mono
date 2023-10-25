@@ -189,7 +189,9 @@ export const MapPlaces = ({global}: {global: boolean}) => {
 
 
         const relayList: RelayList = getRelayList(relays, ['read'])
-        const naddr = createNaddr(beacon.pubkey, beacon.tags.find(getTag('d'))?.[1] || "", relayList)
+        // sort relay list by length of relay address from shortest to longest
+        
+        const naddr = createNaddr(beacon.pubkey, beacon.tags.find(getTag('d'))?.[1] || "", relayList.sort( (a, b) => a.length - b.length).slice(0, 3))
 
         const output = (
           <Marker clickTolerance={5} key={beacon.id} longitude={beacon.content.geometry.coordinates[0]} latitude={beacon.content.geometry.coordinates[1]} offset={[-20,-52]} anchor={'center'}>

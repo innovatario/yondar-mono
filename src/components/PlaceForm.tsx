@@ -99,11 +99,8 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ edit = false }) => {
   const geohash = Geohash.encode(cursorPosition!.lat, cursorPosition!.lng, 5)
 
   const updateNaddr = () => {
-    const naddr = createNaddr(
-      identity.pubkey,
-      nameRef.current?.value || "",
-      relayList.slice(0, 3),
-    )
+
+    const naddr = createNaddr(identity.pubkey, nameRef.current?.value || "", relayList.sort( (a, b) => a.length - b.length).slice(0, 3))
     setNaddr(naddr)
   }
 
