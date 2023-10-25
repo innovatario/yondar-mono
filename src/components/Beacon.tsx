@@ -208,12 +208,12 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
         {hours}
         {tele}
         {authorInfo}
-        <div className="beacon__actions">
-          {edit}
-          {share}
-          {sms}
-          {nav}
-        </div>
+      </div>
+      <div className="beacon__actions">
+        {edit}
+        {share}
+        {sms}
+        {nav}
       </div>
       </>
     )
