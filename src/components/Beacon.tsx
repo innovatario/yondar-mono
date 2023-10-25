@@ -13,6 +13,8 @@ import { MapPin } from './MapPin'
 import { FancyButton } from './FancyButton'
 import { Shared } from './Shared'
 import { ModeContext } from '../providers/ModeProvider'
+import { useNavigationTarget } from '../hooks/useNavigationTarget'
+import { BiSolidNavigation as NavIcon } from 'react-icons/bi'
 
 type BeaconProps = {
   currentUserPubkey: string | undefined
@@ -40,6 +42,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
   const relayList: RelayList = getRelayList(relays, ['read'])
   const picture = ownerProfile?.content?.picture
   const {setMode} = useContext(ModeContext)
+  const {setTarget} = useNavigationTarget()
 
   const toggle = () => {
     if (!modal?.placeForm) {
@@ -185,6 +188,13 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
       console.log(e)
     }
 
+    let nav = null
+    try {
+      nav = <button onClick={() => setTarget(beaconData.content.geometry.coordinates)} style={{ float: "right", margin: "22px 0.25rem", position: "relative" }}><NavIcon/></button>
+    } catch(e) {
+      console.log(e)
+    }
+
     let tele = null
     if (beaconData.content?.properties?.phone) tele = <a href={`tel:${beaconData.content.properties.phone}`}>{beaconData.content.properties.phone}</a>
 
@@ -201,6 +211,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
         {edit}
         {share}
         {sms}
+        {nav}
       </div>
     )
   }

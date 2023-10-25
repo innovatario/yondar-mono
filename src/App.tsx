@@ -11,6 +11,7 @@ import { ModalProvider } from './providers/ModalProvider.tsx'
 import { NaddrProvider } from './providers/NaddrProvider.tsx'
 import { Logout } from './components/Logout.tsx'
 import { ModeProvider } from './providers/ModeProvider.tsx'
+import { NavigationTargetProvider } from './providers/NavigationTargetProvider.tsx'
 
 function App() {
 
@@ -22,19 +23,21 @@ function App() {
     <div id="app">
         <IdentityProvider>
           <NaddrProvider>
-            <DraftPlaceProvider>
-              <ModalProvider>
-                <ModeProvider>
-                  <Routes>
-                    <Route path="/" element={<Home/>}/>
-                    <Route path="/login" element={<Login/>}/>
-                    <Route path="/dashboard" element={<DashboardGuard/>}/>
-                    <Route path="/logout" element={<Logout/>}/>
-                    <Route path="/place/:naddr" element={<DashboardGuard/>}/>
-                  </Routes>
-                </ModeProvider>
-              </ModalProvider>
-            </DraftPlaceProvider>
+            <NavigationTargetProvider>
+              <DraftPlaceProvider>
+                <ModalProvider>
+                  <ModeProvider>
+                    <Routes>
+                      <Route path="/" element={<Home/>}/>
+                      <Route path="/login" element={<Login/>}/>
+                      <Route path="/dashboard" element={<DashboardGuard/>}/>
+                      <Route path="/logout" element={<Logout/>}/>
+                      <Route path="/place/:naddr" element={<DashboardGuard/>}/>
+                    </Routes>
+                  </ModeProvider>
+                </ModalProvider>
+              </DraftPlaceProvider>
+            </NavigationTargetProvider>
           </NaddrProvider>
         </IdentityProvider>
     </div>

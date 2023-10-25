@@ -17,6 +17,7 @@ import { ModeContext } from '../providers/ModeProvider'
 import { AddPlace } from './AddPlace'
 import { AddButton } from './AddButton'
 import { ZoomOutButton } from './ZoomOutButton'
+import { Directions } from './Directions'
 
 type YondarMapProps = {
   children?: React.ReactNode
@@ -108,6 +109,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       mapStyle='mapbox://styles/innovatar/clnw247z1001f01ri43tacxbg'
     >
       {/* { !triggerGeo ? <MapClickHint longitude={longitude} latitude={latitude} /> : null } */}
+      <Directions/>
       <Cursor>
         { mode === 'add' ? <AddPlace/> : null }
       </Cursor>
