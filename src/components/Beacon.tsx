@@ -185,7 +185,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
     let sms = null
     try {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      sms = beaconData.content?.properties?.phone ? <button className="normal-button" onClick={() => sendSMS(beaconData.content.properties.phone!)}>{isMobile ? 'Text us' : 'Call us'}</button> : null
+      sms = beaconData.content?.properties?.phone ? <button className="normal-button" onClick={(e) => { e.stopPropagation(); sendSMS(beaconData.content.properties.phone!)}}>{isMobile ? 'Text us' : 'Call us'}</button> : null
     } catch(e) {
       console.log(e)
     }
