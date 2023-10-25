@@ -24,6 +24,7 @@ export const PreviewBeacon = ({coords, ownerProfile, beaconData}: PreviewBeaconP
       center: [coords[0] + 0.0032, coords[1] - 0.0008],
       zoom: 15,
     })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map])
 
   const mapMarker = useMemo( () => {
