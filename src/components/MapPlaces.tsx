@@ -177,6 +177,9 @@ export const MapPlaces = ({global}: {global: boolean}) => {
   }, [contacts, identity.pubkey])
 
   // iterate through beacon data and prepare it for map display. 
+  // TODO: to fix the order of beacon display, I may need to render the list of beacons separately in a memoized function with its own deps, then
+  // render the list of markers separately and insert the beacons into each marker. This way, beacons don't unmount and remount when deps state changes.
+  // Right now, the Marker is changing which unmounts the beacon I think.
   const displayBeacons = useMemo( () => {
     return Object.values(beacons)
       .sort( (a, b) => {
