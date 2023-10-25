@@ -7,7 +7,7 @@ import { formatTimes, isOpenNow } from '../libraries/decodeDay'
 import { DraftPlaceContextType, Place } from '../types/Place'
 import { beaconToDraftPlace } from '../libraries/draftPlace'
 import { CursorPositionType } from '../providers/GeolocationProvider'
-import { IdentityType } from '../types/IdentityType'
+import { IdentityContextType, IdentityType } from '../types/IdentityType'
 import { RelayList, RelayObject } from '../types/NostrRelay'
 import { MapPin } from './MapPin'
 import { FancyButton } from './FancyButton'
@@ -15,6 +15,7 @@ import { Shared } from './Shared'
 import { ModeContext } from '../providers/ModeProvider'
 import { useNavigationTarget } from '../hooks/useNavigationTarget'
 import { TbNavigationFilled as NavIcon } from 'react-icons/tb'
+import { IdentityContext } from '../providers/IdentityProvider'
 
 type BeaconProps = {
   currentUserPubkey: string | undefined
@@ -35,10 +36,11 @@ function sendSMS(phoneNumber: string) {
   window.open(uri, '_blank')
 }
 
-export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, modal, open, focusHandler, editHandler, draft }: BeaconProps) => {
+export const Beacon = ({ currentUserPubkey, ownerProfile, beaconData, modal, open, focusHandler, editHandler, draft }: BeaconProps) => {
   const [shared, setShared] = useState(false)
   const { setDraftPlace } = draft
-  const { setCursorPosition } = useGeolocationData()
+  const { position, setCursorPosition } = useGeolocationData()
+  const {relays} = useContext<IdentityContextType>(IdentityContext)
   const relayList: RelayList = getRelayList(relays, ['read'])
   const picture = ownerProfile?.content?.picture
   const {setMode} = useContext(ModeContext)
@@ -213,7 +215,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, relays, beaconData, mo
         {edit}
         {share}
         {sms}
-        {nav}
+        {position ? nav : null}
       </div>
       </>
     )

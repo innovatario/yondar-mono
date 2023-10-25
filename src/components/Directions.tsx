@@ -29,8 +29,8 @@ export const Directions = () => {
     fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/${position.coords.longitude},${position.coords.latitude};${target[0]},${target[1]}?access_token=${import.meta.env.VITE_MAPBOX_API}&geometries=geojson&overview=full`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data, data.routes, data.routes[0])
       if (data.routes.length > 0) {
+        console.log(data, data.routes, data.routes[0])
         setTurns(data.routes[0])
         // TODO - zoom out map so we can see the whole route
         const bounds = data.routes[0].geometry.coordinates.reduce( (bounds: mapboxgl.LngLatBounds, coord: number[]) => bounds.extend(coord as LngLatBoundsLike), new mapboxgl.LngLatBounds())
