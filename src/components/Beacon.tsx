@@ -8,7 +8,7 @@ import { DraftPlaceContextType, Place } from '../types/Place'
 import { beaconToDraftPlace } from '../libraries/draftPlace'
 import { CursorPositionType } from '../providers/GeolocationProvider'
 import { IdentityContextType, IdentityType } from '../types/IdentityType'
-import { RelayList, RelayObject } from '../types/NostrRelay'
+import { RelayList } from '../types/NostrRelay'
 import { MapPin } from './MapPin'
 import { FancyButton } from './FancyButton'
 import { Shared } from './Shared'
@@ -20,7 +20,6 @@ import { IdentityContext } from '../providers/IdentityProvider'
 type BeaconProps = {
   currentUserPubkey: string | undefined
   ownerProfile: (Event & {content: IdentityType }) | undefined
-  relays: RelayObject
   beaconData: Place
   modal: ModalType
   open: boolean,
