@@ -59,6 +59,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, beaconData, modal, ope
   }
 
   const editPlace = () => {
+    toggle()
     editHandler()
     // set cursor to beacon's current coordinates
     const lnglat: CursorPositionType = {
