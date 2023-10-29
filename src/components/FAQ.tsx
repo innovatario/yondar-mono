@@ -113,7 +113,7 @@ export const FAQ = () => {
         Your GPS location simply shows where you are on the map in relation to other places. It can be helpful if you want to put a new place right where you are! 🎯
         <br/>
         <br/>
-        Your location is not transmitted, and our code is <a href="https://github.com/innovatar/yondar-mono.git" target="_blank" rel="noopener noreferrer">open-sourced</a> to prove it. <a href="https://innovatar.io" target="_blank" rel="noopener noreferrer">We are</a> regular people who value our privacy, so we built Yondar to do the same for you. ✅
+        Your location is not transmitted, and our code is <a href="https://github.com/innovatario/yondar-mono.git" target="_blank" rel="noopener noreferrer">open-sourced</a> to prove it. <a href="https://innovatar.io" target="_blank" rel="noopener noreferrer">We are</a> regular people who value our privacy, so we built Yondar to do the same for you. ✅
       </p>
 
       <p className="send">
