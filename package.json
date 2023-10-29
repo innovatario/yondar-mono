@@ -2,7 +2,7 @@
   "name": "yondar-mono",
   "private": true,
   "version": "0.0.0",
-  "license": "Copyright (c) 2021 InnovatAR Inc.",
+  "license": "See ./LICENSE",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
