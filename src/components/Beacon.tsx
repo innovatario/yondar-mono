@@ -162,7 +162,6 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, beaconData, modal, ope
     let tele = null
     if (beaconData.content?.properties?.phone) tele = <a href={`tel:${beaconData.content.properties.phone}`}>{beaconData.content.properties.phone}</a>
 
-    console.log(ownerProfile)
     let authorInfo = null
     const authorLink = nip19.npubEncode(beaconData.pubkey)
     authorInfo = 

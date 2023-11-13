@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { nip05 } from 'nostr-tools'
 
 interface VerificationResult {
   verified: boolean;
@@ -22,20 +23,11 @@ export const Nip05Verifier: React.FC<Nip05VerifierProps> = ({ pubkey, nip05Ident
                 nip05Identifier,
               })
         }
-        const [localPart, domain] = nip05Identifier.split('@')
-
-        const apiUrl = localPart === '_'
-          ? `https://${domain}/.well-known/nostr.json?name=_`
-          : `https://${domain}/.well-known/nostr.json`
-
-        const response = await fetch(apiUrl)
-        const data = await response.json()
-
-        // Check if the pubkey matches the one in the response
-        const verified = data.names && data.names[localPart] === pubkey
+        // Get the profile for the NIP-05 identifier
+        const profile = await nip05.queryProfile(nip05Identifier)
 
         setVerificationResult({
-          verified,
+          verified: profile?.pubkey === pubkey,
           nip05Identifier,
         })
       }catch(e) {
@@ -51,11 +43,17 @@ export const Nip05Verifier: React.FC<Nip05VerifierProps> = ({ pubkey, nip05Ident
   }, [pubkey, nip05Identifier])
 
   return (
-    <div>
-      <span>{nip05Identifier}</span>
-      {verificationResult && verificationResult.verified && (
-        <span style={{ color: 'green', marginLeft: '5px' }}>✓</span>
+    <span>
+      {nip05Identifier && (
+        <>
+          <span>{nip05Identifier}</span>
+          {verificationResult && verificationResult.verified ? (
+            <span style={{ color: 'green', marginLeft: '5px' }}>✓</span>
+          ) : (
+            <span style={{ color: 'red', marginLeft: '5px' }}>✗</span>
+          )}
+        </>
       )}
-    </div>
+    </span>
   )
 }

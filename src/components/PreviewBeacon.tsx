@@ -5,6 +5,7 @@ import { isOpenNow } from '../libraries/decodeDay'
 import { IdentityType } from '../types/IdentityType'
 import { MapPin } from './MapPin'
 import { Place } from '../types/Place'
+import { Nip05Verifier } from './Nip05Verifier'
 
 type PreviewBeaconProps = {
   ownerProfile: IdentityType | null
@@ -92,6 +93,7 @@ export const PreviewBeacon = ({coords, ownerProfile, beaconData}: PreviewBeaconP
       console.log('failed to parse status', e)
     }
 
+    console.log(ownerProfile)
     let authorInfo = null
     const authorLink = nip19.npubEncode(beaconData.pubkey)
     authorInfo = 
@@ -99,7 +101,7 @@ export const PreviewBeacon = ({coords, ownerProfile, beaconData}: PreviewBeaconP
         <a href={`https://njump.me/${authorLink}`} target="_blank" rel="noopener noreferrer">
           <small className="ellipses">Created by {ownerProfile?.displayName || ownerProfile?.display_name || ownerProfile?.username || beaconData.pubkey}</small>
         </a>
-        <small className="ellipses">{ownerProfile?.nip05}</small>
+        <small><Nip05Verifier pubkey={ownerProfile?.pubkey} nip05Identifier={ownerProfile?.nip05} /></small>
       </p>
 
     return (
