@@ -94,7 +94,13 @@ export const PreviewBeacon = ({coords, ownerProfile, beaconData}: PreviewBeaconP
 
     let authorInfo = null
     const authorLink = nip19.npubEncode(beaconData.pubkey)
-    authorInfo = <p onClick={e => e.stopPropagation()}><a href={`https://njump.me/${authorLink}`} target="_blank" rel="noopener noreferrer"><small className="ellipses">Created by {ownerProfile?.displayName || ownerProfile?.display_name || ownerProfile?.username || beaconData.pubkey}</small></a></p>
+    authorInfo = 
+      <p onClick={e => e.stopPropagation()}>
+        <a href={`https://njump.me/${authorLink}`} target="_blank" rel="noopener noreferrer">
+          <small className="ellipses">Created by {ownerProfile?.displayName || ownerProfile?.display_name || ownerProfile?.username || beaconData.pubkey}</small>
+        </a>
+        <small className="ellipses">{ownerProfile?.nip05}</small>
+      </p>
 
     return (
       <div className="beacon__info">

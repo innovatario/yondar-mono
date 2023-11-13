@@ -16,6 +16,7 @@ import { ModeContext } from '../providers/ModeProvider'
 import { useNavigationTarget } from '../hooks/useNavigationTarget'
 import { TbNavigationFilled as NavIcon } from 'react-icons/tb'
 import { IdentityContext } from '../providers/IdentityProvider'
+import { Nip05Verifier } from './Nip05Verifier'
 
 type BeaconProps = {
   currentUserPubkey: string | undefined
@@ -158,13 +159,19 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, beaconData, modal, ope
     } catch (e) {
       console.log('failed to parse status', e)
     }
-
     let tele = null
     if (beaconData.content?.properties?.phone) tele = <a href={`tel:${beaconData.content.properties.phone}`}>{beaconData.content.properties.phone}</a>
 
+    console.log(ownerProfile)
     let authorInfo = null
     const authorLink = nip19.npubEncode(beaconData.pubkey)
-    authorInfo = <p onClick={e => e.stopPropagation()}><a href={`https://njump.me/${authorLink}`} target="_blank" rel="noopener noreferrer"><small className="ellipses">Created by {ownerProfile?.content?.displayName || ownerProfile?.content?.display_name || ownerProfile?.content?.username || beaconData.pubkey}</small></a></p>
+    authorInfo = 
+      <p onClick={e => e.stopPropagation()}>
+        <a href={`https://njump.me/${authorLink}`} target="_blank" rel="noopener noreferrer">
+          <small className="ellipses">Created by {ownerProfile?.content?.displayName || ownerProfile?.content?.display_name || ownerProfile?.content?.username || beaconData.pubkey}</small>
+        </a>
+        <small><Nip05Verifier pubkey={ownerProfile?.pubkey} nip05Identifier={ownerProfile?.content?.nip05} /></small>
+      </p>
 
     let edit = null
     try {
