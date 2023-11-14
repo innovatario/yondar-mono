@@ -86,26 +86,32 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
 
   // get profile for each chat
   useEffect(() => {
-    if (!chats.length ) return 
-    authorList: for (const chat of chats) {
-      for (const profile of profiles) {
-        if (chat.pubkey === profile.pubkey) {
-          continue authorList
-        }
-      }
-      // If we get here, we didn't find the profile in the list
-      const filter: Filter = { kinds: [0], authors: [chat.pubkey]}
-      console.log('getting profile for note:', filter)
-      const relayList: RelayList = getRelayList(relays, ['read'])
-      const profileSub = pool.sub(relayList, [filter])
-      profileSub.on('event', (event) => {
-        profileDispatch({ type: 'add', 
-          payload: {...event, content: JSON.parse(event.content) } 
-        })
+    if (!chats.length) return
+  
+    // Get an array of pubkeys that are missing in the profiles list
+    const missingPubkeys = chats
+      .map(chat => chat.pubkey)
+      .filter(pubkey => !profiles.some(profile => profile.pubkey === pubkey))
+  
+    if (missingPubkeys.length === 0) return
+  
+    // Prepare the filter for the missing profiles
+    const filter: Filter = { kinds: [0], authors: missingPubkeys }
+  
+    console.log('getting profiles for notes:', filter)
+  
+    const relayList: RelayList = getRelayList(relays, ['read'])
+    const profileSub = pool.sub(relayList, [filter])
+  
+    profileSub.on('event', (event) => {
+      profileDispatch({
+        type: 'add',
+        payload: { ...event, content: JSON.parse(event.content) }
       })
-      return () => {
-        profileSub.unsub()
-      }
+    })
+  
+    return () => {
+      profileSub.unsub()
     }
   }, [chats, profiles, relays, profileDispatch])
 
@@ -188,15 +194,22 @@ export const GeoChat = ({show, mapLngLat, zoom}: {show: boolean, mapLngLat: numb
       // console.log('Couldn\'t find geohash tag')
     }
     const profile = profiles.find(profile => profile.pubkey === chat.pubkey)  
-
     return (
       <div key={index+chat.id} className="chat">
         <p className="chat-date">{new Date(chat.created_at * 1000).toDateString()}</p>
         <p className="chat-text">{chat.content}</p>
+        {profile?.content?.picture && (
+          <img
+            className="chat-picture"
+            src={profile.content.picture}
+            alt="profile"
+          />
+        )}
         <small className="chat-author" onClick={() => {
           const npub = nip19.npubEncode(chat.pubkey)
           window.open(`https://njump.me/${npub}`, '_blank', 'noopener noreferrer')
-        }}>Author: {profile?.content?.display_name || chat.pubkey.substring(0,6)}</small><br></br>
+        }}>Author: {profile?.content?.display_name || chat.pubkey.substring(0,6)}</small>
+        <br></br>
         <small><Nip05Verifier pubkey={profile?.pubkey} nip05Identifier={profile?.content?.nip05} /></small>
         { geohash && <p className="chat-geohash">geo#{geohash}</p> }
       </div>
