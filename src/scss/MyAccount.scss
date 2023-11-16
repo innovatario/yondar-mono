@@ -1,0 +1,47 @@
+.profileBox {
+    border-radius: 1rem;
+    min-height: 30vh;
+    background-color: #000000;
+
+    .background-picture {
+        width: 100%;
+        height: 7rem;
+        border-radius: 1rem;
+        background-size: cover;
+        background-position: center;
+
+        @media screen and (min-width: 480px) {
+            height: 10rem;
+        }
+    }
+
+    .profile-picture {
+        width: 40%; // Adjust the percentage based on your design
+        max-width: 9rem; // Maximum width for larger screens
+        height: auto;
+        border-radius: 50%; // Use 50% for a circular profile picture
+        margin-left: 0.5rem;
+        @media screen and (min-width: 480px) {
+            width: 70%; // Adjust for larger screens
+        }
+    }
+    .profile-name-box {
+        display: flex;
+        flex-direction: column;
+        margin-left: 1rem;
+        margin-bottom: 1rem;
+    }
+    .profile-name {
+        font-size: 2.5rem;
+        font-weight: bold;
+        padding: 1rem 0 1rem 0;
+    }
+    
+
+    .about {
+        background-color: #1a1a1a;
+        border-radius: 1rem;
+        padding: 1rem;
+        white-space: break-spaces;
+    }
+}
