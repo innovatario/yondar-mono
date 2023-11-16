@@ -18,17 +18,14 @@ Go and check out the Problem tree here: https://nostrocket.org/problems/rocket/y
 
 ### Configuration
 
- **Rename the Environment File:**
+ 1. **Rename the Environment File:**
 
     Rename the `example.env` file to `.env` and paste with API token. 
 
-    ```bash
     mv example.env .env
-    ```
-
-    ```env
+ 
     VITE_MAPBOX_API=mapbox-token
-    ```
+
 
 ## License
 
