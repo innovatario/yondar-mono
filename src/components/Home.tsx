@@ -8,6 +8,11 @@ import { Footer } from './Footer'
 import { useLocation } from 'react-router-dom'
 import { PlacePreview } from './PlacePreview'
 import { useNaddr } from '../hooks/useNaddr'
+import { NsecSignInButton } from './NsecSigninButton'
+import { IdentityContext } from '../providers/IdentityProvider'
+import { IdentityContextType } from '../types/IdentityType'
+import { useContext } from 'react'
+import { LoginButton } from './LoginButton'
 
 export const Home = () => {
   const { search } = useLocation()
@@ -16,6 +21,8 @@ export const Home = () => {
   const pleaseLogin = params.get('pleaseLogin') === 'true'
 
   const showPreview = naddr && pleaseLogin ? <PlacePreview/> : null
+  const { identity } = useContext<IdentityContextType>(IdentityContext)
+  const loginButton = identity ? <LoginButton /> : null
 
   return (
     <div id="home">
@@ -23,10 +30,18 @@ export const Home = () => {
         <img className="logo" src={ logo } alt="Yondar Logo" />
         <br/>
       </div>
-      {showPreview ? showPreview : 
+      {showPreview ? (
+        showPreview
+      ) : (
         <div className="button-row">
-          <SignInButton/><SignUpButton/>
-        </div> }
+          {loginButton || (
+            <>
+            <SignInButton/><NsecSignInButton /><br></br><SignUpButton />   
+          
+            </>
+          )}
+        </div>
+      )}
       <div className="wrapper subsequent">
         <FAQ/>
         <Dataspace/>
