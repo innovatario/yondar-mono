@@ -7,7 +7,6 @@ import defaultBanner from '../assets/default-banner.png'
 import '../scss/MyAccount.scss'
 import { Nip05Verifier } from "./Nip05Verifier"
 
-
 export const MyAccount = () => {
   const {identity} = useContext<IdentityContextType>(IdentityContext)
   const [handleProfile, setHandleProfile] = useState(false)
@@ -28,9 +27,6 @@ export const MyAccount = () => {
 
   const displayName = identity?.display_name && identity?.display_name !== 'unknown' ? identity.display_name : identity?.displayName && identity?.displayName !== 'unknown' ? identity.displayName : 'unknown'
 
-  const about = identity?.about && identity.about !== 'unknown' ? identity.about : 'Just an anonymous lone Yondarer' 
-
-  const zapps = identity?.lud16 
   
   const $profile = (
     <>
@@ -40,20 +36,24 @@ export const MyAccount = () => {
         </div>
           <div className=" profile-name-box">
             <div className="profile-name">{displayName}</div>
-            <div><Nip05Verifier pubkey={identity?.pubkey} nip05Identifier={identity?.nip05} /></div>
+            {/* TODO: add external link to "see full profile" Link to njump */}
+            <Nip05Verifier pubkey={identity?.pubkey} nip05Identifier={identity?.nip05} />
           </div>
         <div className="about full">
-          <p className="">{about}</p>
-          <p>{zapps}</p>
+        List of Places I have added:
+        <br/>
+        List of Reviews I have wrote:
+        <br/>
+        List of Reviews I have liked:
         </div>
       </div>
+      <br/>
     </>
   )
 
   return (
     <>
     { handleProfile ? $profile : null }
-    <br/>
     <button onClick={handleClick}>View My Account</button>
     <br/>
     </>

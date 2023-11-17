@@ -1,7 +1,7 @@
 .profileBox {
     border-radius: 1rem;
     min-height: 30vh;
-    background-color: #000000;
+    background-color: #000000b2;
 
     .background-picture {
         width: 100%;
@@ -39,9 +39,13 @@
     
 
     .about {
+        margin:  1rem;
         background-color: #1a1a1a;
         border-radius: 1rem;
         padding: 1rem;
         white-space: break-spaces;
     }
+}
+.lud16 {
+    font-size: 1.6rem;
 }
