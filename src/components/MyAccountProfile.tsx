@@ -28,15 +28,17 @@ export const MyAccountProfile = () => {
         </div>
           <div className=" profile-name-box">
             <div className="profile-name">{displayName}</div>
-            {/* TODO: add external link to "see full profile" Link to njump */}
             <Nip05Verifier pubkey={identity?.pubkey} nip05Identifier={identity?.nip05} />
           </div>
         <div className="about full">
-        List of Places I have added:
-        <br/>
-        List of Reviews I have wrote:
-        <br/>
-        List of Reviews I have liked:
+            List of Places I have added:
+            <br/>
+            List of Reviews I have wrote:
+            <br/>
+            List of Reviews I have liked:
+            <br/>
+            Add a new Place:
+            <br/>
         </div>
       </div>
       <br/>
