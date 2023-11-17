@@ -16,13 +16,13 @@
     }
 
     .profile-picture {
-        width: 40%; // Adjust the percentage based on your design
-        max-width: 9rem; // Maximum width for larger screens
+        width: 35%; 
+        max-width: 9rem; 
         height: auto;
-        border-radius: 50%; // Use 50% for a circular profile picture
+        border-radius: 50%;
         margin-left: 0.5rem;
         @media screen and (min-width: 480px) {
-            width: 70%; // Adjust for larger screens
+            width: 70%; 
         }
     }
     .profile-name-box {
@@ -32,9 +32,14 @@
         margin-bottom: 1rem;
     }
     .profile-name {
-        font-size: 2.5rem;
+        font-size: 2rem;
         font-weight: bold;
         padding: 1rem 0 1rem 0;
+
+        @media screen and (min-width: 480px) {
+            font-size: 2.5rem;
+        }
+       
     }
     
 
