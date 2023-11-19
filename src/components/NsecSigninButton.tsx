@@ -17,7 +17,7 @@ export const NsecSignInButton = () => {
     try { 
       const sk = nip19.decode(nsec).data
       const pk= getPubkey(sk.toString())
-      const proceed = await encryptAndStorePrivateKey(nsec, false)
+      const proceed = await encryptAndStorePrivateKey(pk, false)
       if (proceed === false) return
       setIdentity({pubkey: pk})
       navigate('/login')
