@@ -5,6 +5,7 @@ import defaultDisplayImage from '../assets/default-display-image.png'
 import defaultBanner from '../assets/default-banner.png'
 import '../scss/MyAccountProfile.scss'
 import { Nip05Verifier } from "./Nip05Verifier"
+import {  FaLink  } from "react-icons/fa"
 
 export const MyAccountProfile = () => {
   const {identity} = useContext<IdentityContextType>(IdentityContext)
@@ -19,7 +20,9 @@ export const MyAccountProfile = () => {
     backgroundPosition: 'center',
   }
   const displayName = identity?.display_name && identity?.display_name !== 'unknown' ? identity.display_name : identity?.displayName && identity?.displayName !== 'unknown' ? identity.displayName : 'unknown'
-  
+  const website = identity?.website && identity?.website !== 'unknown' ? identity.website : 'unknown'
+  const websitepretty = website.replace('http://', '').replace('https://', '').replace('www.', '')
+
   const $profile = (
     <>
       <div className="profileBox">
@@ -29,6 +32,7 @@ export const MyAccountProfile = () => {
           <div className=" profile-name-box">
             <div className="profile-name">{displayName}</div>
             <Nip05Verifier pubkey={identity?.pubkey} nip05Identifier={identity?.nip05} />
+            <a className="flexcol" href={identity.website}><FaLink size={10} />{websitepretty}</a>
           </div>
         <div className="about full">
             List of Places I have added:
