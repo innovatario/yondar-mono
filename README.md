@@ -16,16 +16,19 @@ Go and check out the Problem tree here: https://nostrocket.org/problems/rocket/y
     npm run dev
     ```
 
-### Configuration
+### Configuration for Development
 
  1. **Rename the Environment File:**
 
-    Rename the `example.env` file to `.env` and paste with API token. 
+    ```bash
+    Rename the `example.env` file to `.env`. 
 
-    mv example.env .env
- 
-    VITE_MAPBOX_API=mapbox-token
+    Go to Mapbox.com create an account and copy the styles from the link underneath! 
 
+    Then use your 'pk.mapbox-token' and copy it into the .env file.
+
+    ```
+  [LINK TO STYLES HERE](https://api.mapbox.com/styles/v1/innovatar/clnw247z1001f01ri43tacxbg.html?title=copy&access_token=pk.eyJ1IjoiaW5ub3ZhdGFyIiwiYSI6ImNrNW9ldnR0ejA2OGIzZXBjYnM3eWlndnUifQ.yRId8fHdrFQvHGytpfiLCw&zoomwheel=true&fresh=true#15.13/)
 
 ## License
 
