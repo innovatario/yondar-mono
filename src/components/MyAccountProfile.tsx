@@ -29,14 +29,14 @@ export const MyAccountProfile = () => {
         <div className="flexcol align-center background-picture" style={backgroundStyle}>
           <img className="profile-picture" src={displayImage} alt={`${displayName}'s profile picture`}/>&nbsp;
         </div>
-          <div className=" profile-name-box">
+          <div className="profile-name-box">
             <div className="profile-name">{displayName}</div>
             <Nip05Verifier pubkey={identity?.pubkey} nip05Identifier={identity?.nip05} />
-                <a href={website} target="_blank" rel="noreferrer" className="website-link">
-                <FaLink size={10}/> {websitepretty}
-                </a>
+            <a href={website} target="_blank" rel="noreferrer" className="website-link"><FaLink size={10}/> {websitepretty}</a>
           </div>
-        <div className="about full">
+          {/* FUTURE TODO: rendering here the personal stuff  */}
+
+        {/* <div className="about full">
             List of Places I have added:
             <br/>
             List of Reviews I have wrote:
@@ -45,7 +45,7 @@ export const MyAccountProfile = () => {
             <br/>
             Add a new Place:
             <br/>
-        </div>
+        </div> */}
       </div>
       <br/>
     </>
@@ -53,6 +53,7 @@ export const MyAccountProfile = () => {
 
   return (
     <>
+    {/* need to make an component out of this for reuse */}
         { $profile }
     </>
   )
