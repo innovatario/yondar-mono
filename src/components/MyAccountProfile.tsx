@@ -32,7 +32,9 @@ export const MyAccountProfile = () => {
           <div className=" profile-name-box">
             <div className="profile-name">{displayName}</div>
             <Nip05Verifier pubkey={identity?.pubkey} nip05Identifier={identity?.nip05} />
-            <a className="flexcol" href={identity.website}><FaLink size={10} />{websitepretty}</a>
+                <a href={website} target="_blank" rel="noreferrer" className="website-link">
+                <FaLink size={10}/> {websitepretty}
+                </a>
           </div>
         <div className="about full">
             List of Places I have added:

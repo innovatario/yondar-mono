@@ -54,3 +54,19 @@
 .lud16 {
     font-size: 1.6rem;
 }
+.website-link {
+    display: flex;
+    align-items: center;
+
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    &:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+    svg {
+        top: 0.1rem;
+        margin-right: 0.25rem;
+      }
+}
