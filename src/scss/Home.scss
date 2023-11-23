@@ -6,7 +6,7 @@
 }
 
 .wrapper {
-  padding: 2rem;
+  padding: 2rem 0;
   max-width: 100%;
   & + .wrapper, &.subsequent {
     padding-top: 0;
