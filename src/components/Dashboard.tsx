@@ -28,6 +28,8 @@ export const Dashboard = () => {
     const isNpub = param && param.startsWith('npub')
     if (isNpub) {
       setShowProfile(true)
+    } else {
+      setShowProfile(false)
     }
   }, [param])
 
