@@ -1,14 +1,16 @@
-import { useContext } from "react"
-import { IdentityContext } from "../providers/IdentityProvider"
-import { IdentityContextType } from "../types/IdentityType"
+
+import { IdentityType } from "../types/IdentityType"
 import defaultDisplayImage from '../assets/default-display-image.png'
 import defaultBanner from '../assets/default-banner.png'
 import '../scss/MyAccountProfile.scss'
 import { Nip05Verifier } from "./Nip05Verifier"
 import {  FaLink  } from "react-icons/fa"
 
-export const MyAccountProfile = () => {
-  const {identity} = useContext<IdentityContextType>(IdentityContext)
+interface AccountProfileProps {
+  identity: IdentityType;
+}
+
+export const AccountProfile = ({ identity }: AccountProfileProps) => {
   
   const displayImage = identity?.picture && identity.picture !== 'unknown' ? identity.picture : defaultDisplayImage
 
@@ -53,7 +55,6 @@ export const MyAccountProfile = () => {
 
   return (
     <>
-    {/* need to make an component out of this for reuse */}
         { $profile }
     </>
   )

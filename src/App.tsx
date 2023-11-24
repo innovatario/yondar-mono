@@ -12,6 +12,7 @@ import { NaddrProvider } from './providers/NaddrProvider.tsx'
 import { Logout } from './components/Logout.tsx'
 import { ModeProvider } from './providers/ModeProvider.tsx'
 import { NavigationTargetProvider } from './providers/NavigationTargetProvider.tsx'
+import { ViewProfile } from './components/ViewProfile.tsx'
 
 function App() {
 
@@ -30,7 +31,8 @@ function App() {
                     <Routes>
                       <Route path="/" element={<Home/>}/>
                       <Route path="/login" element={<Login/>}/>
-                      <Route path="/dashboard" element={<DashboardGuard/>}/>
+                      <Route path="/dashboard/:param?" element={<DashboardGuard/>}/>
+                      {/* <Route path="/dashboard/:npub" element={<ViewProfile/>}/> */}
                       <Route path="/logout" element={<Logout/>}/>
                       <Route path="/place/:naddr" element={<DashboardGuard/>}/>
                     </Routes>
