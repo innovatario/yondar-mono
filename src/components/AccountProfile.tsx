@@ -34,7 +34,7 @@ export const AccountProfile = ({ identity }: AccountProfileProps) => {
           <div className="profile-name-box">
             <div className="profile-name">{displayName}</div>
             <Nip05Verifier pubkey={identity?.pubkey} nip05Identifier={identity?.nip05} />
-            <a href={website} target="_blank" rel="noreferrer" className="website-link"><FaLink size={10}/> {websitepretty}</a>
+            <a href={website} target="_blank" rel="noreferrer" className="website-link"><FaLink size={10}/>{websitepretty}</a>
           </div>
           {/* FUTURE TODO: rendering here the personal stuff  */}
 

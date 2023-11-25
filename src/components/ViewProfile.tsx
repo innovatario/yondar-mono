@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom"
 
 interface ViewProfileProps {
   npub: string;
-  children?: React.ReactNode;
 }
 
 export const ViewProfile = ({ npub }: ViewProfileProps) => {
@@ -25,8 +24,8 @@ export const ViewProfile = ({ npub }: ViewProfileProps) => {
     map && console.log("zoom out")
     map &&
       map.flyTo({
-        zoom: 3,
-        duration: 2000,
+        zoom: 15.5,
+        duration: 1000,
       })
   }, [map])
 
