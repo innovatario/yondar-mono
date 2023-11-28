@@ -44,14 +44,21 @@ export const ViewProfile = ({ npub }: ViewProfileProps) => {
     setToggle(!toggle)
     navigate("/dashboard")
   }
-
+  const handleLink = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault()
+    if (!metadata) return
+    const npub = nip19.npubEncode(metadata.pubkey)
+    window.open(`https://njump.me/${npub}`, '_blank', 'noopener noreferrer')
+  }
   const outerClasses =
     "component-logobutton " + (toggle ? "active" : "inactive")
 
   const profile = (
     <div className="component-logobutton-menu">
       <div className="wrapper">
-        <>{metadata ? <AccountProfile identity={metadata} /> : null}</>{" "}
+        <>{metadata ? <AccountProfile identity={metadata} /> : null }</>
+        <>{ metadata ? <button onClick={handleLink}>Go to Full Account</button>: null }</>
+
       </div>
     </div>
   )
@@ -60,7 +67,6 @@ export const ViewProfile = ({ npub }: ViewProfileProps) => {
     <>
       <div className={outerClasses} onClick={doToggle}>
         {toggle && metadata ? profile : null}
-    
       </div>
     </>
   )
