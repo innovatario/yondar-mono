@@ -23,7 +23,7 @@ Go and check out the Problem tree here: https://nostrocket.org/problems/rocket/y
     ```bash
     Rename the `example.env` file to `.env`. 
 
-    Go to Mapbox.com create an account and copy the styles from the link underneath! 
+    Go to Mapbox.com create an account and copy the map styles from the link underneath! 
 
     Then use your 'pk.mapbox-token' and copy it into the .env file.
 

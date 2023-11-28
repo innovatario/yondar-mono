@@ -170,6 +170,8 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, beaconData, modal, ope
           <small className="ellipses">Created by {ownerProfile?.content?.displayName || ownerProfile?.content?.display_name || ownerProfile?.content?.username || beaconData.pubkey}</small>
         </a>
         <small><Nip05Verifier pubkey={ownerProfile?.pubkey} nip05Identifier={ownerProfile?.content?.nip05} /></small>
+      {/* could add here a lud16 button  */}
+      {/* <Lud16Account lud16={ownerProfile?.content.lud16} /> */}
       </p>
 
     let edit = null
