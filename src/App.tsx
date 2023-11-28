@@ -12,7 +12,6 @@ import { NaddrProvider } from './providers/NaddrProvider.tsx'
 import { Logout } from './components/Logout.tsx'
 import { ModeProvider } from './providers/ModeProvider.tsx'
 import { NavigationTargetProvider } from './providers/NavigationTargetProvider.tsx'
-import { ViewProfile } from './components/ViewProfile.tsx'
 
 function App() {
 
