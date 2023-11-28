@@ -21,9 +21,9 @@ export const AccountProfile = ({ identity }: AccountProfileProps) => {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   }
-  const displayName = identity?.display_name && identity?.display_name !== 'unknown' ? identity.display_name : identity?.displayName && identity?.displayName !== 'unknown' ? identity.displayName : 'unknown'
-  const website = identity?.website && identity?.website !== 'unknown' ? identity.website : 'unknown'
-  const websitepretty = website.replace('http://', '').replace('https://', '').replace('www.', '')
+  const displayName = identity?.display_name && identity?.display_name !== 'unknown' ? identity.display_name : identity?.displayName && identity?.displayName !== 'unknown' ? identity.displayName : 'unknown' && identity?.name && identity?.name !== 'unknown' ? identity.name : 'unknown'
+  const website = identity?.website && identity?.website !== null ? identity.website : null
+  const websitepretty = website?.replace('http://', '').replace('https://', '').replace('www.', '')
 
   const $profile = (
     <>
@@ -34,7 +34,7 @@ export const AccountProfile = ({ identity }: AccountProfileProps) => {
           <div className="profile-name-box">
             <div className="profile-name">{displayName}</div>
             <Nip05Verifier pubkey={identity?.pubkey} nip05Identifier={identity?.nip05} />
-            <a href={website} target="_blank" rel="noreferrer" className="website-link"><FaLink size={10}/>{websitepretty}</a>
+            { website ? <a href={website} target="_blank" rel="noreferrer" className="website-link"><FaLink size={10}/>{websitepretty}</a> : null }
           </div>
           {/* FUTURE TODO: rendering here the personal stuff  */}
 
