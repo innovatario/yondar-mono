@@ -32,7 +32,6 @@ function App() {
                       <Route path="/" element={<Home/>}/>
                       <Route path="/login" element={<Login/>}/>
                       <Route path="/dashboard/:param?" element={<DashboardGuard/>}/>
-                      {/* <Route path="/dashboard/:npub" element={<ViewProfile/>}/> */}
                       <Route path="/logout" element={<Logout/>}/>
                       <Route path="/place/:naddr" element={<DashboardGuard/>}/>
                     </Routes>

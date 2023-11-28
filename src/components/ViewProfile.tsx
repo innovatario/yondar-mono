@@ -10,14 +10,14 @@ import { useMap } from "react-map-gl"
 import { useNavigate } from "react-router-dom"
 
 interface ViewProfileProps {
-  npub: string;
+  npub?: string;
 }
 
 export const ViewProfile = ({ npub }: ViewProfileProps) => {
   const [metadata, setMetadata] = useState<IdentityType>()
-  const hex = npub ? nip19.decode(npub).data.toString() : undefined
-  const { current: map } = useMap()
   const navigate = useNavigate()
+  const hex = npub ? nip19.decode(npub).data.toString() : null
+  const { current: map } = useMap()
 
 
   useEffect(() => {
@@ -31,9 +31,13 @@ export const ViewProfile = ({ npub }: ViewProfileProps) => {
 
   useEffect(() => {
     const getUserProfile = async () => {
-      // getting users metadata potential later more stuff like reviews, list of places etc
-      const loadedProfile = await getMyProfile(hex as string)
-      setMetadata(loadedProfile)
+      try {
+        const loadedProfile = await getMyProfile(hex as string)
+        setMetadata(loadedProfile)
+      } catch (error) {
+        console.error('Error decoding npub:', error)
+        // Handle the error as needed
+      }
     }
     getUserProfile()
   }, [hex])

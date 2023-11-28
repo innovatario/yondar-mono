@@ -15,6 +15,8 @@ import { DraftPlaceContext } from "../providers/DraftPlaceProvider.tsx"
 import { DraftPlaceContextType } from "../types/Place.tsx"
 import { ViewProfile } from "./ViewProfile.tsx"
 import { useParams } from "react-router-dom"
+import { nip19 } from "nostr-tools"
+import { isValidNpub } from "../libraries/Nostr.ts"
 
 export const Dashboard = () => {
   const {setDraftPlace} = useContext<DraftPlaceContextType>(DraftPlaceContext)
@@ -22,13 +24,17 @@ export const Dashboard = () => {
   const [showProfile, setShowProfile] = useState(false)
   const [userInteracted, setUserInteracted] = useState(false)
   const { param } = useParams() 
-
+  
   useEffect(() => {
-    // TODO: proper error handling if param is npub123 or something will crash...
-    const isNpub = param && param.startsWith('npub')
+    // check if npub is valid
+    const isNpub = isValidNpub(param as string)
+    
     if (isNpub) {
       setShowProfile(true)
     } else {
+      // Handle the case when it's not a valid 'npub'
+      console.warn('Invalid npub value:', param)
+      //returns to dashboard
       setShowProfile(false)
     }
   }, [param])
@@ -55,7 +61,7 @@ export const Dashboard = () => {
             <ExportIdentityButton/>
             <WipeIdentityButton/>
           </LogoButton>
-          { showProfile ? <ViewProfile npub={param || ""}/> : null }
+          { showProfile ? <ViewProfile npub={param}/> : null }
         </YondarMap>
         { modal?.placeForm ? modal.placeForm === 'edit' ? <PlaceForm edit={true}/> : <PlaceForm edit={false}/> : null }
       </GeolocationProvider>
