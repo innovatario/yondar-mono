@@ -14,8 +14,7 @@ import { freshDefaultPlace } from "../libraries/defaultPlace.tsx"
 import { DraftPlaceContext } from "../providers/DraftPlaceProvider.tsx"
 import { DraftPlaceContextType } from "../types/Place.tsx"
 import { ViewProfile } from "./ViewProfile.tsx"
-import { useParams } from "react-router-dom"
-import { nip19 } from "nostr-tools"
+import { useNavigate, useParams } from "react-router-dom"
 import { isValidNpub } from "../libraries/Nostr.ts"
 
 export const Dashboard = () => {
@@ -23,6 +22,7 @@ export const Dashboard = () => {
   const {modal} = useContext<ModalContextType>(ModalContext)
   const [showProfile, setShowProfile] = useState(false)
   const [userInteracted, setUserInteracted] = useState(false)
+  const navigate = useNavigate()
   const { param } = useParams() 
   
   useEffect(() => {
@@ -33,11 +33,11 @@ export const Dashboard = () => {
       setShowProfile(true)
     } else {
       // Handle the case when it's not a valid 'npub'
-      console.warn('Invalid npub value:', param)
       //returns to dashboard
+      navigate("/dashboard")
       setShowProfile(false)
     }
-  }, [param])
+  }, [navigate, param])
 
   // only request geolocation after the user interacts with the page
   const initialInteraction = () => {
