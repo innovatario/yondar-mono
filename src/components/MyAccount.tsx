@@ -2,7 +2,7 @@ import { useContext, useState } from "react"
 import { IdentityContext } from "../providers/IdentityProvider"
 import { IdentityContextType } from "../types/IdentityType"
 import { nip19 } from "nostr-tools"
-import { MyAccountProfile } from "./MyAccountProfile"
+import { AccountProfile } from "./AccountProfile"
 
 export const MyAccount = () => {
   const {identity} = useContext<IdentityContextType>(IdentityContext)
@@ -20,7 +20,7 @@ export const MyAccount = () => {
 
   return (
     <>
-    { handleProfile ? <MyAccountProfile/> : null }
+    { handleProfile ? <AccountProfile identity={identity}/> : null }
     { handleProfile ? <button onClick={handleLink}>Go to Full Account</button>: <button onClick={handleClick}>View My Account</button> }
     <br/>
     </>

@@ -30,7 +30,7 @@ function App() {
                     <Routes>
                       <Route path="/" element={<Home/>}/>
                       <Route path="/login" element={<Login/>}/>
-                      <Route path="/dashboard" element={<DashboardGuard/>}/>
+                      <Route path="/dashboard/:param?" element={<DashboardGuard/>}/>
                       <Route path="/logout" element={<Logout/>}/>
                       <Route path="/place/:naddr" element={<DashboardGuard/>}/>
                     </Routes>

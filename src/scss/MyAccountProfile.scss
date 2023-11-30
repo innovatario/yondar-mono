@@ -1,7 +1,7 @@
 .profileBox {
     border-radius: 1rem;
     min-height: 25vh;
-    background-color: #000000b2;
+    background-color: #333333db;
 
     .background-picture {
         width: 100%;
@@ -11,13 +11,13 @@
         background-position: center;
 
         @media screen and (min-width: 480px) {
-            height: 10rem;
+            height: 9rem;
         }
     }
 
     .profile-picture {
         width: 35%; 
-        max-width: 9rem; 
+        max-width: 7.5rem; 
         height: auto;
         border-radius: 50%;
         margin-left: 0.5rem;
@@ -32,6 +32,7 @@
         margin-bottom: 1rem;
     }
     .profile-name {
+        line-height: 1;
         font-size: 2rem;
         font-weight: bold;
         padding: 1rem 0 1rem 0;
@@ -39,9 +40,7 @@
         @media screen and (min-width: 480px) {
             font-size: 2.5rem;
         }
-       
     }
-    
 
     .about {
         margin:  1rem;
@@ -51,13 +50,14 @@
         white-space: break-spaces;
     }
 }
+
 .lud16 {
     font-size: 1.6rem;
 }
+
 .website-link {
     display: flex;
     align-items: center;
-
     color: #fff;
     text-decoration: none;
     font-weight: bold;
@@ -69,4 +69,5 @@
         top: 0.1rem;
         margin-right: 0.25rem;
       }
+     
 }

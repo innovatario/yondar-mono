@@ -38,6 +38,15 @@ a {
 a:hover {
   color: #535bf2;
 }
+.fake-link {
+  font-weight: 500;
+  color: #646cff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.fake-link:hover {
+  color: #535bf2;
+}
 
 body {
   margin: 0;
