@@ -5,6 +5,8 @@ export enum Kind {
   Place = 37515,
 }
 
+export type EventWithoutContent = Omit<Event<37515>, 'content'>
+
 export type DraftPlace = {
   kind: 37515,
   tags: string[][],
@@ -21,38 +23,32 @@ export type Place = {
   sig: string,
 }
 
-export type EventWithoutContent = Omit<Event<37515>, 'content'>
-
 export type PlaceProperties = {
+  type: "FeatureCollection",
+  features: Feature[],
+}
+
+export type Feature = {
   type: "Feature",
   geometry: {
-    coordinates: [number, number],
-    type: "Point"
+    coordinates: 
+      [number, number] // Point
+      | [number, number][] // LineString, MultiPoint
+      | [number, number][][] // Polygon, MultiLineString
+      | [number, number][][][], // MultiPolygon
+    type: "Point" | "LineString" | "Polygon" | "MultiPoint" | "MultiLineString" | "MultiPolygon"
   },
   properties: {
-    name: string,
-    abbrev?: string,
-    description: string,
-    address?: PlaceAddress,
-    type: GooglePlaceType,
-    status?: GooglePlaceStatus,
-    website?: string,
-    phone?: string,
-    hours?: string,
-    // string index
+    schema: undefined | {
+      [key: string]: string | undefined
+    },
+    osm: undefined | {
+      [key: string]: string | undefined
+    }
     [key: string]: string | object | undefined
   }
 }
 
-export type PlaceAddress = {
-  "street-address"?: string,
-  locality?: string, // city
-  region?: string, // state
-  "country-name"?: string,
-  "postal-code"?: string,
-}
-
-export type AddressKeys = keyof PlaceAddress
 
 export type DraftPlaceProviderProps = {
   children: React.ReactNode
