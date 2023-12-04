@@ -17,6 +17,7 @@ import { useNavigationTarget } from '../hooks/useNavigationTarget'
 import { TbNavigationFilled as NavIcon } from 'react-icons/tb'
 import { IdentityContext } from '../providers/IdentityProvider'
 import { Nip05Verifier } from './Nip05Verifier'
+import { freshDefaultPlace } from '../libraries/defaultPlace'
 
 type BeaconProps = {
   currentUserPubkey: string | undefined
@@ -69,7 +70,13 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, beaconData, modal, ope
     }
     setCursorPosition(lnglat)
     // load place data into modal 
-    const newPlace = beaconToDraftPlace(beaconData, relayList)
+    let newPlace
+    try {
+      newPlace = beaconToDraftPlace(beaconData, relayList)
+    } catch (e) {
+      console.warn("Place's data was invalid; could not load to edit.",e,beaconData)
+      newPlace = freshDefaultPlace()
+    }
     // set draft place
     setDraftPlace(newPlace)
     modal?.setPlaceForm('edit')

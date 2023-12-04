@@ -38,15 +38,57 @@ export type Feature = {
       | [number, number][][][], // MultiPolygon
     type: "Point" | "LineString" | "Polygon" | "MultiPoint" | "MultiLineString" | "MultiPolygon"
   },
+  properties: FeatureProperties
+}
+
+export type FeatureProperties = {
+  schema: undefined | {
+    [key: string]: string | undefined
+  },
+  osm: undefined | {
+    [key: string]: string | undefined
+  }
+  [key: string]: string | object | undefined
+}
+
+// OldPlace is the original Place kind 37515 definition. It is only here for backwards compatibility.
+export type OldPlace = {
+  kind: 37515,
+  tags: string[][],
+  content: OldPlaceProperties,
+  created_at: number,
+  pubkey: string,
+  id: string,
+  sig: string,
+}
+
+export type OldPlaceProperties = {
+  type: "Feature",
+  geometry: {
+    coordinates: [number, number],
+    type: "Point"
+  },
   properties: {
-    schema: undefined | {
-      [key: string]: string | undefined
-    },
-    osm: undefined | {
-      [key: string]: string | undefined
-    }
+    name: string,
+    abbrev?: string,
+    description: string,
+    address?: OldPlaceAddress,
+    type: GooglePlaceType,
+    status?: GooglePlaceStatus,
+    website?: string,
+    phone?: string,
+    hours?: string,
+    // string index
     [key: string]: string | object | undefined
   }
+}
+
+export type OldPlaceAddress = {
+  "street-address"?: string,
+  locality?: string, // city
+  region?: string, // state
+  "country-name"?: string,
+  "postal-code"?: string,
 }
 
 

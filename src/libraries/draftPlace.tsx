@@ -1,5 +1,5 @@
 import { nip19 } from "nostr-tools"
-import { DraftPlace, GooglePlaceStatus, GooglePlaceType, Place } from "../types/Place"
+import { DraftPlace, FeatureProperties, GooglePlaceStatus, GooglePlaceType, OldPlace, Place } from "../types/Place"
 import { RelayList } from "../types/NostrRelay"
 import { getTag } from "./Nostr"
 
@@ -7,25 +7,7 @@ import { getTag } from "./Nostr"
  * 
  * @returns a DraftPlace object based on the form data
  */
-export const createDraftPlace = (
-  name: string,
-  geohash: string,
-  naddr: string,
-  description: string,
-  type: GooglePlaceType,
-  coords: [number, number],
-  dtag: string,
-  abbrev?: string,
-  streetAddress?: string,
-  locality?: string,
-  region?: string,
-  countryName?: string,
-  postalCode?: string,
-  status?: GooglePlaceStatus,
-  hours?: string,
-  website?: string,
-  phone?: string
-) => {
+export const createDraftPlace = (featureProperties: FeatureProperties, dtag, geohash, naddr, coords) => {
   const newPlace: DraftPlace = {
     kind: 37515,
     tags: [
@@ -37,29 +19,20 @@ export const createDraftPlace = (
       ],
     ],
     content: {
-      type: "Feature",
-      geometry: {
-        coordinates: [coords[0], coords[1]],
-        type: "Point",
-      },
-      properties: {
-        name,
-        abbrev,
-        description,
-        address: {
-          "street-address": streetAddress,
-          locality,
-          region,
-          "country-name": countryName,
-          "postal-code": postalCode,
-        },
-        type,
-        status,
-        hours,
-        website,
-        phone,
-      },
-    },
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          geometry: {
+            coordinates: [coords[0], coords[1]],
+            type: "Point",
+          },
+          properties: {
+            ...featureProperties
+          },
+        }
+      ]
+    }
   }
   return newPlace
 }
@@ -73,15 +46,49 @@ export const beaconToDraftPlace = (beacon: Place, relayList: RelayList) => {
   const geohash = gtag ? gtag[1] : ""
   const alttag = beacon.tags.find(getTag("alt"))
   const previousAlt = alttag ? alttag[1] : null
+  let naddr
   let alt
   if (!previousAlt) {
     // no previous alt tag with naddr, create a new one
-    const naddr = createNaddr(beacon.pubkey, beacon.content.properties.name, relayList.sort( (a, b) => a.length - b.length).slice(0, 3))
+    naddr = createNaddr(beacon.pubkey, beacon.content.properties.name, relayList.sort( (a, b) => a.length - b.length).slice(0, 3))
 
     alt = `This event represents a place. View it on https://go.yondar.me/place/${naddr}`
   } else {
     // use the previous alt tag
     alt = previousAlt
+  }
+  // determine if the content is formatted in the previous "OldPlace" format or the new format
+  if (beacon.content.type === "FeatureCollection") {
+    // new format
+  } else {
+    // old format
+    // convert to new format
+    const oldbeacon = beacon as unknown as OldPlace
+    return createDraftPlace(
+      {
+        schema: {
+          name: oldbeacon.content.properties.name,
+          description: oldbeacon.content?.properties?.description,
+          alternateName: oldbeacon.content?.properties?.abbrev,
+        },
+        osm: {
+          "google:type": oldbeacon.content?.properties?.type as GooglePlaceType,
+          "google:status": oldbeacon.content?.properties?.status as GooglePlaceStatus,
+          "google:hours": oldbeacon.content?.properties?.hours,
+          "website": oldbeacon.content?.properties?.website,
+          "phone": oldbeacon.content?.properties?.phone,
+          "addr:street": oldbeacon.content?.properties?.address?.["street-address"],
+          "addr:city": oldbeacon.content?.properties?.address?.locality,
+          "addr:state": oldbeacon.content?.properties?.address?.region,
+          "addr:country": oldbeacon.content?.properties?.address?.["country-name"],
+          "addr:postcode": oldbeacon.content?.properties?.address?.["postal-code"],
+        }
+      },
+      unique,
+      geohash,
+      naddr,
+      beacon.content.geometry.coordinates
+    )
   }
   return createDraftPlace(
     beacon.content.properties.name,
