@@ -1,4 +1,4 @@
-import { SimplePool, Filter, Sub, Event } from "nostr-tools"
+import { SimplePool, Filter, Sub, Event, nip19 } from "nostr-tools"
 import { IdentityType } from "../types/IdentityType"
 import { RelayList, RelayObject, RelayReadWrite, FilterReadWrite } from "../types/NostrRelay"
 import { ContactObject } from "../types/NostrContact"
@@ -154,4 +154,18 @@ export const getMyContacts = async (pubkey: string): Promise<ContactObject> => {
     console.warn('Failed to parse contacts from user metadata.')
     return defaultContacts
   }
+}
+
+export function isValidNpub(param: string) {
+  if (param === '') return false
+  if (param?.match(/^[a-f0-9]{64}$/)) return false
+  if (param !== undefined){
+    try {
+      if (nip19.decode(param).type === 'npub') return true
+    } catch (error) {
+      console.error('Error decoding not valid npub:', error)
+      return false
+    }
+  }
+  return false
 }

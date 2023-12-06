@@ -44,5 +44,12 @@
       width: min( max(30vw, 300px), 100%);
       margin: 0 auto;
     }
+    .loading {
+      font-size: 2.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: start;
+      margin-top: 10vh; ;
+    }
   }
 }

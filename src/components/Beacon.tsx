@@ -17,6 +17,7 @@ import { useNavigationTarget } from '../hooks/useNavigationTarget'
 import { TbNavigationFilled as NavIcon } from 'react-icons/tb'
 import { IdentityContext } from '../providers/IdentityProvider'
 import { Nip05Verifier } from './Nip05Verifier'
+import { useNavigate } from 'react-router-dom'
 import { freshDefaultPlace } from '../libraries/defaultPlace'
 
 type BeaconProps = {
@@ -46,6 +47,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, beaconData, modal, ope
   const picture = ownerProfile?.content?.picture
   const {setMode} = useContext(ModeContext)
   const {setTarget} = useNavigationTarget()
+  const navigate = useNavigate()
 
   const toggle = () => {
     if (!modal?.placeForm) {
@@ -91,6 +93,12 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, beaconData, modal, ope
     navigator.clipboard.writeText(url)
     // show toast
     setShared(true)
+  }
+
+  const handleShowProfile = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation()
+    toggle()
+    navigate(`/dashboard/${nip19.npubEncode(beaconData.pubkey)}`)
   }
 
   useEffect(() => {
@@ -170,13 +178,12 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, beaconData, modal, ope
     if (beaconData.content?.properties?.phone) tele = <a href={`tel:${beaconData.content.properties.phone}`}>{beaconData.content.properties.phone}</a>
 
     let authorInfo = null
-    const authorLink = nip19.npubEncode(beaconData.pubkey)
     authorInfo = 
-      <p onClick={e => e.stopPropagation()}>
-        <a href={`https://njump.me/${authorLink}`} target="_blank" rel="noopener noreferrer">
-          <small className="ellipses">Created by {ownerProfile?.content?.displayName || ownerProfile?.content?.display_name || ownerProfile?.content?.username || beaconData.pubkey}</small>
-        </a>
+      <p onClick={handleShowProfile}>
+          <small className="ellipses fake-link">Created by {ownerProfile?.content?.displayName || ownerProfile?.content?.display_name || ownerProfile?.content?.username || beaconData.pubkey}</small>
         <small><Nip05Verifier pubkey={ownerProfile?.pubkey} nip05Identifier={ownerProfile?.content?.nip05} /></small>
+      {/* could add here a lud16 button  */}
+      {/* <Lud16Account lud16={ownerProfile?.content.lud16} /> */}
       </p>
 
     let edit = null
