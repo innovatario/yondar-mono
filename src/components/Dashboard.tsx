@@ -28,14 +28,16 @@ export const Dashboard = () => {
   useEffect(() => {
     // check if npub is valid
     const isNpub = isValidNpub(param as string)
-    
+    console.log('param',param,'isNpub',isNpub)
     if (isNpub) {
       setShowProfile(true)
-    } else {
-      // Handle the case when it's not a valid 'npub'
-      //returns to dashboard
+    } else if (param) {
+      // Handle the case when param is not a valid 'npub'
       navigate("/dashboard")
       setShowProfile(false)
+    } else {
+      setShowProfile(false)
+      // don't do anything else here if param is undefined because this would prevent naddrs for places from being accessible when you click a place.
     }
   }, [navigate, param])
 
