@@ -14,7 +14,7 @@ import { freshDefaultPlace } from "../libraries/defaultPlace.tsx"
 import { DraftPlaceContext } from "../providers/DraftPlaceProvider.tsx"
 import { DraftPlaceContextType } from "../types/Place.tsx"
 import { ViewProfile } from "./ViewProfile.tsx"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams, useLocation } from "react-router-dom"
 import { isValidNpub } from "../libraries/Nostr.ts"
 
 export const Dashboard = () => {
@@ -24,12 +24,16 @@ export const Dashboard = () => {
   const [userInteracted, setUserInteracted] = useState(false)
   const navigate = useNavigate()
   const { param } = useParams() 
+  const location = useLocation()
   
   useEffect(() => {
     // check if npub is valid
     const isNpub = isValidNpub(param as string)
-    console.log('param',param,'isNpub',isNpub)
     if (isNpub) {
+      // if we are at /dashboard/<npub> then redirect to /user/<npub>
+      if (location.pathname.startsWith('/dashboard')) {
+        navigate('/user/' + param)
+      }
       setShowProfile(true)
     } else if (param) {
       // Handle the case when param is not a valid 'npub'

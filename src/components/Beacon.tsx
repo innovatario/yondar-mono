@@ -91,7 +91,7 @@ export const Beacon = ({ currentUserPubkey, ownerProfile, beaconData, modal, ope
   const handleShowProfile = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
     toggle()
-    navigate(`/dashboard/${nip19.npubEncode(beaconData.pubkey)}`)
+    navigate(`/user/${nip19.npubEncode(beaconData.pubkey)}`)
   }
 
   useEffect(() => {

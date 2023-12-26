@@ -33,6 +33,7 @@ function App() {
                       <Route path="/dashboard/:param?" element={<DashboardGuard/>}/>
                       <Route path="/logout" element={<Logout/>}/>
                       <Route path="/place/:naddr" element={<DashboardGuard/>}/>
+                      <Route path="/user/:param?" element={<DashboardGuard/>}/>
                     </Routes>
                   </ModeProvider>
                 </ModalProvider>
