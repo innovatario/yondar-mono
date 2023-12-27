@@ -20,6 +20,7 @@ import { useNaddr } from '../hooks/useNaddr'
 import { useNavigate } from 'react-router-dom'
 import { createNaddr } from '../libraries/draftPlace'
 import { getLatitudeOffset, getLongitudeOffset } from '../libraries/mapUtils'
+import beaconMarker from '../assets/marker.png'
 
 export const MapPlaces = ({global}: {global: boolean}) => {
   const [beacons, beaconsDispatch] = useReducer(beaconsReducer, {})
@@ -36,28 +37,41 @@ export const MapPlaces = ({global}: {global: boolean}) => {
   const navigate = useNavigate()
   const [naddrZoom, setNaddrZoom] = useState<boolean>(false) // tells whether we are currently zooming on a beacon from a /place/:naddr URL
 
+  // add icon for beacons
   useEffect( () => {
-    // when we get a new beaconOwners, load their profile image and load it into the map so we can use it in the layer.
-    Object.values(beaconOwners).forEach( owner => {
-      if (owner.content.picture) {
-        const img = new Image()
-        img.width = 50
-        img.height = 50
-        img.src = owner.content.picture
-        img.onload = () => {
-          if (map) {
-            map.loadImage(img.src, (error, image) => {
-              if (error) console.log(error) //throw error
-              if (map.hasImage(owner.pubkey)) {
-                map.removeImage(owner.pubkey)
-              }
-              map.addImage(owner.pubkey, image as HTMLImageElement)
-            })
-          }
+    if (map) {
+      map.loadImage(beaconMarker, (error, image) => {
+        if (error) console.log(error) //throw error
+        console.log('image',image)
+        if (!map.hasImage('beacon')) {
+          map.addImage('beacon', image as HTMLImageElement)
         }
-      }
-    })
-  }, [beaconOwners])
+      })
+    }
+  },[map])
+
+  // useEffect( () => {
+  //   // when we get a new beaconOwners, load their profile image and load it into the map so we can use it in the layer.
+  //   Object.values(beaconOwners).forEach( owner => {
+  //     if (owner.content.picture) {
+  //       const img = new Image()
+  //       img.width = 50
+  //       img.height = 50
+  //       img.src = owner.content.picture
+  //       img.onload = () => {
+  //         if (map) {
+  //           map.loadImage(img.src, (error, image) => {
+  //             if (error) console.log(error) //throw error
+  //             if (map.hasImage(owner.pubkey)) {
+  //               map.removeImage(owner.pubkey)
+  //             }
+  //             map.addImage(owner.pubkey, image as HTMLImageElement)
+  //           })
+  //         }
+  //       }
+  //     }
+  //   })
+  // }, [beaconOwners])
 
   // validate naddr, find corresponding place, and focus the map on it.
   // set up effect so when the map leaves the place, the URL is changed back to /dashboard
@@ -209,15 +223,20 @@ export const MapPlaces = ({global}: {global: boolean}) => {
       }
     }>
     <Layer id="beacons" type="symbol" source="beacons" layout={{
-      'icon-image': ['get', 'pubkey'],
-      'icon-size': 0.08,
-      'icon-allow-overlap': true,
-      'text-field': ['get', 'name'],
-      'text-size': 12,
-      'text-allow-overlap': true,
-      'text-offset': [0, 1.25],
-      'text-anchor': 'top'
-    }} />
+        'icon-image': 'beacon',
+        'icon-size': 0.8,
+        'icon-allow-overlap': true,
+        // 'text-field': ['get', 'name'],
+        // 'text-size': 12,
+        // 'text-allow-overlap': false,
+        // 'text-offset': [0, 1.25],
+        // 'text-anchor': 'top'
+      }}
+      paint={{
+        'text-color': '#fff',
+        'text-halo-color': '#fff',
+
+      }} />
   </Source>
 
   /// old stuff below
