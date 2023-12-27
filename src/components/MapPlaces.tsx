@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom'
 import { createNaddr } from '../libraries/draftPlace'
 import { getLatitudeOffset, getLongitudeOffset } from '../libraries/mapUtils'
 import beaconMarker from '../assets/marker.png'
+import beaconMarker2 from '../assets/marker-red.png'
 
 export const MapPlaces = ({global}: {global: boolean}) => {
   const [beacons, beaconsDispatch] = useReducer(beaconsReducer, {})
@@ -40,12 +41,15 @@ export const MapPlaces = ({global}: {global: boolean}) => {
   // add icon for beacons
   useEffect( () => {
     if (map) {
-      map.loadImage(beaconMarker, (error, image) => {
-        if (error) console.log(error) //throw error
-        console.log('image',image)
-        if (!map.hasImage('beacon')) {
-          map.addImage('beacon', image as HTMLImageElement)
-        }
+      const markers = [beaconMarker, beaconMarker2]
+      markers.map( marker => {
+        map.loadImage(marker, (error, image) => {
+          if (error) console.log(error) //throw error
+          console.log('image',image)
+          if (!map.hasImage('beacon')) {
+            map.addImage('beacon', image as HTMLImageElement)
+          }
+        })
       })
     }
   },[map])
@@ -222,21 +226,33 @@ export const MapPlaces = ({global}: {global: boolean}) => {
         }))
       }
     }>
-    <Layer id="beacons" type="symbol" source="beacons" layout={{
+    <Layer id="beacons" type="circle" source="beacons"
+      layout={{
+        'visibility': 'visible',
+      }}
+      paint={{
+        'circle-radius': ["interpolate", ["linear", 2], ['zoom'], 0, 4, 20, 15],
+        'circle-color': ["interpolate", ["linear"], ['zoom'], 0, "#800080", 10, ["concat", "#", ["slice", ["get", "pubkey"], 0, 6]]],
+        'circle-opacity': 1,
+      }}
+    />
+    {/* <Layer id="beacons" type="symbol" source="beacons" layout={{
         'icon-image': 'beacon',
         'icon-size': 0.8,
         'icon-allow-overlap': true,
+        'icon-anchor': 'bottom',
         // 'text-field': ['get', 'name'],
         // 'text-size': 12,
         // 'text-allow-overlap': false,
         // 'text-offset': [0, 1.25],
         // 'text-anchor': 'top'
+        'symbol-sort-key': ['get', 'pubkey'], // TODO this is what I was looking for! to fix sorting! 
       }}
       paint={{
-        'text-color': '#fff',
-        'text-halo-color': '#fff',
+        'icon-color': '#ff0000',
+        // 'icon-image-cross-fade': ['get', 'zoom'],
 
-      }} />
+      }} /> */}
   </Source>
 
   /// old stuff below
