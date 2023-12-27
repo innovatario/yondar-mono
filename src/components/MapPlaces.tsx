@@ -231,9 +231,14 @@ export const MapPlaces = ({global}: {global: boolean}) => {
         'visibility': 'visible',
       }}
       paint={{
-        'circle-radius': ["interpolate", ["linear", 2], ['zoom'], 0, 4, 20, 15],
+        'circle-radius': ["interpolate", ["exponential", 2], ['zoom'], 0, 8, 20, 18],
         'circle-color': ["interpolate", ["linear"], ['zoom'], 0, "#800080", 10, ["concat", "#", ["slice", ["get", "pubkey"], 0, 6]]],
         'circle-opacity': 1,
+        'circle-stroke-width': ["interpolate", ["exponential", 1.5], ["zoom"], 0, 0, 20, 4],
+        'circle-stroke-color': '#091218',
+        // 'circle-stroke-opacity-transition': {duration: 1000},
+        // 'circle-pitch-alignment': 'map',
+        // 'circle-sort-key': ['get', 'pubkey'], // TODO this is what I was looking for! to fix sorting! 
       }}
     />
     {/* <Layer id="beacons" type="symbol" source="beacons" layout={{
