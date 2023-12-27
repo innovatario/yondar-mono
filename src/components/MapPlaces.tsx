@@ -6,7 +6,7 @@ import { ModalContext } from '../providers/ModalProvider'
 import { Filter, nip19 } from 'nostr-tools'
 import { getRelayList, getTag, pool } from "../libraries/Nostr"
 import { useGeolocationData } from "../hooks/useGeolocationData"
-import { useMap, Marker, MapRef } from 'react-map-gl'
+import { useMap, Marker, MapRef, Source, Layer } from 'react-map-gl'
 import { DraftPlaceContext } from '../providers/DraftPlaceProvider'
 import { DraftPlaceContextType, EventWithoutContent, Place, PlaceProperties } from '../types/Place'
 import { RelayList } from '../types/NostrRelay'
@@ -35,6 +35,29 @@ export const MapPlaces = ({global}: {global: boolean}) => {
   const { naddr, setNaddr } = useNaddr()
   const navigate = useNavigate()
   const [naddrZoom, setNaddrZoom] = useState<boolean>(false) // tells whether we are currently zooming on a beacon from a /place/:naddr URL
+
+  useEffect( () => {
+    // when we get a new beaconOwners, load their profile image and load it into the map so we can use it in the layer.
+    Object.values(beaconOwners).forEach( owner => {
+      if (owner.content.picture) {
+        const img = new Image()
+        img.width = 50
+        img.height = 50
+        img.src = owner.content.picture
+        img.onload = () => {
+          if (map) {
+            map.loadImage(img.src, (error, image) => {
+              if (error) console.log(error) //throw error
+              if (map.hasImage(owner.pubkey)) {
+                map.removeImage(owner.pubkey)
+              }
+              map.addImage(owner.pubkey, image as HTMLImageElement)
+            })
+          }
+        }
+      }
+    })
+  }, [beaconOwners])
 
   // validate naddr, find corresponding place, and focus the map on it.
   // set up effect so when the map leaves the place, the URL is changed back to /dashboard
@@ -172,43 +195,70 @@ export const MapPlaces = ({global}: {global: boolean}) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gotAllBeacons])
 
-  const contactList: ContactList = useMemo( () => {
-    return [identity.pubkey, ...Object.keys(contacts || {}) ]
-  }, [contacts, identity.pubkey])
+  return <Source id="beacons" type="geojson" data={
+      {
+        type: 'FeatureCollection',
+        features: Object.values(beacons).map( beacon => ({
+          type: 'Feature',
+          geometry: { ... beacon.content.geometry },
+          properties: { 
+            ... beacon.content.properties,
+            pubkey: beacon.pubkey,
+          }
+        }))
+      }
+    }>
+    <Layer id="beacons" type="symbol" source="beacons" layout={{
+      'icon-image': ['get', 'pubkey'],
+      'icon-size': 0.08,
+      'icon-allow-overlap': true,
+      'text-field': ['get', 'name'],
+      'text-size': 12,
+      'text-allow-overlap': true,
+      'text-offset': [0, 1.25],
+      'text-anchor': 'top'
+    }} />
+  </Source>
 
-  // iterate through beacon data and prepare it for map display. 
-  // TODO: to fix the order of beacon display, I may need to render the list of beacons separately in a memoized function with its own deps, then
-  // render the list of markers separately and insert the beacons into each marker. This way, beacons don't unmount and remount when deps state changes.
-  // Right now, the Marker is changing which unmounts the beacon I think.
-  const displayBeacons = useMemo( () => {
-    return Object.values(beacons)
-      .sort( (a, b) => {
-        if (showBeacon === a.id) return -1 // if this is the expanded beacon, show it first
-        return a.content.geometry.coordinates[1] - b.content.geometry.coordinates[1] // otherwise, show beacons by smallest latitude (nearest) first
-      })
-      .map( (beacon: Place) => {
-        // if the map feed is Friends, only display beacons from friends
-        if (!global && !contactList.includes(beacon.pubkey)) return null
+  /// old stuff below
+
+  // const contactList: ContactList = useMemo( () => {
+  //   return [identity.pubkey, ...Object.keys(contacts || {}) ]
+  // }, [contacts, identity.pubkey])
+
+  // // iterate through beacon data and prepare it for map display. 
+  // // TODO: to fix the order of beacon display, I may need to render the list of beacons separately in a memoized function with its own deps, then
+  // // render the list of markers separately and insert the beacons into each marker. This way, beacons don't unmount and remount when deps state changes.
+  // // Right now, the Marker is changing which unmounts the beacon I think.
+  // const displayBeacons = useMemo( () => {
+  //   return Object.values(beacons)
+  //     .sort( (a, b) => {
+  //       if (showBeacon === a.id) return -1 // if this is the expanded beacon, show it first
+  //       return a.content.geometry.coordinates[1] - b.content.geometry.coordinates[1] // otherwise, show beacons by smallest latitude (nearest) first
+  //     })
+  //     .map( (beacon: Place) => {
+  //       // if the map feed is Friends, only display beacons from friends
+  //       if (!global && !contactList.includes(beacon.pubkey)) return null
 
 
-        const relayList: RelayList = getRelayList(relays, ['read'])
-        // sort relay list by length of relay address from shortest to longest
+  //       const relayList: RelayList = getRelayList(relays, ['read'])
+  //       // sort relay list by length of relay address from shortest to longest
         
-        const naddr = createNaddr(beacon.pubkey, beacon.tags.find(getTag('d'))?.[1] || "", relayList.sort( (a, b) => a.length - b.length).slice(0, 3))
+  //       const naddr = createNaddr(beacon.pubkey, beacon.tags.find(getTag('d'))?.[1] || "", relayList.sort( (a, b) => a.length - b.length).slice(0, 3))
 
-        const output = (
-          <Marker clickTolerance={5} key={beacon.id} longitude={beacon.content.geometry.coordinates[0]} latitude={beacon.content.geometry.coordinates[1]} offset={[-20,-52]} anchor={'center'}>
-            <Beacon currentUserPubkey={identity?.pubkey} ownerProfile={beaconOwners[beacon.pubkey]} beaconData={beacon} modal={modal} open={showBeacon === beacon.id} focusHandler={getFocusBeaconHandler(beacon, showBeacon, setShowBeacon, naddr, setNaddr, navigate)} editHandler={getEditBeaconHandler(beacon, map )} draft={{draftPlace, setDraftPlace}} />
-          </Marker>
-        )
+  //       const output = (
+  //         <Marker clickTolerance={5} key={beacon.id} longitude={beacon.content.geometry.coordinates[0]} latitude={beacon.content.geometry.coordinates[1]} offset={[-20,-52]} anchor={'center'}>
+  //           <Beacon currentUserPubkey={identity?.pubkey} ownerProfile={beaconOwners[beacon.pubkey]} beaconData={beacon} modal={modal} open={showBeacon === beacon.id} focusHandler={getFocusBeaconHandler(beacon, showBeacon, setShowBeacon, naddr, setNaddr, navigate)} editHandler={getEditBeaconHandler(beacon, map )} draft={{draftPlace, setDraftPlace}} />
+  //         </Marker>
+  //       )
 
-        return output
-      })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [beacons, showBeacon, setShowBeacon, global, contactList, identity?.pubkey, beaconOwners, relays, modal, map, position, draftPlace, setDraftPlace])
+  //       return output
+  //     })
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [beacons, showBeacon, setShowBeacon, global, contactList, identity?.pubkey, beaconOwners, relays, modal, map, position, draftPlace, setDraftPlace])
 
-  if (!gotAllBeacons) return <div id="loading-message"><WavyText text="Loading Places..." /></div>
-  else return displayBeacons
+  // if (!gotAllBeacons) return <div id="loading-message"><WavyText text="Loading Places..." /></div>
+  // else return displayBeacons
 }
 
 const getFocusBeaconHandler = (beacon: Place , showBeacon: string, setShowBeacon: React.Dispatch<React.SetStateAction<string>>, naddr: string, setNaddr: (naddr:string) => void, navigate: (naddr: string) => void) => {

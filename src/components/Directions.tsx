@@ -20,7 +20,6 @@ export const Directions = () => {
   const {current: map} = useMap()
 
   useEffect(() => {
-    console.log(position, target)
     if (!position) return // TODO - show warning
     if (!target) return
     if (!map) return
@@ -43,6 +42,7 @@ export const Directions = () => {
   }, [target,map])
 
   if (!turns) return null
+  console.log('source example', turns.geometry)
   return (
     <Source id="directions" type="geojson" data={turns?.geometry}>
       <Layer
