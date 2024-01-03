@@ -216,8 +216,8 @@ export const MapPlaces = ({global}: {global: boolean}) => {
   return <Source id="beacons-data" type="geojson" data={
       {
         type: 'FeatureCollection',
-        features: Object.values(beacons).map( beacon => ({
-          id: beacon.id,
+        features: Object.values(beacons).map( (beacon, index) => ({
+          id: index,
           type: 'Feature',
           geometry: { ... beacon.content.geometry },
           properties: { 
