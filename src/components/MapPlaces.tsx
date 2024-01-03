@@ -213,10 +213,11 @@ export const MapPlaces = ({global}: {global: boolean}) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gotAllBeacons])
 
-  return <Source id="beacons" type="geojson" data={
+  return <Source id="beacons-data" type="geojson" data={
       {
         type: 'FeatureCollection',
         features: Object.values(beacons).map( beacon => ({
+          id: beacon.id,
           type: 'Feature',
           geometry: { ... beacon.content.geometry },
           properties: { 
@@ -226,7 +227,7 @@ export const MapPlaces = ({global}: {global: boolean}) => {
         }))
       }
     }>
-    <Layer id="beacons" type="circle" source="beacons"
+    <Layer id="beacons" type="circle" source="beacons-data" maxzoom={24} minzoom={0}
       layout={{
         'visibility': 'visible',
       }}
@@ -236,8 +237,6 @@ export const MapPlaces = ({global}: {global: boolean}) => {
         'circle-opacity': 1,
         'circle-stroke-width': ["interpolate", ["exponential", 1.5], ["zoom"], 0, 0, 20, 4],
         'circle-stroke-color': '#091218',
-        // 'circle-stroke-opacity-transition': {duration: 1000},
-        // 'circle-pitch-alignment': 'map',
         // 'circle-sort-key': ['get', 'pubkey'], // TODO this is what I was looking for! to fix sorting! 
       }}
     />
