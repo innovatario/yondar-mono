@@ -1,3 +1,4 @@
 files:
-  - source: localization/en/*.json
-    translation: localization/ru/*.json
+  - source: /src/localization/en/en.json
+    translation: /src/localization/%two_letters_code%/%two_letters_code%.json
+    multilingual: 1
