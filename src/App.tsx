@@ -12,6 +12,7 @@ import { NaddrProvider } from './providers/NaddrProvider.tsx'
 import { Logout } from './components/Logout.tsx'
 import { ModeProvider } from './providers/ModeProvider.tsx'
 import { NavigationTargetProvider } from './providers/NavigationTargetProvider.tsx'
+import { IntlProvider } from 'react-intl'
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
 
   return (
     <div id="app">
+      <IntlProvider locale="ru" defaultLocale="en">
         <IdentityProvider>
           <NaddrProvider>
             <NavigationTargetProvider>
@@ -41,6 +43,7 @@ function App() {
             </NavigationTargetProvider>
           </NaddrProvider>
         </IdentityProvider>
+        </IntlProvider>
     </div>
   )
 }
