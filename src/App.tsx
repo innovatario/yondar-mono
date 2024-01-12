@@ -14,7 +14,26 @@ import { ModeProvider } from './providers/ModeProvider.tsx'
 import { NavigationTargetProvider } from './providers/NavigationTargetProvider.tsx'
 import { IntlProvider } from 'react-intl'
 
+function loadLocaleData(locale: string) {
+  switch (locale) {
+    case 'ru':
+      return import('/src/localization/ru/compiled-lang/ru.json')
+    default:
+      return import('/src/localization/en/compiled-lang/en.json')
+  }
+}
+
+
 function App() {
+
+  function loadLocaleData(locale: string) {
+    switch (locale) {
+      case 'ru':
+        return import('/src/localization/ru/compiled-lang/ru.json')
+      default:
+        return import('/src/localization/en/compiled-lang/en.json')
+    }
+  }
 
   useEffect(() => {
     window.scrollTo(0, 1)
@@ -22,7 +41,12 @@ function App() {
 
   return (
     <div id="app">
-      <IntlProvider locale="ru" defaultLocale="en">
+      <IntlProvider
+        // locale="ru"
+        defaultLocale="en"
+        messages = { loadLocaleData("ru") }
+        // messages={props.messages}
+      >
         <IdentityProvider>
           <NaddrProvider>
             <NavigationTargetProvider>
@@ -47,5 +71,10 @@ function App() {
     </div>
   )
 }
+
+// async function bootstrapApplication(locale, mainDiv) {
+//   const messages = await loadLocaleData(locale)
+//   ReactDOM.render(<App locale={locale} messages={messages} />, mainDiv)
+// }
 
 export default App

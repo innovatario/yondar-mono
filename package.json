@@ -9,6 +9,7 @@
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "extract": "formatjs extract",
+    "compile": "formatjs compile",
     "preview": "vite preview"
   },
   "dependencies": {
