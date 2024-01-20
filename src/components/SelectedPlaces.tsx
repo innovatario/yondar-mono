@@ -13,8 +13,10 @@ export const SelectedPlaces = ({set}: SelectedPlacesType) => {
   return (
     <div id="selected-places">
         {set.map((place: mapboxgl.MapboxGeoJSONFeature) => {
+          let key = place.id
+          if (place.properties && place.properties.name && place.properties.pubkey) key = place.properties.name + place.properties.pubkey + place.id
           return (
-            <SelectedPlace place={place} key={place.id} />
+            <SelectedPlace place={place} key={key} />
           )
         })}
     </div>
