@@ -74,13 +74,13 @@ export const YondarMap = ({ children }: YondarMapProps) => {
     // Get the features within the cursor's bounding box
     const features = mapRef.current.queryRenderedFeatures(cursorBox as [PointLike, PointLike], {layers: ['beacons']})
 
-    // Handle the selected features
-    features.sort((a, b) => {
-      // sort by name
-      if (!a.properties || !b.properties) return 0
-      if (a.properties.name.toUpperCase() < b.properties.name.toUpperCase()) return -1
-      return 1
-    })
+    // This sort messes up the map. Probably because SelectedPlaces is a child of the map component.
+    // features.sort((a, b) => {
+    //   // sort by name
+    //   if (!a.properties || !b.properties) return 0
+    //   if (a.properties.name.toUpperCase() < b.properties.name.toUpperCase()) return -1
+    //   return 1
+    // })
     setSelectedFeatures(features)
     // console.log('Selected features:', features)
   },[cursorPosition, zoom, latitude, longitude])
