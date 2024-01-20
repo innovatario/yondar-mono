@@ -1,7 +1,7 @@
 .component-zoomoutbutton {
   animation: fadein 1s, swoopup 1s;
   align-items: center;
-  background: linear-gradient(to top, #8925f4, #0b345b); /* Add a background color gradient */
+  background: linear-gradient(to top, #3325f4, #1a82e4); /* Add a background color gradient */
 
   border-radius: 50%;
   border: 2px solid #140d41;
@@ -20,9 +20,9 @@
 
   // mobile
   @media screen and (max-width: 640px) {
-    bottom: calc(0px + 2rem);
+    top: calc(0px + 0.25rem);
     &.show {
-      left: 0rem;
+      right: 0rem;
     }
     // &.hide {
     // }
@@ -30,9 +30,9 @@
 
   // desktop
   @media screen and (min-width: 641px) {
-    bottom: calc(0px + 2rem);
+    top: calc(0px + 0.25rem);
     &.show {
-      left: 0rem;
+      right: 0rem;
     }
     // &.hide {
     // }

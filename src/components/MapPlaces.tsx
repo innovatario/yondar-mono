@@ -38,22 +38,6 @@ export const MapPlaces = ({global}: {global: boolean}) => {
   const navigate = useNavigate()
   const [naddrZoom, setNaddrZoom] = useState<boolean>(false) // tells whether we are currently zooming on a beacon from a /place/:naddr URL
 
-  // add icon for beacons
-  useEffect( () => {
-    if (map) {
-      const markers = [beaconMarker, beaconMarker2]
-      markers.map( marker => {
-        map.loadImage(marker, (error, image) => {
-          if (error) console.log(error) //throw error
-          console.log('image',image)
-          if (!map.hasImage('beacon')) {
-            map.addImage('beacon', image as HTMLImageElement)
-          }
-        })
-      })
-    }
-  },[map])
-
   // useEffect( () => {
   //   // when we get a new beaconOwners, load their profile image and load it into the map so we can use it in the layer.
   //   Object.values(beaconOwners).forEach( owner => {

@@ -19,6 +19,7 @@ import { AddButton } from './AddButton'
 import { ZoomOutButton } from './ZoomOutButton'
 import { Directions } from './Directions'
 import mapboxgl, { LngLatLike } from 'mapbox-gl'
+import { SelectedPlaces } from './SelectedPlaces'
 
 type YondarMapProps = {
   children?: React.ReactNode
@@ -35,6 +36,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
   const [geoChat, setGeoChat] = useState<boolean>(false)
   const [addPlace, setAddPlace] = useState<boolean>(false)
   const {mode, setMode} = useContext(ModeContext)
+  const [selectedFeatures, setSelectedFeatures] = useState<mapboxgl.MapboxGeoJSONFeature[]>([]) // TODO: type this as [Feature
   const mapRef = useRef<MapRef>(null)
 
   function setViewState(viewState: ViewState) {
@@ -65,15 +67,15 @@ export const YondarMap = ({ children }: YondarMapProps) => {
     const cursorScreenPosition = mapRef.current.project(cursorPosition as LngLatLike)
 
     const cursorBox = [
-      [cursorScreenPosition.x - cursorRadiusInPixels - zoomAdjust, cursorScreenPosition.y + cursorRadiusInPixels + zoomAdjust], // bottom left
-      [cursorScreenPosition.x + cursorRadiusInPixels + zoomAdjust, cursorScreenPosition.y - cursorRadiusInPixels - zoomAdjust] // top right
+      [cursorScreenPosition.x - cursorRadiusInPixels - zoomAdjust, cursorScreenPosition.y + cursorRadiusInPixels + zoomAdjust + 10], // bottom left
+      [cursorScreenPosition.x + cursorRadiusInPixels + zoomAdjust, cursorScreenPosition.y - cursorRadiusInPixels - zoomAdjust - 10] // top right
     ]
 
     // Get the features within the cursor's bounding box
     const features = mapRef.current.queryRenderedFeatures(cursorBox as [PointLike, PointLike], {layers: ['beacons']})
 
     // Handle the selected features
-    // @TODO
+    setSelectedFeatures(features)
     console.log('Selected features:', features)
   },[cursorPosition, zoom, latitude, longitude])
 
@@ -156,11 +158,12 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       <FeedToggle globalFeed={globalFeed} toggleFeed={toggleFeed}/>
       { children }
       { mode === 'chat' ? <MapGeoChat zoom={zoom} mapLngLat={[mapLongitude, mapLatitude]}/> : null}
-      {!modal?.placeForm && zoom > 7 ? <ZoomOutButton show={true} /> : null }
+      {!modal?.placeForm && zoom > 5 ? <ZoomOutButton show={true} /> : null }
     </Map>
     {!modal?.placeForm && (cursorPosition || mode === 'chat') ? <GeoChatButton show={geoChat} onClick={toggleGeoChat}/> : null }
     {!modal?.placeForm && (cursorPosition || mode === 'add') ? <AddButton show={addPlace} onClick={toggleAddPlace}/> : null }
     {mode === 'chat' ? <GeoChat show={geoChat} mapLngLat={[mapLongitude, mapLatitude]} zoom={zoom}/> : null }
+    {mode === null && selectedFeatures.length ? <SelectedPlaces set={selectedFeatures}/> : null }
     </>
   )
 }

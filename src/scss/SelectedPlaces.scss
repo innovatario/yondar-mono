@@ -1,0 +1,31 @@
+$place-card-width: 33svh;
+#selected-places {
+  display: flex;
+  flex-wrap: nowrap; // Add this line
+  position: absolute;
+  bottom: 2.5rem;
+  left: 0.25rem;
+  min-width: $place-card-width;
+  max-width: 80svw;
+  height: 20svh;
+  overflow: hidden;
+}
+
+.selected-place {
+    flex-shrink: 0; // Add this line
+    flex-grow: 1; // Add this line
+    animation: fadein 1s, swoopup 1s;
+    background: rgba(31, 21, 35, 0.6666666667);
+    backdrop-filter: blur(10px);
+    border: 1px solid #4707b166;
+    padding: 0.5rem 1rem 1rem 1rem;
+    margin: 0.125rem;
+    font-size: 14px;
+    min-width: max(33svh, 33%);
+}
+
+.place-name {
+    font-size: 16px;
+    font-weight: lighter;
+    margin: 0rem;
+}
