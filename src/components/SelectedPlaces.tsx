@@ -38,7 +38,7 @@ const SelectedPlace = ({place}: {place: mapboxgl.MapboxGeoJSONFeature}) => {
         place.properties.longitude,
         place.properties.latitude],
       zoom: 16, 
-      duration: 1000
+      duration: 2000
     })
     // map.once('moveend', () => {
     //   setCursorPosition(map.getCenter())

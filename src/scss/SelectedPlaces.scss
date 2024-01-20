@@ -16,6 +16,7 @@ $place-card-width: 33svh;
 .selected-place {
   // flex-shrink: 0; // Add this line
   // flex-grow: 1; // Add this line
+  cursor: pointer;
   animation: fadein 1s;//, swoopup 1s;
   border-radius: 1rem;
   background: rgba(20, 6, 32, 0.667);

@@ -75,6 +75,12 @@ export const YondarMap = ({ children }: YondarMapProps) => {
     const features = mapRef.current.queryRenderedFeatures(cursorBox as [PointLike, PointLike], {layers: ['beacons']})
 
     // Handle the selected features
+    features.sort((a, b) => {
+      // sort by name
+      if (!a.properties || !b.properties) return 0
+      if (a.properties.name.toUpperCase() < b.properties.name.toUpperCase()) return -1
+      return 1
+    })
     setSelectedFeatures(features)
     // console.log('Selected features:', features)
   },[cursorPosition, zoom, latitude, longitude])
