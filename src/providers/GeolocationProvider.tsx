@@ -6,7 +6,7 @@ import { useGeolocation } from '../hooks/useGeolocation'
 type GeolocationContextType = {
   position: GeolocationPosition | null
   cursorPosition: CursorPositionType
-  setCursorPosition: Function
+  setCursorPosition: (position: CursorPositionType) => void
 }
 
 export type CursorPositionType = {

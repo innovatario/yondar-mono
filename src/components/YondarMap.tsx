@@ -163,7 +163,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       { children }
       { mode === 'chat' ? <MapGeoChat zoom={zoom} mapLngLat={[mapLongitude, mapLatitude]}/> : null}
       {!modal?.placeForm && zoom > 5 ? <ZoomOutButton show={true} /> : null }
-      {mode === null && selectedFeatures.length ? <SelectedPlaces set={selectedFeatures} map={mapRef}/> : null }
+      {mode === null && selectedFeatures.length && cursorPosition ? <SelectedPlaces set={selectedFeatures} map={mapRef}/> : null }
     </Map>
     {!modal?.placeForm && (cursorPosition || mode === 'chat') ? <GeoChatButton show={geoChat} onClick={toggleGeoChat}/> : null }
     {!modal?.placeForm && (cursorPosition || mode === 'add') ? <AddButton show={addPlace} onClick={toggleAddPlace}/> : null }

@@ -31,18 +31,19 @@ const SelectedPlace = ({place}: {place: mapboxgl.MapboxGeoJSONFeature}) => {
     if (!map) return
     if (!place.properties) return
     if (place.geometry.type !== 'Point') return
-    // setCursorPosition(null)
+    // setCursorPosition({lng: place.properties.longitude, lat: place.properties.latitude})
+    setCursorPosition(null)
     map.flyTo({
       center: [
         place.properties.longitude,
         place.properties.latitude],
       zoom: 16, 
-      duration: 5000
+      duration: 1000
     })
-    map.once('moveend', () => {
-      console.log('map', map.getCenter())
-    })
-  }, [map, place._geometry])
+    // map.once('moveend', () => {
+    //   setCursorPosition(map.getCenter())
+    // })
+  }, [map, place.properties])
   return (
     <div className="selected-place" onClick={zoomTo}>
       {place.properties?.name ? <h2 className="place-name">{place.properties.name}</h2> : null}
