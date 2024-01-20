@@ -76,7 +76,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
 
     // Handle the selected features
     setSelectedFeatures(features)
-    console.log('Selected features:', features)
+    // console.log('Selected features:', features)
   },[cursorPosition, zoom, latitude, longitude])
 
   function handleMove(event: ViewStateChangeEvent) {
@@ -135,11 +135,15 @@ export const YondarMap = ({ children }: YondarMapProps) => {
   const mapLongitude = position && follow === "USER" ? position?.coords.longitude : longitude
   const mapLatitude = position && follow === "USER" ? position?.coords.latitude : latitude
 
+  const projection = !cursorPosition ? zoom < 6 ? 'globe' : 'mercator' : 'globe'
+
+  // console.log(projection)
+
   return (
     <>
     <Map
       ref={mapRef}
-      projection={zoom < 6 ? 'globe' : 'mercator'}
+      projection={projection}
       mapboxAccessToken={import.meta.env.VITE_MAPBOX_API}
       longitude={mapLongitude}
       latitude={mapLatitude}
@@ -159,11 +163,11 @@ export const YondarMap = ({ children }: YondarMapProps) => {
       { children }
       { mode === 'chat' ? <MapGeoChat zoom={zoom} mapLngLat={[mapLongitude, mapLatitude]}/> : null}
       {!modal?.placeForm && zoom > 5 ? <ZoomOutButton show={true} /> : null }
+      {mode === null && selectedFeatures.length ? <SelectedPlaces set={selectedFeatures} map={mapRef}/> : null }
     </Map>
     {!modal?.placeForm && (cursorPosition || mode === 'chat') ? <GeoChatButton show={geoChat} onClick={toggleGeoChat}/> : null }
     {!modal?.placeForm && (cursorPosition || mode === 'add') ? <AddButton show={addPlace} onClick={toggleAddPlace}/> : null }
     {mode === 'chat' ? <GeoChat show={geoChat} mapLngLat={[mapLongitude, mapLatitude]} zoom={zoom}/> : null }
-    {mode === null && selectedFeatures.length ? <SelectedPlaces set={selectedFeatures}/> : null }
     </>
   )
 }

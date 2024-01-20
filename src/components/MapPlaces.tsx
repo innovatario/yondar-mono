@@ -207,6 +207,8 @@ export const MapPlaces = ({global}: {global: boolean}) => {
           properties: { 
             ... beacon.content.properties,
             pubkey: beacon.pubkey,
+            longitude: beacon.content.geometry.coordinates[0],
+            latitude: beacon.content.geometry.coordinates[1],
           }
         }))
       }
