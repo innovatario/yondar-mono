@@ -332,7 +332,7 @@ export const FAQ = () => {
           description="Q28"
           defaultMessage="What is "
         />
-        <a href=" https://yondar.me">https://yondar.me</a>
+        <a href=" https://yondar.me"> Yondar.me </a>
 
         <FormattedMessage
           id="q28-1"
