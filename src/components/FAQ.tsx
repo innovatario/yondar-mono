@@ -41,20 +41,22 @@ export const FAQ = () => {
           defaultMessage="You can publish places on a decentralized map for the world to see!"
         />
       </p>
-      {/* <p className="receive">
+      <p className="receive">
         <FormattedMessage
+          id="expl"
           description="explanation"
           defaultMessage="Just tap the map 🗺️ and hit this button:"
         />
-        <br />
-        <br />
+      </p>
+      <p>
         <AddExampleButton />
-      </p> */}
-      {/* <p className="send">
+      </p> 
+       <p className="send">
         <FormattedMessage
           id="q2"
           description="Q2"
           defaultMessage="Is it like putting a business on" /><Goolag /> Maps?</p>
+          
       <p className="receive">
         <FormattedMessage
           id="a2"
@@ -100,12 +102,14 @@ export const FAQ = () => {
           defaultMessage="Since "
         />
         <Geochat />
+        
         <FormattedMessage
           id="a4-1"
           description="A4-1"
           defaultMessage="is based on regions, no precise personal location is shared. Also, chat is optional!"
         />
       </p>
+      
       <p className="send">
         <FormattedMessage
           id="q5"
@@ -122,6 +126,7 @@ export const FAQ = () => {
         />
         <a href="https://heynostr.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ae6cff' }}>nostr</a>! 🫂
       </p>
+      
       <p className="send">
         <FormattedMessage
           id="a6"
@@ -199,8 +204,7 @@ export const FAQ = () => {
           description="A14"
           defaultMessage="It allows you to create places 📍, edit them, and post in "
         />
-        <Geochat />
-        <br />
+        <br /><Geochat />
         <br />
         <FormattedMessage
           id="a15"
@@ -211,7 +215,7 @@ export const FAQ = () => {
           <FormattedMessage
             id="a16"
             description="A16"
-            defaultMessage="nostr-compatible app"
+            defaultMessage=" nostr-compatible app "
           /></a>
         <FormattedMessage
           id="a17"
@@ -225,7 +229,7 @@ export const FAQ = () => {
           description="A18"
           defaultMessage="If you already have a nostr id, you can use it through a browser extension like "
         />
-        <a href="https://getalby.com" target="_blank" rel="noopener noreferrer">Alby on Desktop</a>, <a href="https://apps.apple.com/us/app/nostore/id1666553677" target="_blank" rel="noopener noreferrer">Nostore for iOS</a>, or <a href="https://github.com/nostrband/nostr-universe/releases/tag/v0.1.4" target="_blank" rel="noopener noreferrer">Spring browser for Android</a>.
+        <a href="https://getalby.com" target="_blank" rel="noopener noreferrer"> Alby on Desktop </a>, <a href="https://apps.apple.com/us/app/nostore/id1666553677" target="_blank" rel="noopener noreferrer">Nostore for iOS</a>, or <a href="https://github.com/nostrband/nostr-universe/releases/tag/v0.1.4" target="_blank" rel="noopener noreferrer">Spring browser for Android</a>.
       </p>
 
       <p className="send">
@@ -250,7 +254,7 @@ export const FAQ = () => {
           description="A20"
           defaultMessage="Your location is not transmitted, and our code is"
         />
-        <a href="https://github.com/innovatario/yondar-mono.git" target="_blank" rel="noopener noreferrer">open-sourced</a> to prove it. <a href="https://innovatar.io" target="_blank" rel="noopener noreferrer">We are</a>
+        <a href="https://github.com/innovatario/yondar-mono.git" target="_blank" rel="noopener noreferrer">open-sourced</a> to prove it. <a href="https://innovatar.io" target="_blank" rel="noopener noreferrer"> We are </a>
         <FormattedMessage
           id="a21"
           description="A21"
@@ -372,7 +376,7 @@ export const FAQ = () => {
           defaultMessage="have fun!"
         />
 
-      </p> */}
+      </p>
     </div>
   )
 }

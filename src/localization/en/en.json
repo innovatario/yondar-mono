@@ -3,6 +3,10 @@
     "defaultMessage": "You can publish places on a decentralized map for the world to see!",
     "description": "A1"
   },
+  "expl": {
+    "defaultMessage": "Just tap the map 🗺️ and hit this button:",
+    "description": "explanation"
+  },
   "a10": {
     "defaultMessage": "It's all anonymous 🎭 unless you want to fill out your profile.",
     "description": "A10"
