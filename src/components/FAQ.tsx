@@ -41,7 +41,7 @@ export const FAQ = () => {
           defaultMessage="You can publish places on a decentralized map for the world to see!"
         />
       </p>
-      <p className="receive">
+      {/* <p className="receive">
         <FormattedMessage
           description="explanation"
           defaultMessage="Just tap the map 🗺️ and hit this button:"
@@ -49,8 +49,8 @@ export const FAQ = () => {
         <br />
         <br />
         <AddExampleButton />
-      </p>
-      <p className="send">
+      </p> */}
+      {/* <p className="send">
         <FormattedMessage
           id="q2"
           description="Q2"
@@ -372,7 +372,7 @@ export const FAQ = () => {
           defaultMessage="have fun!"
         />
 
-      </p>
+      </p> */}
     </div>
   )
 }
