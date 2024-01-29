@@ -25,7 +25,7 @@ export const FAQ = () => {
         <FormattedMessage
           id="q1"
           description="Q1"
-          defaultMessage="What can I do with Yondar? "
+          defaultMessage="What can I do with Yondar? It looks cool!"
         />
         <span role="img" aria-label="smile">
           😃
