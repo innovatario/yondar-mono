@@ -13,7 +13,6 @@ import { Logout } from './components/Logout.tsx'
 import { ModeProvider } from './providers/ModeProvider.tsx'
 import { NavigationTargetProvider } from './providers/NavigationTargetProvider.tsx'
 
-
 function App() {
 
   useEffect(() => {
@@ -22,26 +21,26 @@ function App() {
 
   return (
     <div id="app">
-        <IdentityProvider>
-          <NaddrProvider>
-            <NavigationTargetProvider>
-              <DraftPlaceProvider>
-                <ModalProvider>
-                  <ModeProvider>
-                    <Routes>
-                      <Route path="/" element={<Home/>}/>
-                      <Route path="/login" element={<Login/>}/>
-                      <Route path="/dashboard/:param?" element={<DashboardGuard/>}/>
-                      <Route path="/logout" element={<Logout/>}/>
-                      <Route path="/place/:naddr" element={<DashboardGuard/>}/>
-                      <Route path="/user/:param?" element={<DashboardGuard/>}/>
-                    </Routes>
-                  </ModeProvider>
-                </ModalProvider>
-              </DraftPlaceProvider>
-            </NavigationTargetProvider>
-          </NaddrProvider>
-        </IdentityProvider>
+      <IdentityProvider>
+        <NaddrProvider>
+          <NavigationTargetProvider>
+            <DraftPlaceProvider>
+              <ModalProvider>
+                <ModeProvider>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/dashboard/:param?" element={<DashboardGuard />} />
+                    <Route path="/logout" element={<Logout />} />
+                    <Route path="/place/:naddr" element={<DashboardGuard />} />
+                    <Route path="/user/:param?" element={<DashboardGuard />} />
+                  </Routes>
+                </ModeProvider>
+              </ModalProvider>
+            </DraftPlaceProvider>
+          </NavigationTargetProvider>
+        </NaddrProvider>
+      </IdentityProvider>
     </div>
   )
 }
