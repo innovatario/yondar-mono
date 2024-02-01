@@ -1,0 +1,260 @@
+{
+  "a1": [
+    {
+      "type": 0,
+      "value": "You can publish places on a decentralized map for the world to see!"
+    }
+  ],
+  "a10": [
+    {
+      "type": 0,
+      "value": "It's all anonymous 🎭 unless you want to fill out your profile."
+    }
+  ],
+  "a11": [
+    {
+      "type": 0,
+      "value": "With one click you can have a new account and join the fun!"
+    }
+  ],
+  "a12": [
+    {
+      "type": 0,
+      "value": "Or sign in if you're a nostr user already."
+    }
+  ],
+  "a13": [
+    {
+      "type": 0,
+      "value": "Wow that's amazing! What does my account do? 💪"
+    }
+  ],
+  "a14": [
+    {
+      "type": 0,
+      "value": "It allows you to create places 📍, edit them, and post in"
+    }
+  ],
+  "a15": [
+    {
+      "type": 0,
+      "value": "Then you can take your identity to any other"
+    }
+  ],
+  "a16": [
+    {
+      "type": 0,
+      "value": "nostr-compatible app"
+    }
+  ],
+  "a17": [
+    {
+      "type": 0,
+      "value": "and use it there too! That's the superpower of the nostr protocol!"
+    }
+  ],
+  "a18": [
+    {
+      "type": 0,
+      "value": "If you already have a nostr id, you can use it through a browser extension like"
+    }
+  ],
+  "a19": [
+    {
+      "type": 0,
+      "value": "Your GPS location simply shows where you are on the map in relation to other places. It can be helpful if you want to put a new place right where you are! 🎯"
+    }
+  ],
+  "a2": [
+    {
+      "type": 0,
+      "value": "Yeah, but without the"
+    }
+  ],
+  "a2-e": [
+    {
+      "type": 0,
+      "value": "The Yondar map is a social place too 😆📢"
+    }
+  ],
+  "a2-e2": [
+    {
+      "type": 0,
+      "value": "lets you share posts or chat with others based on your geographic area! 🌎"
+    }
+  ],
+  "a20": [
+    {
+      "type": 0,
+      "value": "Your location is not transmitted, and our code is"
+    }
+  ],
+  "a21": [
+    {
+      "type": 0,
+      "value": "regular people who value our privacy, so we built Yondar to do the same for you. ✅"
+    }
+  ],
+  "a23": [
+    {
+      "type": 0,
+      "value": "Yes! Using Yondar is"
+    }
+  ],
+  "a24": [
+    {
+      "type": 0,
+      "value": "We make our money by charging businesses"
+    }
+  ],
+  "a24-1": [
+    {
+      "type": 0,
+      "value": "to create custom Yondar experiences 🎁🎡🗺"
+    }
+  ],
+  "a25": [
+    {
+      "type": 0,
+      "value": "Do you want to gamify👾🕹 your event or attraction and help your visitors find what they need? Do you host more than 10,000 people at your destination?"
+    }
+  ],
+  "a26": [
+    {
+      "type": 0,
+      "value": "Contact us"
+    }
+  ],
+  "a27": [
+    {
+      "type": 0,
+      "value": "to see how we can improve your visitor experience, monetization, and safety!"
+    }
+  ],
+  "a28": [
+    {
+      "type": 0,
+      "value": "Yondar.me started out as a centralized web2 PWA, but go.yondar.me is our new decentralized version of Yondar built on the nostr protocol!"
+    }
+  ],
+  "a28-1": [
+    {
+      "type": 0,
+      "value": "Once go.yondar.me reaches feature parity with yondar.me, we will shut down the old Yondar and replace it with the new nostr-powered Yondar! Nostr is the future and we are excited to be a part of it! 🚀"
+    }
+  ],
+  "a29": [
+    {
+      "type": 0,
+      "value": "ok cool! thnx"
+    }
+  ],
+  "a30": [
+    {
+      "type": 0,
+      "value": "have fun!"
+    }
+  ],
+  "a4": [
+    {
+      "type": 0,
+      "value": "Since"
+    }
+  ],
+  "a4-1": [
+    {
+      "type": 0,
+      "value": "is based on regions, no precise personal location is shared. Also, chat is optional!"
+    }
+  ],
+  "a5": [
+    {
+      "type": 0,
+      "value": "You can also see Places owned by your friends 🤗 and follows 🫡 on"
+    }
+  ],
+  "a6": [
+    {
+      "type": 0,
+      "value": "TOASTR? 😮🍞🔥"
+    }
+  ],
+  "a7": [
+    {
+      "type": 0,
+      "value": "No, NOSTR! 🤦‍♂️ It's a new"
+    }
+  ],
+  "a8": [
+    {
+      "type": 0,
+      "value": "social internet"
+    }
+  ],
+  "a9": [
+    {
+      "type": 0,
+      "value": "that makes new kinds of apps possible!"
+    }
+  ],
+  "nhFKDQ": [
+    {
+      "type": 0,
+      "value": "Just tap the map 🗺️ and hit this button:"
+    }
+  ],
+  "q1": [
+    {
+      "type": 0,
+      "value": "What can I do with Yondar?"
+    }
+  ],
+  "q18": [
+    {
+      "type": 0,
+      "value": "What is my location used for? 🤔"
+    }
+  ],
+  "q2": [
+    {
+      "type": 0,
+      "value": "Is it like putting a business on"
+    }
+  ],
+  "q22": [
+    {
+      "type": 0,
+      "value": "Is Yondar free?"
+    }
+  ],
+  "q28": [
+    {
+      "type": 0,
+      "value": "What is"
+    }
+  ],
+  "q28-1": [
+    {
+      "type": 0,
+      "value": "? Is it a different app?"
+    }
+  ],
+  "q3": [
+    {
+      "type": 0,
+      "value": "That sounds cool, but what about privacy? 🤔"
+    }
+  ],
+  "q5": [
+    {
+      "type": 0,
+      "value": "Introvert friendly! 🤓"
+    }
+  ],
+  "q9": [
+    {
+      "type": 0,
+      "value": "That sounds fun! Do I need an account? ✍"
+    }
+  ]
+}
