@@ -2,7 +2,7 @@ import {useState} from 'react'
 import { FaComments } from 'react-icons/fa'
 
 export const GeoChatExampleButton = () => {
-  const [boop, setBoop] = useState<number|undefined>()
+  const [boop, setBoop] = useState<NodeJS.Timeout|undefined>()
   const handleClick = () => {
     if (typeof boop === 'undefined')
       setBoop( setTimeout( () => {

@@ -2,7 +2,7 @@ import {useState} from 'react'
 import { FaMapPin } from 'react-icons/fa'
 
 export const AddExampleButton = () => {
-  const [boop, setBoop] = useState<number|undefined>()
+  const [boop, setBoop] = useState<NodeJS.Timeout|undefined>()
   const handleClick = () => {
     if (typeof boop === 'undefined')
       setBoop( setTimeout( () => {
