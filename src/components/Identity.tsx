@@ -28,7 +28,7 @@ export const Identity = ({ color = '#00aeef', children }: LogoButtonProps) => {
   )
 
   const profilepic = <img src={identity?.picture} width={65} height={65} />
-  const defaultpic = <img src={yondarlogo} width={65} height={65} />
+  const defaultpic = <img className="default" src={yondarlogo} width={65} height={65}/>
 
   return (
     <div className={outerClasses}>

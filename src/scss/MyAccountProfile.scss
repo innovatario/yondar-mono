@@ -1,6 +1,7 @@
 .profileBox {
     border-radius: 1rem;
     min-height: 25vh;
+    padding-bottom: 2rem;
     background-color: #333333db;
 
     .background-picture {
@@ -16,8 +17,7 @@
     }
 
     .profile-picture {
-        width: 35%; 
-        max-width: 7.5rem; 
+        max-width: 65px; 
         height: auto;
         border-radius: 50%;
         margin-left: 0.5rem;

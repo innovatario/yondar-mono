@@ -15,7 +15,7 @@
   }
 
   // profile image
-  img {
+  .button img {
     border-radius: 100%;
     border: 2px solid #4707b1;
     display: block;
@@ -23,6 +23,13 @@
     top: 0.25rem;
     margin: 0.25rem 0 0 .5rem;
     transition: top 150ms ease-out;
+    &.default {
+      opacity: 0.75;
+      transition: opacity 250ms ease;
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
 
   // when open, cover whole screen so tapping anywhere will deactivate it.
@@ -47,12 +54,14 @@
     margin: 0 auto;
     overflow-y: scroll;
     padding-top: 12vh;
+    padding-right: .5rem;
+    padding-left: .5rem;
     position: relative;
     max-width: 100%;
     max-height: 100%;
     & > * {
       display: block;
-      width: min( max(30vw, 300px), 100%);
+      width: min( max(30vw, 500px), 100%);
       margin: 0 auto;
     }
     .loading {
