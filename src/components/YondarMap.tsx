@@ -151,6 +151,7 @@ export const YondarMap = ({ children }: YondarMapProps) => {
   return (
     <>
     <Map
+      attributionControl={false}
       ref={mapRef}
       projection={projection}
       mapboxAccessToken={import.meta.env.VITE_MAPBOX_API}
