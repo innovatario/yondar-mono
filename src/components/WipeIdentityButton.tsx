@@ -9,7 +9,7 @@ export const WipeIdentityButton = () => {
   const navigate = useNavigate()
 
   const wipe = async () => {
-    localStorage.removeItem('identity')
+    localStorage.setItem('identity', 'null')
     localStorage.removeItem('relays')
     localStorage.removeItem('contacts')
     localStorage.removeItem('draftPlace')
