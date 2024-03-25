@@ -1,6 +1,9 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import '../scss/LogoButton.scss'
 import { YLogo } from './YLogo'
+import { IdentityContextType } from '../types/IdentityType'
+import { IdentityContext } from '../providers/IdentityProvider'
+import yondarlogo from '../assets/Yondar-Icon.png'
 
 type LogoButtonProps = {
   color?: string
@@ -9,6 +12,7 @@ type LogoButtonProps = {
 
 export const Identity = ({ color = '#00aeef', children }: LogoButtonProps) => {
   const [toggle, setToggle] = useState<boolean>(false)
+  const { identity } = useContext<IdentityContextType>(IdentityContext)
 
   const doToggle = () => setToggle(!toggle)
 
@@ -23,11 +27,14 @@ export const Identity = ({ color = '#00aeef', children }: LogoButtonProps) => {
     </div>
   )
 
+  const profilepic = <img src={identity?.picture} width={65} height={65} />
+  const defaultpic = <img src={yondarlogo} width={65} height={65} />
+
   return (
     <div className={outerClasses}>
       { toggle ? menu : null }
       <div className={classes} onClick={doToggle}>
-        <YLogo color={color}/>
+        { identity?.picture ? profilepic : defaultpic }
       </div>
     </div>
   )

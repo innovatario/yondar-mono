@@ -14,6 +14,17 @@
     transition: top 150ms ease-out;
   }
 
+  // profile image
+  img {
+    border-radius: 100%;
+    border: 2px solid #4707b1;
+    display: block;
+    position: relative;
+    top: 0.25rem;
+    margin: 0.25rem 0 0 .5rem;
+    transition: top 150ms ease-out;
+  }
+
   // when open, cover whole screen so tapping anywhere will deactivate it.
   &:active {
     width: 100%;
