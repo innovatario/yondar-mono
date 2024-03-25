@@ -17,7 +17,7 @@ export type CursorPositionType = {
 const defaultGeolocationContext: GeolocationContextType = {
   position: null,
   cursorPosition: null,
-  setCursorPosition: () => {console.log('beans')},
+  setCursorPosition: () => {},
 }
 
 export const GeolocationContext = createContext<GeolocationContextType>(defaultGeolocationContext)

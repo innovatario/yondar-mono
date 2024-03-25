@@ -14,6 +14,7 @@ import { ModeProvider } from './providers/ModeProvider.tsx'
 import { NavigationTargetProvider } from './providers/NavigationTargetProvider.tsx'
 import { YondarMap } from './components/YondarMap.tsx'
 import { GeolocationProvider } from './providers/GeolocationProvider.tsx'
+import { UI } from './components/UI.tsx'
 
 function App() {
 
@@ -30,7 +31,9 @@ function App() {
                 <ModalProvider>
                   <ModeProvider>
                     <GeolocationProvider>
-                      <YondarMap/>
+                      <UI>
+                        <YondarMap/>
+                      </UI>
                     </GeolocationProvider>
                   </ModeProvider>
                 </ModalProvider>

@@ -8,8 +8,15 @@ export const WipeIdentityButton = () => {
   const { identity } = useContext<IdentityContextType>(IdentityContext)
   const navigate = useNavigate()
 
-  const wipe = () => {
-    navigate('/logout')
+  const wipe = async () => {
+    localStorage.removeItem('identity')
+    localStorage.removeItem('relays')
+    localStorage.removeItem('contacts')
+    localStorage.removeItem('draftPlace')
+    localStorage.removeItem(localStorageKey)
+    localStorage.removeItem(localStorageKey+'v')
+    localStorage.removeItem(localStorageKey+'s')
+    window.location.href='/'
   }
 
   const initiateWipe = () => {
