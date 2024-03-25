@@ -20,6 +20,7 @@ import { ZoomOutButton } from './ZoomOutButton'
 import { Directions } from './Directions'
 import mapboxgl, { LngLatLike } from 'mapbox-gl'
 import { SelectedPlaces } from './SelectedPlaces'
+import { GeolocationContext, GeolocationContextType } from '../providers/GeolocationProvider'
 
 type YondarMapProps = {
   children?: React.ReactNode
@@ -28,7 +29,7 @@ type YondarMapProps = {
 export const YondarMap = ({ children }: YondarMapProps) => {
   const [longitude, setLongitude] = useState<number>(-80)
   const [latitude, setLatitude] = useState<number>(0)
-  const {position, cursorPosition, setCursorPosition} = useGeolocationData()
+  const {position, cursorPosition, setCursorPosition} = useContext<GeolocationContextType>(GeolocationContext)
   const [zoom, setZoom] = useState<number>(1)
   const [follow, setFollow] = useState<FollowTarget>(null)
   const {modal} = useContext<ModalContextType>(ModalContext)
@@ -141,7 +142,9 @@ export const YondarMap = ({ children }: YondarMapProps) => {
   const mapLongitude = position && follow === "USER" ? position?.coords.longitude : longitude
   const mapLatitude = position && follow === "USER" ? position?.coords.latitude : latitude
 
-  const projection = !cursorPosition ? zoom < 6 ? 'globe' : 'mercator' : 'globe'
+  const projectionName = !cursorPosition ? zoom < 6 ? 'globe' : 'mercator' : 'globe'
+  const projection = {name: projectionName} as mapboxgl.Projection
+
 
   // console.log(projection)
 

@@ -12,6 +12,8 @@ import { NaddrProvider } from './providers/NaddrProvider.tsx'
 import { Logout } from './components/Logout.tsx'
 import { ModeProvider } from './providers/ModeProvider.tsx'
 import { NavigationTargetProvider } from './providers/NavigationTargetProvider.tsx'
+import { YondarMap } from './components/YondarMap.tsx'
+import { GeolocationProvider } from './providers/GeolocationProvider.tsx'
 
 function App() {
 
@@ -27,14 +29,9 @@ function App() {
               <DraftPlaceProvider>
                 <ModalProvider>
                   <ModeProvider>
-                    <Routes>
-                      <Route path="/" element={<Home/>}/>
-                      <Route path="/login" element={<Login/>}/>
-                      <Route path="/dashboard/:param?" element={<DashboardGuard/>}/>
-                      <Route path="/logout" element={<Logout/>}/>
-                      <Route path="/place/:naddr" element={<DashboardGuard/>}/>
-                      <Route path="/user/:param?" element={<DashboardGuard/>}/>
-                    </Routes>
+                    <GeolocationProvider>
+                      <YondarMap/>
+                    </GeolocationProvider>
                   </ModeProvider>
                 </ModalProvider>
               </DraftPlaceProvider>

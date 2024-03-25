@@ -3,7 +3,7 @@
 import { createContext, useState } from 'react'
 import { useGeolocation } from '../hooks/useGeolocation'
 
-type GeolocationContextType = {
+export type GeolocationContextType = {
   position: GeolocationPosition | null
   cursorPosition: CursorPositionType
   setCursorPosition: (position: CursorPositionType) => void
@@ -17,19 +17,18 @@ export type CursorPositionType = {
 const defaultGeolocationContext: GeolocationContextType = {
   position: null,
   cursorPosition: null,
-  setCursorPosition: () => {},
+  setCursorPosition: () => {console.log('beans')},
 }
 
 export const GeolocationContext = createContext<GeolocationContextType>(defaultGeolocationContext)
 
 type GeolocationProviderProps = {
   children: React.ReactNode
-  trigger: boolean // this tells us the user clicked somewhere so we can request geo
 }
 
-export const GeolocationProvider: React.FC<GeolocationProviderProps> = ({ children, trigger }) => {
-  const [position] = useGeolocation(trigger)
-  const [cursorPosition, setCursorPosition] = useState(null)
+export const GeolocationProvider: React.FC<GeolocationProviderProps> = ({ children }) => {
+  const [cursorPosition, setCursorPosition] = useState<CursorPositionType>(null)
+  const [position] = useGeolocation(!!cursorPosition)
 
   return (
     <GeolocationContext.Provider value={{ position, cursorPosition, setCursorPosition }}>
